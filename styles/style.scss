@@ -1,0 +1,48 @@
+@import 'navbar';
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Merriweather Sans', sans-serif;
+    color: #122620;
+}
+
+body {
+    background-color: #F4EBD0;
+    margin: 0 133px 0 133px;
+    padding: 0;
+    height: 100vh;
+    background: url('../images/Dshbrd_bg_abv.png') no-repeat center center fixed;
+    background-size: cover;
+    max-width: 1180px;
+    align-items: center;
+}
+
+/* Welcome section styling */
+.welcome-section {
+    text-align: left;
+    padding: 50px 0;
+  }
+  
+  .welcome-section h1,
+  .welcome-section h2 {
+    margin-bottom: 20px;
+  }
+  
+  .welcome-section .button-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center; /* Center the button */
+  }
+
+  .welcome-subtitle{
+    font-family: 'Playball';
+  }
+
+  .welcome-title{
+    font-size: 56px;
+    margin-bottom: 20px;
+    letter-spacing: 0.1em;
+    margin-right: 50px;
+  }
