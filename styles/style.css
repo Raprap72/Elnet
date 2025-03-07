@@ -1,6 +1,5 @@
 .container {
   color: #122620;
-  max-width: 1180px;
   margin: 0 auto; /* Center the container */
   padding: 0 20px; /* Add padding for better spacing */
   letter-spacing: 0.1em;
@@ -21,7 +20,6 @@ body {
   height: 100vh;
   background: url("../images/Dshbrd_bg_abv.png") no-repeat center center fixed;
   background-size: cover;
-  max-width: 1180px;
   align-items: center;
 }
 
@@ -51,4 +49,24 @@ body {
   margin-bottom: 20px;
   letter-spacing: 0.1em;
   margin-right: 50px;
+}
+
+.book_now-btn {
+  background-color: #FCEEC3 !important; /* Button background color */
+  width: 220px; /* Button width */
+  height: 48px; /* Button height */
+  border-radius: 15px !important; /* Corner radius */
+  box-shadow: 3px 7px 6px rgba(0, 0, 0, 0.62); /* Shadow */
+  border: none !important; /* Remove Bootstrap default border */
+  color: black !important; /* Text color */
+  font-weight: bold; /* Optional: Make text bold */
+  text-align: center;
+  display: inline-block;
+  position: fixed; /* Fixes the button position */
+  bottom: 150px; /* Distance from the bottom */
+}
+
+.book_now-btn:hover {
+  background-color: #f8e0a8 !important; /* Slightly darker shade for hover */
+  box-shadow: 3px 5px 4px rgba(0, 0, 0, 0.5); /* Adjust shadow on hover */
 }/*# sourceMappingURL=style.css.map */
