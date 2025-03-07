@@ -27,6 +27,7 @@ body {
 .welcome-section {
   text-align: left;
   padding: 50px 0;
+  height: 100vh;
 }
 
 .welcome-section h1,
@@ -56,13 +57,13 @@ body {
   width: 220px; /* Button width */
   height: 48px; /* Button height */
   border-radius: 15px !important; /* Corner radius */
-  box-shadow: 3px 7px 6px rgba(0, 0, 0, 0.62); /* Shadow */
+  box-shadow: 3px 7px 6px rgba(0, 0, 0, 0.5); /* Shadow */
   border: none !important; /* Remove Bootstrap default border */
-  color: black !important; /* Text color */
+  color: #122620 !important; /* Text color */
   font-weight: bold; /* Optional: Make text bold */
   text-align: center;
   display: inline-block;
-  position: fixed; /* Fixes the button position */
+  position: absolute; /* scrollable but fixed button position */
   bottom: 150px; /* Distance from the bottom */
 }
 
