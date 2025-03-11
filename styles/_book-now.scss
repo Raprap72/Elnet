@@ -1,0 +1,20 @@
+body.book_now {
+    background-size: cover; /* Ensures the background image covers the entire page */
+    height: 130vh; /* Ensures the background covers the full height of the viewport */
+
+    main.main-section{
+        padding: 0 133px 0 133px;
+        background-image: url('../images/book_now_bg.png');
+        height: 100%;
+        background-size: cover;
+    }
+}
+
+.nav-color{
+    position: absolute;  /* Position the div absolutely */
+    top: 0;
+    left: 0;
+    width: 100%;         /* Make it span the entire width */
+    height: 80px;        /* Set the height of the overlay to match the navbar's height */
+    background-color: rgba(214, 173, 96, 0.75);  /* The desired background color */
+}

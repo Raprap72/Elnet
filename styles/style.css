@@ -4,10 +4,35 @@
   padding: 0 20px; /* Add padding for better spacing */
   letter-spacing: 0.1em;
 }
+.container .contact-info .bi-telephone-fill {
+  display: inline-block;
+  background-color: #9B8757; /* Circular background color */
+  border-radius: 50%; /* Make it circular */
+  padding: 10px; /* Adjust padding to make the circle larger or smaller */
+  width: 36px; /* Set a fixed width and height */
+  height: 36px; /* Set a fixed width and height */
+  text-align: center; /* Center the icon inside the circle */
+  line-height: 0px; /* Align the icon vertically */
+}
 
 .navbar {
   background: transparent;
   height: 150px;
+}
+
+.book_now .main-section {
+  background-color: rgba(214, 173, 96, 0.75); /* rgba for #D6AD60 with 75% transparency */
+}
+
+.book_now .navbar {
+  height: 80px;
+}
+.book_now .navbar a.navbar-brand {
+  margin: 0 auto;
+}
+.book_now .navbar .navbar-nav {
+  margin-right: 20px;
+  gap: 10px;
 }
 
 .room-details {
@@ -164,6 +189,26 @@ main.main-section {
     text-align: center;
   }
 }
+body.book_now {
+  background-size: cover; /* Ensures the background image covers the entire page */
+  height: 130vh; /* Ensures the background covers the full height of the viewport */
+}
+body.book_now main.main-section {
+  padding: 0 133px 0 133px;
+  background-image: url("../images/book_now_bg.png");
+  height: 100%;
+  background-size: cover;
+}
+
+.nav-color {
+  position: absolute; /* Position the div absolutely */
+  top: 0;
+  left: 0;
+  width: 100%; /* Make it span the entire width */
+  height: 80px; /* Set the height of the overlay to match the navbar's height */
+  background-color: rgba(214, 173, 96, 0.75); /* The desired background color */
+}
+
 * {
   margin: 0;
   padding: 0;
