@@ -5,22 +5,182 @@
   letter-spacing: 0.1em;
 }
 
+.navbar {
+  background: transparent;
+  height: 150px;
+}
+
+.room-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  color: #D6AD60;
+  letter-spacing: normal;
+  padding: 0 40px;
+}
+.room-details li {
+  list-style: none;
+}
+.room-details ul {
+  padding: 0;
+  color: #D6AD60;
+}
+.room-details .btn {
+  background-color: #FCEEC3 !important; /* Button background color */
+  width: 180px; /* Button width */
+  height: 48px; /* Button height */
+  border-radius: 15px !important;
+  border: none !important;
+  color: #122620 !important;
+  text-align: center;
+  align-self: self-end;
+}
+
+.rooms-container {
+  color: #122620;
+  margin: 0 auto;
+  padding: 0 20px;
+  letter-spacing: 0.1em;
+  padding: 133px 133px 133px 133px;
+  display: grid;
+  justify-content: center;
+}
+
+.lrn_more:hover {
+  background-color: #f8e0a8 !important; /* Slightly darker shade for hover */
+}
+
+main.main-section {
+  padding: 0 133px 0 133px;
+  background-image: url("../images/Dshbrd_bg_abv.png");
+  height: 100%;
+  background-size: cover;
+}
+
+.hotel-footer {
+  background-color: #6b5325;
+  color: #F4EBD0;
+  padding: 50px 0;
+  text-align: left;
+  box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.2);
+}
+.hotel-footer .footer-logo {
+  width: 120px;
+  margin-bottom: 15px;
+}
+.hotel-footer .footer-section {
+  margin-bottom: 20px;
+  color: #F4EBD0;
+}
+.hotel-footer .footer-heading {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #F4EBD0;
+}
+.hotel-footer .footer-text {
+  font-size: 14px;
+  line-height: 1.6;
+}
+.hotel-footer .footer-links {
+  list-style: none;
+  padding: 0;
+}
+.hotel-footer .footer-links li {
+  margin-bottom: 10px;
+}
+.hotel-footer .footer-links li a {
+  color: #F4EBD0;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.hotel-footer .footer-links li a:hover {
+  color: #e0c289;
+}
+.hotel-footer .newsletter-form {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+.hotel-footer .newsletter-form .newsletter-input {
+  width: 80%;
+  padding: 8px;
+  border: 1px solid #D6AD60;
+  background: #ead9a7;
+  color: #F4EBD0;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+}
+.hotel-footer .newsletter-form .newsletter-btn {
+  background: #D6AD60;
+  border: none;
+  padding: 8px 15px;
+  color: #122620;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.hotel-footer .newsletter-form .newsletter-btn:hover {
+  background: #e0c289;
+}
+.hotel-footer .social-icons {
+  margin-top: 15px;
+}
+.hotel-footer .social-icons a {
+  color: #F4EBD0;
+  font-size: 18px;
+  margin: 0 8px;
+  transition: color 0.3s ease;
+}
+.hotel-footer .social-icons a:hover {
+  color: #e0c289;
+}
+.hotel-footer .footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.hotel-footer .footer-bottom p {
+  margin: 0;
+  font-size: 14px;
+}
+.hotel-footer .footer-bottom .footer-bottom-links a {
+  color: #F4EBD0;
+  margin-left: 15px;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.hotel-footer .footer-bottom .footer-bottom-links a:hover {
+  color: #e0c289;
+}
+
+@media (max-width: 768px) {
+  .hotel-footer .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+}
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Merriweather Sans", sans-serif;
-  color: #122620;
 }
 
 body {
   background-color: #F4EBD0;
-  margin: 0 133px 0 133px;
-  padding: 0;
-  height: 100vh;
-  background: url("../images/Dshbrd_bg_abv.png") no-repeat center center fixed;
+  margin: 0;
+  height: 100%;
   background-size: cover;
   align-items: center;
+}
+
+#dashboard {
+  background-color: #122620;
 }
 
 /* Welcome section styling */
@@ -28,6 +188,9 @@ body {
   text-align: left;
   padding: 50px 0;
   height: 100vh;
+  color: #122620;
+  justify-content: center;
+  display: grid;
 }
 
 .welcome-section h1,
@@ -70,4 +233,36 @@ body {
 .book_now-btn:hover {
   background-color: #f8e0a8 !important; /* Slightly darker shade for hover */
   box-shadow: 3px 5px 4px rgba(0, 0, 0, 0.5); /* Adjust shadow on hover */
+}
+
+.custom-section {
+  background-color: #B68D40;
+  color: #122620;
+  font-size: 27px;
+  font-weight: 800; /* Equivalent to extrabold */
+  padding: 15px 30px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.custom-btn {
+  background-color: #FCEEC3;
+  color: #122620;
+  border: none;
+  width: 120px;
+  height: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 15px;
+  transition: all 0.3s ease-in-out;
+}
+.custom-btn:hover {
+  background-color: #fae092;
+}
+
+.personalized-section {
+  box-shadow: 3px 7px 6px rgba(0, 0, 0, 0.5);
+  margin: -30px 420px;
 }/*# sourceMappingURL=style.css.map */
