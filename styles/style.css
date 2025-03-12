@@ -264,6 +264,68 @@ body.book_now main.main-section {
   font-weight: bold;
 }
 
+.modal-header {
+  border-bottom: none;
+  padding: 50px 60px 20px;
+}
+.modal-header button.btn-close {
+  position: relative;
+  bottom: 30px;
+}
+
+.modal-content {
+  background-color: #FCEEC3;
+  border-radius: 5px;
+}
+
+.modal-body {
+  position: relative;
+  flex: 1 1 auto;
+  padding: 0px 60px 40px;
+}
+
+.btn-primary {
+  background-color: #C09736;
+  border: none;
+}
+.btn-primary:hover {
+  background-color: #d4af37;
+}
+
+.modal.show .modal-dialog {
+  align-content: center;
+  height: 100vh;
+  margin: auto;
+}
+
+.modal-title {
+  padding: 0 146px;
+}
+
+.form-control {
+  border: 2px solid #878A71;
+  background-color: #FCEEC3;
+}
+
+.form-label {
+  color: #878A71;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  font-size: 1.5rem;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #878A71;
+}
+
+.modal.show .modal-dialog {
+  align-content: center;
+  height: 100vh;
+  margin: auto;
+}
+
 * {
   margin: 0;
   padding: 0;
