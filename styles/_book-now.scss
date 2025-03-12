@@ -18,3 +18,61 @@ body.book_now {
     height: 80px;        /* Set the height of the overlay to match the navbar's height */
     background-color: rgba(214, 173, 96, 0.75);  /* The desired background color */
 }
+
+.book-now-slct_exprnce {
+    background-color: #B68D40;
+    padding: 20px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.56);
+    width: 480px;
+    position: absolute;
+    top: 45%;
+}
+
+.experience-title {
+    font-size: 27px;
+    color: #F4EBD0;
+    font-weight: 600;
+    letter-spacing: 2.48px;
+    margin: 0;
+    text-align: center;
+}
+
+.experience-subtitle {
+    font-size: 16px;
+    color: #122620;
+    font-weight: normal;
+    margin: 10px;
+    margin-bottom: 0px;
+    letter-spacing: normal;
+    padding-left: 40px;
+}
+
+.book-now_room-list {
+    .room-card {
+        height: 380px;
+        background: $secondary-color;
+        box-shadow: 8px 10px 8px rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        transition: transform 0.3s ease-in-out;
+        cursor: pointer;
+        position: relative;
+        top: 115%;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+
+        .room-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .room-info {
+            height: 80px;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+    }
+}
