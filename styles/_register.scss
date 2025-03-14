@@ -1,0 +1,91 @@
+$primary-color: #B68D40;
+$secondary-color: #F4EBD0;
+$dark-color: #122620;
+$accent-color: #D6AD60;
+$footer-bg: darken($primary-color, 20%);
+$text-color: $secondary-color;
+$link-hover: lighten($accent-color, 10%);
+$input-bg: darken($secondary-color, 10%);
+$input-border: $accent-color;
+
+body {
+    background: $secondary-color;
+    font-family: 'Arial', sans-serif;
+}
+
+.register {
+    .register-card {
+        display: flex;
+        width: 100%;
+        background: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .register-left {
+        flex: 1;
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .register-right {
+        flex: 1;
+        padding: 2rem;
+        background: $dark-color;
+        color: $text-color;
+
+        h2 {
+            color: $accent-color;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+
+            label {
+                font-weight: bold;
+                color: $text-color;
+            }
+
+            input {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid $input-border;
+                background: $input-bg;
+                color: $dark-color;
+                border-radius: 5px;
+            }
+
+            .error-message {
+                color: red;
+                font-size: 0.9rem;
+                display: none;
+                margin-top: 5px;
+            }
+        }
+
+        .btn-primary {
+            background: $primary-color;
+            border: none;
+            font-weight: bold;
+            padding: 10px;
+            transition: 0.3s;
+            &:hover {
+                background: $link-hover;
+                color: $dark-color;
+            }
+        }
+
+        .text-center {
+            color: $text-color;
+        }
+
+        .form-check-label {
+            color: $text-color;
+        }
+    }
+}
