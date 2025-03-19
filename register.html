@@ -16,39 +16,43 @@
 
     <title>Sign Up</title>
 </head>
-<body>
 
+<body>
 <div class="register container-fluid d-flex justify-content-center min-vh-100">
     <div class="register-card">
         <div class="register-left">
-            <img src="rgstr_bg.png" alt="Background Image">
+            <img src="/images/rgstr_bg.png" alt="Background Image">
         </div>
         <div class="register-right">
+            <a href="book_now.html" class="back-to-login-link">
+                <i class="back-to-login bi bi-arrow-left fs-4"></i>
+            </a>
+
             <h2 class="mb-4">Sign Up</h2>
             <form id="registerForm">
                 <div class="form-group">
                     <label for="fullName">Full Name</label>
-                    <input type="text" id="fullName" class="form-control" placeholder="Enter your name">
+                    <input type="text" id="fullName" class="form-control">
                     <small class="error-message"></small>
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" class="form-control" placeholder="Enter your email">
+                    <input type="email" id="email" class="form-control">
                     <small class="error-message"></small>
                 </div>
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" class="form-control" placeholder="Choose a username">
+                    <input type="text" id="username" class="form-control">
                     <small class="error-message"></small>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" class="form-control" placeholder="Enter your password">
+                    <input type="password" id="password" class="form-control">
                     <small class="error-message"></small>
                 </div>
                 <div class="form-group">
                     <label for="repeatPassword">Repeat Password</label>
-                    <input type="password" id="repeatPassword" class="form-control" placeholder="Confirm your password">
+                    <input type="password" id="repeatPassword" class="form-control">
                     <small class="error-message"></small>
                 </div>
                 <div class="form-check my-3">
