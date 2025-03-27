@@ -1,0 +1,485 @@
+@model RoyalStayHotel.Models.Booking
+@using RoyalStayHotel.Models
+@{
+    ViewBag.Title = "Booking Details";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Booking #@Model.BookingId</h1>
+    <div>
+        <a href="@Url.Action("Edit", "Bookings", new { id = Model.BookingId })" class="btn btn-primary btn-sm">
+            <i class="fas fa-edit fa-sm text-white-50"></i> Edit Booking
+        </a>
+        <a href="@Url.Action("Index", "Bookings")" class="btn btn-secondary btn-sm">
+            <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to List
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Booking Details</h6>
+                <span class="font-weight-bold">
+                    Status: 
+                    @if (Model.Status == BookingStatus.Confirmed)
+                    {
+                        <span class="badge badge-success px-3 py-2">@Model.Status</span>
+                    }
+                    else if (Model.Status == BookingStatus.Pending)
+                    {
+                        <span class="badge badge-warning px-3 py-2">@Model.Status</span>
+                    }
+                    else if (Model.Status == BookingStatus.Cancelled)
+                    {
+                        <span class="badge badge-danger px-3 py-2">@Model.Status</span>
+                    }
+                    else if (Model.Status == BookingStatus.CheckedIn)
+                    {
+                        <span class="badge badge-primary px-3 py-2">@Model.Status</span>
+                    }
+                    else if (Model.Status == BookingStatus.CheckedOut)
+                    {
+                        <span class="badge badge-secondary px-3 py-2">@Model.Status</span>
+                    }
+                    else if (Model.Status == BookingStatus.NoShow)
+                    {
+                        <span class="badge badge-dark px-3 py-2">@Model.Status</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-info px-3 py-2">@Model.Status</span>
+                    }
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Guest Information</div>
+                                        @if (Model.User != null)
+                                        {
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.User.FullName</div>
+                                            <div class="text-gray-600">@Model.User.Email</div>
+                                            @if (!string.IsNullOrEmpty(Model.User.Phone))
+                                            {
+                                                <div class="text-gray-600">@Model.User.Phone</div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="text-gray-600">Guest information not available</div>
+                                        }
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-user fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Room Information</div>
+                                        @if (Model.Room != null)
+                                        {
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                @Model.Room.RoomType Room #@Model.Room.RoomNumber
+                                            </div>
+                                            <div class="text-gray-600">Capacity: @Model.Room.Capacity @(Model.Room.Capacity == 1 ? "Person" : "People")</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="text-gray-600">Room information not available</div>
+                                        }
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-bed fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Check-in</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.CheckInDate.ToString("MMM dd, yyyy")</div>
+                                        <div class="text-gray-600">@Model.CheckInDate.ToString("h:mm tt")</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-calendar-check fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Check-out</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.CheckOutDate.ToString("MMM dd, yyyy")</div>
+                                        <div class="text-gray-600">@Model.CheckOutDate.ToString("h:mm tt")</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-calendar-minus fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card border-left-secondary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">Booking Details</div>
+                                        <div class="mb-0 text-gray-800">
+                                            <div><strong>Number of Guests:</strong> @Model.NumberOfGuests</div>
+                                            <div><strong>Stay Duration:</strong> @((Model.CheckOutDate - Model.CheckInDate).Days) nights</div>
+                                            <div><strong>Booking Created:</strong> @Model.CreatedAt.ToString("MMM dd, yyyy")</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-info-circle fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card border-left-danger shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Payment Information</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">Total: @Model.TotalPrice.ToString("C")</div>
+                                        @if (Model.Payments != null && Model.Payments.Any())
+                                        {
+                                            var totalPaid = Model.Payments.Sum(p => p.Amount);
+                                            var balance = Model.TotalPrice - totalPaid;
+                                            <div class="text-gray-600">
+                                                <div>Paid: @totalPaid.ToString("C")</div>
+                                                @if (balance > 0)
+                                                {
+                                                    <div class="text-danger">Balance Due: @balance.ToString("C")</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="text-success">Fully Paid</div>
+                                                }
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="text-danger">No payments recorded</div>
+                                        }
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Update Status Form -->
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Update Booking Status</h6>
+                            </div>
+                            <div class="card-body">
+                                <form asp-controller="Bookings" asp-action="UpdateStatus" method="post" class="d-flex align-items-center">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@Model.BookingId" />
+                                    <div class="form-group mb-0 mr-3 flex-grow-1">
+                                        <select name="status" class="form-control" id="statusSelect">
+                                            @foreach (BookingStatus status in Enum.GetValues(typeof(BookingStatus)))
+                                            {
+                                                <option value="@status" @(Model.Status == status ? "selected" : "")>@status</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-sync-alt mr-1"></i> Update Status
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booked Services -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Booked Services</h6>
+            </div>
+            <div class="card-body">
+                @if (Model.BookedServices != null && Model.BookedServices.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var bookedService in Model.BookedServices)
+                                {
+                                    <tr>
+                                        <td>@bookedService.Service.Name</td>
+                                        <td>@bookedService.Quantity</td>
+                                        <td>@bookedService.Service.Price.ToString("C")</td>
+                                        <td>@((bookedService.Service.Price * bookedService.Quantity).ToString("C"))</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="3" class="text-right">Total Services:</th>
+                                    <th>@Model.BookedServices.Sum(bs => bs.Service.Price * bs.Quantity).ToString("C")</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-4">
+                        <i class="fas fa-concierge-bell fa-3x text-gray-300 mb-3"></i>
+                        <p class="mb-0">No services added to this booking.</p>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Payments -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Payment History</h6>
+            </div>
+            <div class="card-body">
+                @if (Model.Payments != null && Model.Payments.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Payment ID</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Method</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var payment in Model.Payments.OrderByDescending(p => p.PaymentDate))
+                                {
+                                    <tr>
+                                        <td>@payment.PaymentId</td>
+                                        <td>@payment.Amount.ToString("C")</td>
+                                        <td>@payment.PaymentDate.ToString("MMM dd, yyyy h:mm tt")</td>
+                                        <td>@payment.PaymentMethod</td>
+                                        <td>
+                                            @if (payment.Status == TransactionStatus.Completed)
+                                            {
+                                                <span class="badge badge-success">Completed</span>
+                                            }
+                                            else if (payment.Status == TransactionStatus.Pending)
+                                            {
+                                                <span class="badge badge-warning">Pending</span>
+                                            }
+                                            else if (payment.Status == TransactionStatus.Failed)
+                                            {
+                                                <span class="badge badge-danger">Failed</span>
+                                            }
+                                            else if (payment.Status == TransactionStatus.Refunded)
+                                            {
+                                                <span class="badge badge-info">Refunded</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-secondary">@payment.Status</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-4">
+                        <i class="fas fa-credit-card fa-3x text-gray-300 mb-3"></i>
+                        <p class="mb-0">No payment records found for this booking.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="col-lg-4">
+        <!-- Room Preview -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Room Preview</h6>
+            </div>
+            <div class="card-body text-center">
+                @if (!string.IsNullOrEmpty(Model.Room.ImageUrl))
+                {
+                    <img src="@Model.Room.ImageUrl" alt="Room Image" class="img-fluid rounded mb-3" style="max-height: 200px;" />
+                }
+                else
+                {
+                    <img src="/images/placeholder-room.jpg" alt="Room Image" class="img-fluid rounded mb-3" style="max-height: 200px;" />
+                }
+                <h5 class="font-weight-bold">@Model.Room.RoomType Room #@Model.Room.RoomNumber</h5>
+                <p class="mb-1">@Model.Room.Description</p>
+                <div class="mt-3">
+                    <p class="mb-1">
+                        <strong>Price:</strong> @Model.Room.Price.ToString("C") / night
+                    </p>
+                    <p class="mb-1">
+                        <strong>Capacity:</strong> @Model.Room.Capacity @(Model.Room.Capacity == 1 ? "Person" : "People")
+                    </p>
+                    <p class="mb-1">
+                        <strong>Status:</strong>
+                        @if (Model.Room.IsAvailable)
+                        {
+                            <span class="badge badge-success">Available</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-danger">Occupied</span>
+                        }
+                    </p>
+                </div>
+                <a href="@Url.Action("Details", "Room", new { id = Model.Room.RoomId, area = "Admin" })" class="btn btn-info btn-sm mt-3">
+                    <i class="fas fa-info-circle mr-1"></i> Room Details
+                </a>
+            </div>
+        </div>
+
+        <!-- Price Breakdown -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Price Breakdown</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td>Room Rate</td>
+                                <td class="text-right">@Model.Room.Price.ToString("C") × @((Model.CheckOutDate - Model.CheckInDate).Days) nights</td>
+                                <td class="text-right font-weight-bold">@((Model.Room.Price * (Model.CheckOutDate - Model.CheckInDate).Days).ToString("C"))</td>
+                            </tr>
+                            @if (Model.BookedServices != null && Model.BookedServices.Any())
+                            {
+                                <tr>
+                                    <td>Additional Services</td>
+                                    <td class="text-right">@Model.BookedServices.Count() items</td>
+                                    <td class="text-right font-weight-bold">@(Model.BookedServices.Sum(bs => bs.Service.Price * bs.Quantity).ToString("C"))</td>
+                                </tr>
+                            }
+                            <tr>
+                                <td colspan="2" class="text-right font-weight-bold">Total</td>
+                                <td class="text-right font-weight-bold text-primary">@Model.TotalPrice.ToString("C")</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes and Actions -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Actions</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="@Url.Action("Edit", "Bookings", new { id = Model.BookingId })" class="btn btn-primary btn-block mb-2">
+                        <i class="fas fa-edit mr-1"></i> Edit Booking
+                    </a>
+                    @if (Model.Status == BookingStatus.Pending)
+                    {
+                        <form asp-controller="Bookings" asp-action="UpdateStatus" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.BookingId" />
+                            <input type="hidden" name="status" value="@BookingStatus.Confirmed" />
+                            <button type="submit" class="btn btn-success btn-block mb-2">
+                                <i class="fas fa-check mr-1"></i> Confirm Booking
+                            </button>
+                        </form>
+                    }
+                    else if (Model.Status == BookingStatus.Confirmed && DateTime.Now.Date >= Model.CheckInDate.Date)
+                    {
+                        <form asp-controller="Bookings" asp-action="UpdateStatus" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.BookingId" />
+                            <input type="hidden" name="status" value="@BookingStatus.CheckedIn" />
+                            <button type="submit" class="btn btn-info btn-block mb-2">
+                                <i class="fas fa-sign-in-alt mr-1"></i> Check-in Guest
+                            </button>
+                        </form>
+                    }
+                    else if (Model.Status == BookingStatus.CheckedIn && DateTime.Now.Date >= Model.CheckOutDate.Date)
+                    {
+                        <form asp-controller="Bookings" asp-action="UpdateStatus" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.BookingId" />
+                            <input type="hidden" name="status" value="@BookingStatus.CheckedOut" />
+                            <button type="submit" class="btn btn-info btn-block mb-2">
+                                <i class="fas fa-sign-out-alt mr-1"></i> Check-out Guest
+                            </button>
+                        </form>
+                    }
+                    @if (Model.Status != BookingStatus.Cancelled && Model.Status != BookingStatus.CheckedOut)
+                    {
+                        <form asp-controller="Bookings" asp-action="UpdateStatus" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.BookingId" />
+                            <input type="hidden" name="status" value="@BookingStatus.Cancelled" />
+                            <button type="submit" class="btn btn-danger btn-block mb-2" onclick="return confirm('Are you sure you want to cancel this booking?');">
+                                <i class="fas fa-times mr-1"></i> Cancel Booking
+                            </button>
+                        </form>
+                    }
+                    <button type="button" class="btn btn-outline-primary btn-block" onclick="window.print();">
+                        <i class="fas fa-print mr-1"></i> Print Details
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

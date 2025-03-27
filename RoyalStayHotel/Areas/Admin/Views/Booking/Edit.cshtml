@@ -1,0 +1,288 @@
+@model RoyalStayHotel.Models.Booking
+@using RoyalStayHotel.Models
+@{
+    ViewBag.Title = "Edit Booking";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Edit Booking #@Model.BookingId</h1>
+    <div>
+        <a href="@Url.Action("Details", new { id = Model.BookingId })" class="btn btn-primary btn-sm">
+            <i class="fas fa-info-circle fa-sm text-white-50"></i> View Details
+        </a>
+        <a href="@Url.Action("Index")" class="btn btn-secondary btn-sm">
+            <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to List
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Booking Information</h6>
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                    
+                    <input type="hidden" asp-for="BookingId" />
+                    <input type="hidden" asp-for="CreatedAt" />
+                    
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label asp-for="UserId" class="control-label">Guest</label>
+                            <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
+                            <span asp-validation-for="UserId" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label asp-for="RoomId" class="control-label">Room</label>
+                            <select asp-for="RoomId" class="form-control" asp-items="ViewBag.RoomId"></select>
+                            <span asp-validation-for="RoomId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label asp-for="CheckInDate" class="control-label">Check-in Date</label>
+                            <input asp-for="CheckInDate" class="form-control" type="date" />
+                            <span asp-validation-for="CheckInDate" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label asp-for="CheckOutDate" class="control-label">Check-out Date</label>
+                            <input asp-for="CheckOutDate" class="form-control" type="date" />
+                            <span asp-validation-for="CheckOutDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label asp-for="NumberOfGuests" class="control-label">Number of Guests</label>
+                            <input asp-for="NumberOfGuests" class="form-control" min="1" max="10" />
+                            <span asp-validation-for="NumberOfGuests" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label asp-for="TotalPrice" class="control-label">Total Price</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">$</span>
+                                </div>
+                                <input asp-for="TotalPrice" class="form-control" readonly />
+                            </div>
+                            <span asp-validation-for="TotalPrice" class="text-danger"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="Status" class="control-label">Status</label>
+                        <select asp-for="Status" class="form-control" asp-items="ViewBag.BookingStatuses"></select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group mb-0">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save mr-1"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Current Room Info -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Current Room</h6>
+            </div>
+            <div class="card-body text-center">
+                @if (Model.Room != null)
+                {
+                    @if (!string.IsNullOrEmpty(Model.Room.ImageUrl))
+                    {
+                        <img src="@Model.Room.ImageUrl" alt="Room Image" class="img-fluid rounded mb-3" style="max-height: 150px;" />
+                    }
+                    else
+                    {
+                        <img src="/images/placeholder-room.jpg" alt="Room Image" class="img-fluid rounded mb-3" style="max-height: 150px;" />
+                    }
+                    <div class="mb-3">
+                        <h5 class="font-weight-bold" id="previewRoomType">@Model.Room.RoomType Room #@Model.Room.RoomNumber</h5>
+                        <p class="mb-1">Price: <span id="previewRoomPrice">@Model.Room.Price.ToString("C")</span> / night</p>
+                        <p class="mb-1">Capacity: <span id="previewRoomCapacity">@Model.Room.Capacity</span> persons</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning">
+                        Room information not available
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Date Summary -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Booking Summary</h6>
+            </div>
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-5 font-weight-bold">Stay Duration:</div>
+                    <div class="col-7 text-right" id="stayDuration">@((Model.CheckOutDate - Model.CheckInDate).Days) nights</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-5 font-weight-bold">Room Charge:</div>
+                    <div class="col-7 text-right" id="roomCharge">
+                        @(Model.Room != null ? (Model.Room.Price * (Model.CheckOutDate - Model.CheckInDate).Days).ToString("C") : "N/A")
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-5 font-weight-bold">Guest:</div>
+                    <div class="col-7 text-right" id="guestName">@(Model.User != null ? Model.User.FullName : "N/A")</div>
+                </div>
+                <hr />
+                <div class="alert alert-warning mt-3 mb-0 small">
+                    <i class="fas fa-exclamation-triangle mr-1"></i> Changing dates or room may affect availability and pricing. Please ensure the selected room is available for the specified dates.
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Status -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Current Status</h6>
+            </div>
+            <div class="card-body text-center">
+                @if (Model.Status == BookingStatus.Confirmed)
+                {
+                    <div class="py-3">
+                        <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                        <h5 class="font-weight-bold text-success">Confirmed</h5>
+                        <p class="text-muted mb-0">This booking has been confirmed.</p>
+                    </div>
+                }
+                else if (Model.Status == BookingStatus.Pending)
+                {
+                    <div class="py-3">
+                        <i class="fas fa-clock fa-3x text-warning mb-3"></i>
+                        <h5 class="font-weight-bold text-warning">Pending</h5>
+                        <p class="text-muted mb-0">This booking is awaiting confirmation.</p>
+                    </div>
+                }
+                else if (Model.Status == BookingStatus.Cancelled)
+                {
+                    <div class="py-3">
+                        <i class="fas fa-ban fa-3x text-danger mb-3"></i>
+                        <h5 class="font-weight-bold text-danger">Cancelled</h5>
+                        <p class="text-muted mb-0">This booking has been cancelled.</p>
+                    </div>
+                }
+                else if (Model.Status == BookingStatus.CheckedIn)
+                {
+                    <div class="py-3">
+                        <i class="fas fa-sign-in-alt fa-3x text-primary mb-3"></i>
+                        <h5 class="font-weight-bold text-primary">Checked In</h5>
+                        <p class="text-muted mb-0">Guest has checked in.</p>
+                    </div>
+                }
+                else if (Model.Status == BookingStatus.CheckedOut)
+                {
+                    <div class="py-3">
+                        <i class="fas fa-sign-out-alt fa-3x text-secondary mb-3"></i>
+                        <h5 class="font-weight-bold text-secondary">Checked Out</h5>
+                        <p class="text-muted mb-0">Guest has checked out.</p>
+                    </div>
+                }
+                else if (Model.Status == BookingStatus.NoShow)
+                {
+                    <div class="py-3">
+                        <i class="fas fa-user-slash fa-3x text-dark mb-3"></i>
+                        <h5 class="font-weight-bold text-dark">No Show</h5>
+                        <p class="text-muted mb-0">Guest did not arrive for check-in.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Update room details when room selection changes
+            $('#RoomId').change(function() {
+                var roomId = $(this).val();
+                $.ajax({
+                    url: '@Url.Action("GetRoomDetails", "Room", new { area = "Admin" })',
+                    type: 'GET',
+                    data: { id: roomId },
+                    success: function(data) {
+                        if (data) {
+                            $('#previewRoomType').text(data.roomType + ' Room #' + data.roomNumber);
+                            $('#previewRoomPrice').text('$' + data.price.toFixed(2));
+                            $('#previewRoomCapacity').text(data.capacity);
+                            updateRoomCharge();
+                        }
+                    }
+                });
+            });
+
+            // Update guest name when guest selection changes
+            $('#UserId').change(function() {
+                var userId = $(this).val();
+                $.ajax({
+                    url: '@Url.Action("GetUserDetails", "User", new { area = "Admin" })',
+                    type: 'GET',
+                    data: { id: userId },
+                    success: function(data) {
+                        if (data) {
+                            $('#guestName').text(data.fullName);
+                        }
+                    }
+                });
+            });
+
+            // Update stay duration and room charge when dates change
+            $('#CheckInDate, #CheckOutDate').change(function() {
+                updateStayDuration();
+                updateRoomCharge();
+            });
+
+            function updateStayDuration() {
+                var checkIn = new Date($('#CheckInDate').val());
+                var checkOut = new Date($('#CheckOutDate').val());
+                
+                if (!isNaN(checkIn) && !isNaN(checkOut)) {
+                    var timeDiff = checkOut - checkIn;
+                    var nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                    
+                    if (nights > 0) {
+                        $('#stayDuration').text(nights + ' nights');
+                    } else {
+                        $('#stayDuration').text('Invalid dates');
+                    }
+                }
+            }
+
+            function updateRoomCharge() {
+                var checkIn = new Date($('#CheckInDate').val());
+                var checkOut = new Date($('#CheckOutDate').val());
+                var roomPriceText = $('#previewRoomPrice').text();
+                var roomPrice = parseFloat(roomPriceText.replace(/[^0-9.-]+/g, ""));
+                
+                if (!isNaN(checkIn) && !isNaN(checkOut) && !isNaN(roomPrice)) {
+                    var timeDiff = checkOut - checkIn;
+                    var nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                    
+                    if (nights > 0) {
+                        var totalCharge = roomPrice * nights;
+                        $('#roomCharge').text('$' + totalCharge.toFixed(2));
+                        $('#TotalPrice').val(totalCharge.toFixed(2));
+                    }
+                }
+            }
+        });
+    </script>
+} 

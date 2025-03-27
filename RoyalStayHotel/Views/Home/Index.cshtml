@@ -1,0 +1,140 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="hero-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <p class="welcome-text">Welcome to Royal Stay</p>
+                <h1 class="hero-title">WHERE ELEGANCE MEETS COMFORT</h1>
+                <a asp-controller="Booking" asp-action="Index" class="btn btn-primary btn-lg mt-4">BOOK NOW</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="featured-rooms py-5">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Our Featured Rooms</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card room-card">
+                    <img src="~/images/deluxe_room.png" class="card-img-top" alt="Deluxe Room">
+                    <div class="card-body">
+                        <h5 class="card-title">Deluxe Room</h5>
+                        <p class="card-text">Experience luxury in our spacious Deluxe Room with modern amenities.</p>
+                        <p class="room-price">₱22,628</p>
+                        <a asp-controller="Rooms" asp-action="Details" asp-route-id="1" class="btn btn-outline-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card room-card">
+                    <img src="~/images/deluxe-suite_room.png" class="card-img-top" alt="Deluxe Suite Room">
+                    <div class="card-body">
+                        <h5 class="card-title">Deluxe Suite Room</h5>
+                        <p class="card-text">Upgrade your stay with our Deluxe Suite featuring a separate living area.</p>
+                        <p class="room-price">₱33,800</p>
+                        <a asp-controller="Rooms" asp-action="Details" asp-route-id="2" class="btn btn-outline-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card room-card">
+                    <img src="~/images/executive-deluxe_room.png" class="card-img-top" alt="Executive Deluxe Room">
+                    <div class="card-body">
+                        <h5 class="card-title">Executive Deluxe Room</h5>
+                        <p class="card-text">Our Executive Deluxe Room offers the ultimate luxury experience.</p>
+                        <p class="room-price">₱55,500</p>
+                        <a asp-controller="Rooms" asp-action="Details" asp-route-id="3" class="btn btn-outline-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="amenities py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Hotel Amenities</h2>
+        <div class="row text-center">
+            <div class="col-md-3 mb-4">
+                <i class="bi bi-wifi fs-1"></i>
+                <h5 class="mt-3">Free Wi-Fi</h5>
+                <p>Stay connected with high-speed internet access throughout the hotel.</p>
+            </div>
+            <div class="col-md-3 mb-4">
+                <i class="bi bi-water fs-1"></i>
+                <h5 class="mt-3">Swimming Pool</h5>
+                <p>Relax and unwind in our luxurious swimming pool with a stunning view.</p>
+            </div>
+            <div class="col-md-3 mb-4">
+                <i class="bi bi-cup-hot fs-1"></i>
+                <h5 class="mt-3">Restaurant & Bar</h5>
+                <p>Enjoy delicious meals and drinks at our in-house restaurant and bar.</p>
+            </div>
+            <div class="col-md-3 mb-4">
+                <i class="bi bi-building fs-1"></i>
+                <h5 class="mt-3">Fitness Center</h5>
+                <p>Stay fit during your stay with our state-of-the-art fitness equipment.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials py-5">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">What Our Guests Say</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card p-4">
+                    <div class="testimonial-stars mb-3">
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                    </div>
+                    <p class="testimonial-text">"An amazing experience! The room was beautiful and the staff was extremely helpful and friendly."</p>
+                    <div class="testimonial-author">
+                        <h6 class="mb-0">John Smith</h6>
+                        <small>Business Traveler</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card p-4">
+                    <div class="testimonial-stars mb-3">
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                    </div>
+                    <p class="testimonial-text">"The view from our room was breathtaking. The hotel amenities are top-notch and the location is perfect."</p>
+                    <div class="testimonial-author">
+                        <h6 class="mb-0">Sarah Johnson</h6>
+                        <small>Family Vacation</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card p-4">
+                    <div class="testimonial-stars mb-3">
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        <i class="bi bi-star-half text-warning"></i>
+                    </div>
+                    <p class="testimonial-text">"We celebrated our anniversary here and it was a wonderful experience. The staff made our stay truly special."</p>
+                    <div class="testimonial-author">
+                        <h6 class="mb-0">Michael & Lisa</h6>
+                        <small>Couple</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,91 @@
+@model RoyalStayHotel.Models.Booking
+
+@{
+    ViewData["Title"] = "Booking Confirmed!";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h1 class="h4 mb-0">Booking Confirmed!</h1>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-success mb-4">
+                        <p class="mb-0">Thank you for your booking. Your reservation has been confirmed. You will receive a confirmation email shortly.</p>
+                    </div>
+
+                    <h5 class="border-bottom pb-2 mb-3">Booking Details</h5>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p><strong>Booking ID:</strong> #@Model.BookingId</p>
+                            <p><strong>Check-in Date:</strong> @Model.CheckInDate.ToString("dddd, MMMM d, yyyy")</p>
+                            <p><strong>Check-out Date:</strong> @Model.CheckOutDate.ToString("dddd, MMMM d, yyyy")</p>
+                            <p><strong>Number of Nights:</strong> @((Model.CheckOutDate - Model.CheckInDate).Days) night(s)</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Room Type:</strong> @(Model.Room?.RoomType.ToString() ?? "N/A")</p>
+                            <p><strong>Room Number:</strong> @(Model.Room?.RoomNumber ?? "To be assigned")</p>
+                            <p><strong>Total Price:</strong> ₱@Model.TotalPrice.ToString("N0")</p>
+                            <p><strong>Status:</strong> <span class="badge bg-success">@Model.Status</span></p>
+                        </div>
+                    </div>
+
+                    @if (Model.Room != null)
+                    {
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <img src="@Model.Room.ImageUrl" alt="@Model.Room.RoomType Room" class="img-fluid rounded" />
+                            </div>
+                            <div class="col-md-8">
+                                <h5>@Model.Room.RoomType Room</h5>
+                                <p>@Model.Room.Description</p>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-users me-2"></i> @Model.Room.MaxGuests guests maximum</li>
+                                    <li><i class="fas fa-bed me-2"></i> @Model.Room.BedType</li>
+                                    <li><i class="fas fa-ruler-combined me-2"></i> @Model.Room.RoomSize</li>
+                                </ul>
+                            </div>
+                        </div>
+                    }
+
+                    <h5 class="border-bottom pb-2 mb-3">What's Next?</h5>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card bg-light mb-3">
+                                <div class="card-body">
+                                    <h6><i class="fas fa-info-circle me-2"></i> Important Information</h6>
+                                    <ul class="small mb-0">
+                                        <li>Check-in time: 2:00 PM</li>
+                                        <li>Check-out time: 12:00 PM</li>
+                                        <li>Photo ID required at check-in</li>
+                                        <li>Credit card required for incidentals</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6><i class="fas fa-concierge-bell me-2"></i> Need Assistance?</h6>
+                                    <p class="small mb-0">For any questions regarding your booking, please contact our customer service at <strong>support@royalstayhotel.com</strong> or call <strong>+1 (800) 123-4567</strong>.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a asp-controller="Booking" asp-action="MyBookings" class="btn btn-primary">
+                            <i class="fas fa-list me-1"></i> View My Bookings
+                        </a>
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary ms-2">
+                            <i class="fas fa-home me-1"></i> Return to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+</div> 

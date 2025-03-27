@@ -1,0 +1,92 @@
+@model RoyalStayHotel.Models.Room
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-6">
+            <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded mb-4">
+        </div>
+        <div class="col-lg-6">
+            <h1 class="mb-3">@Model.Name</h1>
+            <p class="lead">@Model.Description</p>
+            
+            <div class="room-features mb-4">
+                <h4>Room Features</h4>
+                <ul class="list-group">
+                    @if (Model.HasKingBed)
+                    {
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i> King Bed</li>
+                    }
+                    @if (Model.HasDoubleBeds)
+                    {
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i> Double Beds</li>
+                    }
+                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i> Accommodates up to @Model.MaxGuests guests</li>
+                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i> Free Wi-Fi</li>
+                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i> Air Conditioning</li>
+                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i> Flat-screen TV</li>
+                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i> Private Bathroom</li>
+                </ul>
+            </div>
+            
+            <div class="price-booking">
+                <h3 class="mb-3">₱@Model.Price.ToString("N0") <small class="text-muted">per night</small></h3>
+                <a asp-controller="Booking" asp-action="Book" asp-route-id="@Model.Id" class="btn btn-primary btn-lg">Book This Room</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3>Room Amenities</h3>
+            <div class="row mt-3">
+                <div class="col-md-4 mb-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-tv fs-4 me-3"></i>
+                        <span>Flat-screen TV</span>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-wifi fs-4 me-3"></i>
+                        <span>Free Wi-Fi</span>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-snow fs-4 me-3"></i>
+                        <span>Air Conditioning</span>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-safe fs-4 me-3"></i>
+                        <span>In-room Safe</span>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-cup-hot fs-4 me-3"></i>
+                        <span>Coffee Maker</span>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-minecart-loaded fs-4 me-3"></i>
+                        <span>Mini Bar</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <a asp-controller="Rooms" asp-action="Index" class="btn btn-outline-secondary me-3">Back to All Rooms</a>
+            <a asp-controller="Booking" asp-action="Book" asp-route-id="@Model.Id" class="btn btn-primary">Book Now</a>
+        </div>
+    </div>
+</div> 

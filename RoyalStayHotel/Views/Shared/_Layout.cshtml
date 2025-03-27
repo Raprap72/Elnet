@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Royal Stay Hotel</title>
+    
+    <link rel="icon" type="image/x-icon" href="~/images/favicon_royal-stay.png">
+    
+    <link href='https://fonts.googleapis.com/css?family=Merriweather Sans' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Playball' rel='stylesheet'>
+    
+    <!-- Use local Bootstrap instead of CDN -->
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <!-- Use local Bootstrap Icons or Font Awesome -->
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/RoyalStayHotel.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/stndrd_logo.png" alt="Royal Stay Logo" />
+                    <span class="logo-text">ROYAL STAY</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Rooms" asp-action="Index">ROOMS</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">ABOUT</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Services">SERVICES</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">CONTACT</a>
+                        </li>
+                    </ul>
+                    <div class="phone-number">
+                        <div class="phone-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <span>123-456-7890</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <main role="main" class="main-section">
+        @RenderBody()
+    </main>
+
+    <footer class="hotel-footer">
+        <div class="container">
+            <div class="row">
+                <!-- Contact & Logo -->
+                <div class="col-lg-3 col-md-6 footer-section fw-lighter">
+                    <img src="~/images/bg_logo.png" alt="Hotel Logo" class="footer-logo">
+                    <p class="footer-text">+639 92 857 1488</p>
+                    <p class="footer-text">royal_stay@gmail.com</p>
+                    <p class="footer-text">
+                        The Peninsula Manila Residences<br>
+                        Corner of Ayala and Makati Avenues,<br>
+                        Makati City, 1226,<br>
+                        Metro Manila, Philippines
+                    </p>
+                </div>
+
+                <!-- About Links -->
+                <div class="col-lg-3 col-md-6 footer-section">
+                    <h4 class="footer-heading">About</h4>
+                    <ul class="footer-links">
+                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-controller="Home" asp-action="About">Our Story</a></li>
+                        <li><a asp-controller="Rooms" asp-action="Index">Rooms & Suites</a></li>
+                        <li><a href="#">Dining</a></li>
+                        <li><a href="#">Gallery</a></li>
+                        <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-3 col-md-6 footer-section">
+                    <h4 class="footer-heading">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a asp-controller="Booking" asp-action="Index">Book a Room</a></li>
+                        <li><a href="#">Check In</a></li>
+                        <li><a href="#">Check Out</a></li>
+                        <li><a href="#">FAQs</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="col-lg-3 col-md-6 footer-section">
+                    <h4 class="footer-heading">Newsletter</h4>
+                    <p class="footer-text">Stay updated with exclusive offers!</p>
+                    <form class="newsletter-form">
+                        <input type="email" class="newsletter-input" placeholder="Email address">
+                        <button type="submit" class="newsletter-btn" title="Submit Newsletter"><i class="fas fa-check"></i></button>
+                    </form>
+                    <div class="social-icons">
+                        <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="Pinterest"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Footer -->
+            <div class="footer-bottom">
+                <p>&copy; @DateTime.Now.Year - Royal Stay Hotel. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Terms & Conditions</a>
+                    <a href="#">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Use local jQuery and Bootstrap JS instead of CDN -->
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

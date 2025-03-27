@@ -1,0 +1,399 @@
+html {
+  font-size: 14px;
+  position: relative;
+  min-height: 100%;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+body {
+  font-family: 'Merriweather Sans', sans-serif;
+  margin-bottom: 60px;
+  background-color: #f8f4ea;
+  color: #333;
+}
+
+/* Navbar */
+.navbar {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #c5a06a;
+}
+
+.navbar .navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.navbar .navbar-brand img {
+  height: 60px;
+}
+
+.logo-text {
+  font-family: 'Playball', cursive;
+  color: #333;
+  margin-left: 10px;
+  font-size: 1.5rem;
+}
+
+.navbar .nav-link {
+  color: #333;
+  margin: 0 15px;
+  font-weight: 500;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.navbar .nav-link:hover {
+  color: #fff;
+}
+
+.navbar .nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: #fff;
+  transition: width 0.3s;
+}
+
+.navbar .nav-link:hover::after {
+  width: 100%;
+}
+
+.phone-number {
+  display: flex;
+  align-items: center;
+  color: #333;
+}
+
+.phone-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: #333;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.phone-icon i {
+  color: #c5a06a;
+}
+
+/* Hero Section */
+.hero-section {
+  background-image: url('../images/book_now_bg.png');
+  background-size: cover;
+  background-position: center;
+  height: 85vh;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  text-align: left;
+}
+
+.welcome-text {
+  font-family: 'Playball', cursive;
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+}
+
+.hero-section .btn-primary {
+  background-color: #c5a06a;
+  border-color: #c5a06a;
+  color: #333;
+  font-weight: 500;
+  padding: 10px 30px;
+  border-radius: 30px;
+  transition: all 0.3s;
+}
+
+.hero-section .btn-primary:hover {
+  background-color: #fff;
+  border-color: #fff;
+  color: #c5a06a;
+}
+
+/* Section Titles */
+.section-title {
+  position: relative;
+  color: #333;
+  font-weight: bold;
+  padding-bottom: 15px;
+  margin-bottom: 30px;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 3px;
+  background-color: #c5a06a;
+}
+
+/* Room Cards */
+.room-card {
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  background-color: #fff;
+}
+
+.room-card:hover {
+  transform: translateY(-10px);
+}
+
+.room-price {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #c5a06a;
+}
+
+.btn-outline-primary {
+  color: #c5a06a;
+  border-color: #c5a06a;
+}
+
+.btn-outline-primary:hover {
+  background-color: #c5a06a;
+  border-color: #c5a06a;
+  color: #fff;
+}
+
+.btn-primary {
+  background-color: #c5a06a;
+  border-color: #c5a06a;
+}
+
+.btn-primary:hover {
+  background-color: #a98652;
+  border-color: #a98652;
+}
+
+/* Testimonial Cards */
+.testimonial-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.testimonial-text {
+  font-style: italic;
+}
+
+/* Footer */
+.hotel-footer {
+  background-color: #212529;
+  color: #ffffff;
+  padding: 60px 0 20px;
+}
+
+.footer-logo {
+  width: 150px;
+  margin-bottom: 20px;
+}
+
+.footer-heading {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #c5a06a;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 10px;
+}
+
+.footer-links a {
+  color: #9d9d9d;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+}
+
+.footer-text {
+  color: #9d9d9d;
+  margin-bottom: 10px;
+}
+
+.newsletter-form {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.newsletter-input {
+  width: 100%;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  background-color: #333;
+  color: #ffffff;
+}
+
+.newsletter-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  background-color: #c5a06a;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  color: #ffffff;
+  width: 40px;
+}
+
+.social-icons {
+  display: flex;
+  gap: 15px;
+}
+
+.social-icons a {
+  color: #9d9d9d;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: #c5a06a;
+}
+
+.footer-bottom {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-bottom-links a {
+  color: #9d9d9d;
+  margin-left: 20px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-bottom-links a:hover {
+  color: #ffffff;
+}
+
+/* Login and Register */
+.login-card, .register-card {
+  display: flex;
+  width: 800px;
+  height: 600px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.login-left, .register-left {
+  flex: 1;
+  overflow: hidden;
+}
+
+.login-left img, .register-left img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.login-right, .register-right {
+  flex: 1;
+  padding: 40px;
+  position: relative;
+  background-color: #ffffff;
+}
+
+.back-link {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: #000;
+  text-decoration: none;
+}
+
+/* Room Details */
+.room-features .list-group-item {
+  border: none;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+/* Service Features */
+.service-card, .service-feature {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s;
+}
+
+.service-card:hover, .service-feature:hover {
+  transform: translateY(-5px);
+}
+
+.service-card i, .service-feature i {
+  color: #c5a06a;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .navbar .nav-link {
+    margin: 0 8px;
+  }
+  
+  .hero-title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-card, .register-card {
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+  }
+  
+  .login-left, .register-left {
+    display: none;
+  }
+}

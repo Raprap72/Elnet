@@ -1,0 +1,109 @@
+@model IEnumerable<RoyalStayHotel.Models.Room>
+@{
+    ViewBag.Title = "Room Management";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Room Management</h1>
+    <a href="@Url.Action("Create", "Room", new { area = "Admin" })" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <i class="fas fa-plus fa-sm text-white-50"></i> Add New Room
+    </a>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Room List</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="roomsDataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Room Number</th>
+                        <th>Type</th>
+                        <th>Price</th>
+                        <th>Capacity</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var room in Model)
+                    {
+                        <tr>
+                            <td>@room.RoomNumber</td>
+                            <td>@room.RoomType</td>
+                            <td>@room.Price.ToString("C")</td>
+                            <td>@room.Capacity</td>
+                            <td>
+                                @if (room.IsAvailable)
+                                {
+                                    <span class="badge badge-success">Available</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-danger">Occupied</span>
+                                }
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Edit", "Room", new { id = room.RoomId, area = "Admin" })" class="btn btn-info btn-sm">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <a href="@Url.Action("Details", "Room", new { id = room.RoomId, area = "Admin" })" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-info-circle"></i> Details
+                                </a>
+                                <button type="button" class="btn btn-danger btn-sm delete-room" data-toggle="modal" data-target="#deleteModal" data-id="@room.RoomId">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Room</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this room? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                @using (Html.BeginForm("Delete", "Room", FormMethod.Post, new { id = "deleteForm", area = "Admin" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="roomIdToDelete" name="id" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            $('#roomsDataTable').DataTable({
+                "order": [[0, "asc"]]
+            });
+
+            // Set room ID in delete modal
+            $('.delete-room').on('click', function() {
+                var roomId = $(this).data('id');
+                $('#roomIdToDelete').val(roomId);
+            });
+        });
+    </script>
+} 

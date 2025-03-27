@@ -1,0 +1,58 @@
+@model RoyalStayHotel.Models.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container-fluid d-flex justify-content-center min-vh-100 py-5">
+    <div class="login-card">
+        <div class="login-left">
+            <img src="~/images/rgstr_bg.png" alt="Background Image">
+        </div>
+        <div class="login-right">
+            <a asp-controller="Home" asp-action="Index" class="back-link">
+                <i class="back-to-home bi bi-arrow-left fs-4"></i>
+            </a>
+
+            <h2 class="mb-4">Login</h2>
+            
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            
+            <form asp-action="Login" method="post">
+                <div class="form-group mb-3">
+                    <label asp-for="Username"></label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label asp-for="Password"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                
+                <div class="form-check mb-3">
+                    <input asp-for="RememberMe" class="form-check-input" />
+                    <label asp-for="RememberMe" class="form-check-label"></label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+                
+                <div class="text-center mt-3">
+                    <p>or use a social network</p>
+                    <div class="social-icons">
+                        <i class="bi bi-facebook"></i>
+                        <i class="bi bi-google"></i>
+                        <i class="bi bi-telephone"></i>
+                    </div>
+                </div>
+                
+                <p class="mt-3 text-center">Not a member yet? <a asp-action="Register">Sign Up</a></p>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

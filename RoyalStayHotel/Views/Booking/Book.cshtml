@@ -1,0 +1,136 @@
+@{
+    ViewData["Title"] = "Book a Room";
+    var room = ViewBag.Room;
+}
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 text-center mb-5">
+            <h1 class="mb-4">Book Your Stay</h1>
+            <p class="lead">Experience luxury and comfort at Royal Stay Hotel.</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-7 mb-5">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Room Details</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4 align-items-center">
+                        <div class="col-md-5">
+                            <img src="@room.ImageUrl" alt="@room.RoomType Room" class="img-fluid rounded">
+                        </div>
+                        <div class="col-md-7">
+                            <h4>@room.RoomType Room</h4>
+                            <p>@room.Description</p>
+                            <div class="room-features mb-3">
+                                <span class="badge bg-secondary me-2">@room.BedType</span>
+                                <span class="badge bg-secondary">@room.MaxGuests Guests</span>
+                            </div>
+                            <h5 class="text-primary">₱@room.PricePerNight.ToString("N0") <small class="text-muted">per night</small></h5>
+                        </div>
+                    </div>
+                    
+                    <h4 class="mb-3">Room Amenities</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> Free Wi-Fi</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> Air Conditioning</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> Flat-screen TV</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> Private Bathroom</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> In-room Safe</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> Mini Bar</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> Coffee Maker</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> Room Service</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Booking Form</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-action="Book">
+                        <input type="hidden" name="roomId" value="@room.RoomId" />
+                        
+                        <div class="mb-3">
+                            <label for="checkIn" class="form-label">Check-in Date</label>
+                            <input type="date" class="form-control" id="checkIn" name="checkIn" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="checkOut" class="form-label">Check-out Date</label>
+                            <input type="date" class="form-control" id="checkOut" name="checkOut" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="numberOfGuests" class="form-label">Number of Guests</label>
+                            <select class="form-select" id="numberOfGuests" name="numberOfGuests">
+                                @for (int i = 1; i <= room.MaxGuests; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="specialRequests" class="form-label">Special Requests (Optional)</label>
+                            <textarea class="form-control" id="specialRequests" name="specialRequests" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="termsAgree" required>
+                            <label class="form-check-label" for="termsAgree">I agree to the booking terms and conditions</label>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <h5>Booking Summary</h5>
+                            <p class="mb-1">Room: @room.RoomType Room #@room.RoomNumber</p>
+                            <p class="mb-1">Rate: ₱@room.PricePerNight.ToString("N0") per night</p>
+                            <p class="mb-1">Total will be calculated based on your length of stay</p>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">Confirm Booking</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Set minimum date for check-in to today
+            var today = new Date().toISOString().split('T')[0];
+            $('#checkIn').attr('min', today);
+            
+            // Update check-out minimum date when check-in changes
+            $('#checkIn').on('change', function() {
+                var checkInDate = new Date($(this).val());
+                var nextDay = new Date(checkInDate);
+                nextDay.setDate(checkInDate.getDate() + 1);
+                
+                var nextDayStr = nextDay.toISOString().split('T')[0];
+                $('#checkOut').attr('min', nextDayStr);
+                
+                // If check-out date is before new check-in date, update it
+                if ($('#checkOut').val() && new Date($('#checkOut').val()) <= checkInDate) {
+                    $('#checkOut').val(nextDayStr);
+                }
+            });
+        });
+    </script>
+} 

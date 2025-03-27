@@ -1,0 +1,21 @@
+<ul class="navbar-nav">
+    @* In a real app, we would use User.Identity.IsAuthenticated *@
+    @if (false)
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Account" asp-action="MyAccount">MY ACCOUNT</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Account" asp-action="Logout">LOGOUT</a>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Account" asp-action="Register">REGISTER</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Account" asp-action="Login">LOGIN</a>
+        </li>
+    }
+</ul> 

@@ -1,0 +1,155 @@
+@model PaginatedList<RoyalStayHotel.Models.Booking>
+@using RoyalStayHotel.Models
+@using RoyalStayHotel.Areas.Admin.Controllers
+@{
+    ViewBag.Title = "Bookings Management";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Bookings Management</h1>
+    <a href="@Url.Action("Index", "Room", new { area = "Admin" })" class="btn btn-primary btn-sm">
+        <i class="fas fa-bed fa-sm text-white-50 mr-1"></i> Manage Rooms
+    </a>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary">All Bookings</h6>
+        <div>
+            <form asp-action="Index" method="get" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                <div class="input-group">
+                    <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search fa-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>
+                            <a asp-action="Index" asp-route-sortOrder="@ViewData["IdSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">ID</a>
+                        </th>
+                        <th>
+                            <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Guest</a>
+                        </th>
+                        <th>Room</th>
+                        <th>
+                            <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Check-in</a>
+                        </th>
+                        <th>Check-out</th>
+                        <th>
+                            <a asp-action="Index" asp-route-sortOrder="@ViewData["StatusSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Status</a>
+                        </th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var booking in Model)
+                    {
+                        <tr>
+                            <td>@booking.BookingId</td>
+                            <td>
+                                @if (booking.User != null)
+                                {
+                                    @booking.User.FullName
+                                }
+                                else
+                                {
+                                    <span class="text-muted">N/A</span>
+                                }
+                            </td>
+                            <td>
+                                @if (booking.Room != null)
+                                {
+                                    <span>@booking.Room.RoomType Room #@booking.Room.RoomNumber</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">N/A</span>
+                                }
+                            </td>
+                            <td>@booking.CheckInDate.ToString("MMM dd, yyyy")</td>
+                            <td>@booking.CheckOutDate.ToString("MMM dd, yyyy")</td>
+                            <td>
+                                @if (booking.Status == BookingStatus.Confirmed)
+                                {
+                                    <span class="badge badge-success">@booking.Status</span>
+                                }
+                                else if (booking.Status == BookingStatus.Pending)
+                                {
+                                    <span class="badge badge-warning">@booking.Status</span>
+                                }
+                                else if (booking.Status == BookingStatus.Cancelled)
+                                {
+                                    <span class="badge badge-danger">@booking.Status</span>
+                                }
+                                else if (booking.Status == BookingStatus.CheckedIn)
+                                {
+                                    <span class="badge badge-primary">@booking.Status</span>
+                                }
+                                else if (booking.Status == BookingStatus.CheckedOut)
+                                {
+                                    <span class="badge badge-secondary">@booking.Status</span>
+                                }
+                                else if (booking.Status == BookingStatus.NoShow)
+                                {
+                                    <span class="badge badge-dark">@booking.Status</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-info">@booking.Status</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="@Url.Action("Details", new { id = booking.BookingId })" class="btn btn-info btn-sm">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+                                    <a href="@Url.Action("Edit", new { id = booking.BookingId })" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="@Url.Action("Delete", new { id = booking.BookingId })" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        
+        @{
+            var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+            var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+        }
+
+        <div class="d-flex justify-content-between mt-3">
+            <a asp-action="Index"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="btn btn-outline-primary @prevDisabled">
+                <i class="fas fa-chevron-left mr-1"></i> Previous
+            </a>
+            <div>
+                <span class="text-muted">Page @Model.PageIndex of @Model.TotalPages</span>
+            </div>
+            <a asp-action="Index"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-pageNumber="@(Model.PageIndex + 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="btn btn-outline-primary @nextDisabled">
+                Next <i class="fas fa-chevron-right ml-1"></i>
+            </a>
+        </div>
+    </div>
+</div> 

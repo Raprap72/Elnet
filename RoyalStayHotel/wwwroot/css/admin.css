@@ -1,0 +1,174 @@
+/* Admin Dashboard Styles */
+body {
+    font-size: .875rem;
+    background-color: #f8f9fc;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 48px 0 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.75);
+    padding: .75rem 1rem;
+    margin-bottom: .2rem;
+}
+
+.sidebar .nav-link:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar .nav-link.active {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar .nav-link i {
+    margin-right: .5rem;
+}
+
+.sidebar-heading {
+    font-size: .75rem;
+    text-transform: uppercase;
+}
+
+/* Content Area */
+[role="main"] {
+    padding-top: 48px;
+}
+
+/* Navbar */
+.navbar-brand {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+}
+
+/* Cards */
+.card {
+    margin-bottom: 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+}
+
+.card-header {
+    background-color: #f8f9fc;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+.card-header h6 {
+    font-weight: 700;
+    color: #4e73df;
+}
+
+/* Border Card Colors */
+.border-left-primary {
+    border-left: 0.25rem solid #4e73df !important;
+}
+
+.border-left-success {
+    border-left: 0.25rem solid #1cc88a !important;
+}
+
+.border-left-info {
+    border-left: 0.25rem solid #36b9cc !important;
+}
+
+.border-left-warning {
+    border-left: 0.25rem solid #f6c23e !important;
+}
+
+.border-left-danger {
+    border-left: 0.25rem solid #e74a3b !important;
+}
+
+/* Text Colors */
+.text-primary {
+    color: #4e73df !important;
+}
+
+.text-success {
+    color: #1cc88a !important;
+}
+
+.text-info {
+    color: #36b9cc !important;
+}
+
+.text-warning {
+    color: #f6c23e !important;
+}
+
+.text-danger {
+    color: #e74a3b !important;
+}
+
+.text-gray-300 {
+    color: #dddfeb !important;
+}
+
+.text-gray-800 {
+    color: #5a5c69 !important;
+}
+
+/* Table Styles */
+.table th {
+    background-color: #f8f9fc;
+    color: #4e73df;
+    font-weight: 700;
+    border-top: none;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f3f3f9;
+}
+
+/* Chart Containers */
+.chart-container {
+    position: relative;
+    height: 20rem;
+}
+
+/* Custom Utility Classes */
+.text-xs {
+    font-size: .7rem;
+}
+
+.font-weight-bold {
+    font-weight: 700 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767.98px) {
+    .sidebar {
+        position: static;
+        padding-top: 0;
+        box-shadow: none;
+    }
+    
+    .sidebar-sticky {
+        height: auto;
+    }
+    
+    [role="main"] {
+        padding-top: 0;
+    }
+} 

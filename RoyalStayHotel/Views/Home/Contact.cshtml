@@ -1,0 +1,91 @@
+@{
+    ViewData["Title"] = "Contact";
+}
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 text-center mb-5">
+            <h1 class="mb-4">Contact Us</h1>
+            <p class="lead">We're here to assist you with any questions or special requests.</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-6 mb-5">
+            <h2 class="mb-4">Get In Touch</h2>
+            <form>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Your Name</label>
+                    <input type="text" class="form-control" id="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input type="tel" class="form-control" id="phone">
+                </div>
+                <div class="mb-3">
+                    <label for="subject" class="form-label">Subject</label>
+                    <select class="form-select" id="subject">
+                        <option selected>Choose a subject</option>
+                        <option value="reservation">Reservation Inquiry</option>
+                        <option value="feedback">Feedback</option>
+                        <option value="services">Special Services</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="message" class="form-label">Your Message</label>
+                    <textarea class="form-control" id="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
+        </div>
+        
+        <div class="col-lg-6">
+            <h2 class="mb-4">Contact Information</h2>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3 class="card-title">Royal Stay Hotel</h3>
+                    <p class="card-text">
+                        <i class="bi bi-geo-alt me-2"></i> The Peninsula Manila Residences<br>
+                        Corner of Ayala and Makati Avenues,<br>
+                        Makati City, 1226, Metro Manila, Philippines
+                    </p>
+                    <p class="card-text">
+                        <i class="bi bi-telephone me-2"></i> +639 92 857 1488
+                    </p>
+                    <p class="card-text">
+                        <i class="bi bi-envelope me-2"></i> royal_stay@gmail.com
+                    </p>
+                </div>
+            </div>
+            
+            <h3 class="mb-3">Business Hours</h3>
+            <ul class="list-group mb-4">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Front Desk
+                    <span>24/7</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Restaurant
+                    <span>6:30 AM - 10:30 PM</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Spa & Wellness Center
+                    <span>9:00 AM - 9:00 PM</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Fitness Center
+                    <span>6:00 AM - 10:00 PM</span>
+                </li>
+            </ul>
+            
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3861.6499107054204!2d121.02288717488463!3d14.556132185878227!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c96c1d16ff7f%3A0x1dbecb4e11aff24d!2sThe%20Peninsula%20Manila!5e0!3m2!1sen!2sph!4v1685339584401!5m2!1sen!2sph" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </div>
+</div> 

@@ -1,0 +1,183 @@
+@model RoyalStayHotel.Models.Room
+@{
+    ViewBag.Title = "Create Room";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Create New Room</h1>
+    <a href="@Url.Action("Index", "Room", new { area = "Admin" })" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
+        <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to List
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Room Details</h6>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group row">
+                        <label asp-for="RoomNumber" class="col-sm-3 col-form-label">Room Number</label>
+                        <div class="col-sm-9">
+                            <input asp-for="RoomNumber" class="form-control" required />
+                            <span asp-validation-for="RoomNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="RoomType" class="col-sm-3 col-form-label">Room Type</label>
+                        <div class="col-sm-9">
+                            <select asp-for="RoomType" class="form-control" required>
+                                <option value="">Select Room Type</option>
+                                <option value="Single">Single</option>
+                                <option value="Double">Double</option>
+                                <option value="Suite">Suite</option>
+                                <option value="Deluxe">Deluxe</option>
+                                <option value="Presidential">Presidential</option>
+                            </select>
+                            <span asp-validation-for="RoomType" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Description" class="col-sm-3 col-form-label">Description</label>
+                        <div class="col-sm-9">
+                            <textarea asp-for="Description" class="form-control" rows="4" required></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Price" class="col-sm-3 col-form-label">Price per Night</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">$</span>
+                                </div>
+                                <input asp-for="Price" type="number" step="0.01" min="0" class="form-control" required />
+                            </div>
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Capacity" class="col-sm-3 col-form-label">Capacity</label>
+                        <div class="col-sm-9">
+                            <input asp-for="Capacity" type="number" min="1" max="10" class="form-control" required />
+                            <span asp-validation-for="Capacity" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="ImageUrl" class="col-sm-3 col-form-label">Image URL</label>
+                        <div class="col-sm-9">
+                            <input asp-for="ImageUrl" class="form-control" placeholder="Enter image URL" />
+                            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                            <small class="form-text text-muted">Enter a URL for the room image, or leave blank for default image.</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Availability</label>
+                        <div class="col-sm-9">
+                            <div class="form-check">
+                                <input asp-for="IsAvailable" class="form-check-input" />
+                                <label asp-for="IsAvailable" class="form-check-label">Room is available for booking</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mt-4">
+                        <div class="col-sm-9 offset-sm-3">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Create Room
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Room Type Info</h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h5>Single Room</h5>
+                    <p>A room assigned to one person with a single bed.</p>
+                </div>
+                <div class="mb-3">
+                    <h5>Double Room</h5>
+                    <p>A room assigned to two people with one double bed or two single beds.</p>
+                </div>
+                <div class="mb-3">
+                    <h5>Suite</h5>
+                    <p>A larger accommodation with separate living space and bedroom(s).</p>
+                </div>
+                <div class="mb-3">
+                    <h5>Deluxe</h5>
+                    <p>A luxurious room with premium furnishings and amenities.</p>
+                </div>
+                <div class="mb-3">
+                    <h5>Presidential</h5>
+                    <p>The most luxurious and expensive room type, with multiple bedrooms and exclusive amenities.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Room type selection change
+            $('#RoomType').change(function() {
+                var roomType = $(this).val();
+                var priceField = $('#Price');
+                
+                // Set default price based on room type
+                switch(roomType) {
+                    case 'Single':
+                        priceField.val(100);
+                        break;
+                    case 'Double':
+                        priceField.val(150);
+                        break;
+                    case 'Suite':
+                        priceField.val(250);
+                        break;
+                    case 'Deluxe':
+                        priceField.val(350);
+                        break;
+                    case 'Presidential':
+                        priceField.val(500);
+                        break;
+                    default:
+                        priceField.val('');
+                }
+                
+                // Set default capacity
+                if (roomType === 'Single') {
+                    $('#Capacity').val(1);
+                } else if (roomType === 'Double') {
+                    $('#Capacity').val(2);
+                } else if (roomType === 'Suite') {
+                    $('#Capacity').val(4);
+                } else if (roomType === 'Deluxe') {
+                    $('#Capacity').val(2);
+                } else if (roomType === 'Presidential') {
+                    $('#Capacity').val(6);
+                }
+            });
+        });
+    </script>
+} 

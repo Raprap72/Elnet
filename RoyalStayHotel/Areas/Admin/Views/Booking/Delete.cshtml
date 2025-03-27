@@ -1,0 +1,164 @@
+@model RoyalStayHotel.Models.Booking
+@using RoyalStayHotel.Models
+@{
+    ViewBag.Title = "Delete Booking";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Delete Booking</h1>
+    <div>
+        <a href="@Url.Action("Details", "Bookings", new { id = Model.BookingId })" class="d-none d-sm-inline-block btn btn-sm btn-info shadow-sm mr-2">
+            <i class="fas fa-info-circle fa-sm text-white-50"></i> View Details
+        </a>
+        <a href="@Url.Action("Index", "Bookings")" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
+            <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to List
+        </a>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 bg-danger">
+        <h6 class="m-0 font-weight-bold text-white">
+            <i class="fas fa-exclamation-triangle mr-2"></i> Confirm Deletion
+        </h6>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-danger mb-4">
+            <h5 class="alert-heading">Warning!</h5>
+            <p>Are you sure you want to delete this booking? This action cannot be undone and will permanently remove the booking from the system.</p>
+            <hr>
+            <p class="mb-0">Note: Bookings with payments cannot be deleted. Consider cancelling the booking instead.</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="font-weight-bold mb-3">Booking Information</h5>
+                <table class="table">
+                    <tr>
+                        <th>Booking ID:</th>
+                        <td>@Model.BookingId</td>
+                    </tr>
+                    <tr>
+                        <th>Guest Name:</th>
+                        <td>@(Model.User != null ? Model.User.FullName : "N/A")</td>
+                    </tr>
+                    <tr>
+                        <th>Room:</th>
+                        <td>@(Model.Room != null ? $"{Model.Room.RoomType} Room #{Model.Room.RoomNumber}" : "N/A")</td>
+                    </tr>
+                    <tr>
+                        <th>Status:</th>
+                        <td>
+                            @if (Model.Status == BookingStatus.Confirmed)
+                            {
+                                <span class="badge badge-success">@Model.Status</span>
+                            }
+                            else if (Model.Status == BookingStatus.Pending)
+                            {
+                                <span class="badge badge-warning">@Model.Status</span>
+                            }
+                            else if (Model.Status == BookingStatus.Cancelled)
+                            {
+                                <span class="badge badge-danger">@Model.Status</span>
+                            }
+                            else if (Model.Status == BookingStatus.CheckedIn)
+                            {
+                                <span class="badge badge-primary">@Model.Status</span>
+                            }
+                            else if (Model.Status == BookingStatus.CheckedOut)
+                            {
+                                <span class="badge badge-secondary">@Model.Status</span>
+                            }
+                            else if (Model.Status == BookingStatus.NoShow)
+                            {
+                                <span class="badge badge-dark">@Model.Status</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-info">@Model.Status</span>
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <h5 class="font-weight-bold mb-3">Dates & Payment</h5>
+                <table class="table">
+                    <tr>
+                        <th>Check-in:</th>
+                        <td>@Model.CheckInDate.ToString("MMM dd, yyyy")</td>
+                    </tr>
+                    <tr>
+                        <th>Check-out:</th>
+                        <td>@Model.CheckOutDate.ToString("MMM dd, yyyy")</td>
+                    </tr>
+                    <tr>
+                        <th>Total Amount:</th>
+                        <td>@Model.TotalPrice.ToString("C")</td>
+                    </tr>
+                    <tr>
+                        <th>Created At:</th>
+                        <td>@Model.CreatedAt.ToString("MMM dd, yyyy h:mm tt")</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <form asp-controller="Bookings" asp-action="Delete" method="post">
+            <input type="hidden" name="id" value="@Model.BookingId" />
+            <div class="form-group mb-0 text-center">
+                <button type="submit" class="btn btn-danger btn-lg">
+                    <i class="fas fa-trash mr-2"></i> Delete Booking
+                </button>
+                <a asp-action="Index" class="btn btn-secondary btn-lg ml-2">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Alternative Actions</h6>
+    </div>
+    <div class="card-body">
+        <p>If you want to keep the booking record but make it inactive, consider these alternatives:</p>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-3 border-left-warning">
+                    <div class="card-body">
+                        <h5 class="card-title">Cancel the Booking</h5>
+                        <p class="card-text">Mark the booking as cancelled but keep it in the system for record-keeping.</p>
+                        <form asp-controller="Bookings" asp-action="UpdateStatus" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.BookingId" />
+                            <input type="hidden" name="status" value="@BookingStatus.Cancelled" />
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-ban mr-1"></i> Cancel Booking
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-3 border-left-dark">
+                    <div class="card-body">
+                        <h5 class="card-title">Mark as No-Show</h5>
+                        <p class="card-text">If the guest didn't arrive, mark the booking as a no-show for reporting purposes.</p>
+                        <form asp-controller="Bookings" asp-action="UpdateStatus" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.BookingId" />
+                            <input type="hidden" name="status" value="@BookingStatus.NoShow" />
+                            <button type="submit" class="btn btn-dark">
+                                <i class="fas fa-user-slash mr-1"></i> Mark as No-Show
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

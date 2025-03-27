@@ -1,0 +1,72 @@
+@model IEnumerable<RoyalStayHotel.Models.Room>
+
+@{
+    ViewData["Title"] = "Our Rooms";
+}
+
+<div class="container my-5">
+    <h1 class="mb-4">Our Rooms</h1>
+    
+    <div class="mb-4">
+        <h4>Filter Rooms</h4>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <h5>Bed Type</h5>
+                    <div class="form-check">
+                        <input class="form-check-input filter-checkbox" type="checkbox" id="kingBed" data-filter="kingBed">
+                        <label class="form-check-label" for="kingBed">King Bed</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input filter-checkbox" type="checkbox" id="doubleBeds" data-filter="doubleBeds">
+                        <label class="form-check-label" for="doubleBeds">Double Beds</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <h5>Capacity</h5>
+                    <div class="form-check">
+                        <input class="form-check-input filter-checkbox" type="checkbox" id="threeGuests" data-filter="threeGuests">
+                        <label class="form-check-label" for="threeGuests">3+ Guests</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input filter-checkbox" type="checkbox" id="fourGuests" data-filter="fourGuests">
+                        <label class="form-check-label" for="fourGuests">4+ Guests</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="roomList" class="row">
+        @await Html.PartialAsync("_RoomList", Model)
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.filter-checkbox').change(function() {
+                var kingBed = $('#kingBed').is(':checked');
+                var doubleBeds = $('#doubleBeds').is(':checked');
+                var threeGuests = $('#threeGuests').is(':checked');
+                var fourGuests = $('#fourGuests').is(':checked');
+                
+                $.ajax({
+                    url: '@Url.Action("FilterRooms", "Rooms")',
+                    type: 'POST',
+                    data: {
+                        kingBed: kingBed,
+                        doubleBeds: doubleBeds,
+                        threeGuests: threeGuests,
+                        fourGuests: fourGuests
+                    },
+                    success: function(result) {
+                        $('#roomList').html(result);
+                    }
+                });
+            });
+        });
+    </script>
+} 

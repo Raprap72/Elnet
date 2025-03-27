@@ -1,0 +1,39 @@
+@model IEnumerable<RoyalStayHotel.Models.Room>
+
+@foreach (var room in Model)
+{
+    <div class="col-md-4 mb-4">
+        <div class="card room-card">
+            <img src="@room.ImageUrl" class="card-img-top" alt="@room.Name">
+            <div class="card-body">
+                <h5 class="card-title">@room.Name</h5>
+                <p class="card-text">@room.Description</p>
+                
+                <div class="room-features mb-3">
+                    @if (room.HasKingBed)
+                    {
+                        <span class="badge bg-secondary me-2">King Bed</span>
+                    }
+                    @if (room.HasDoubleBeds)
+                    {
+                        <span class="badge bg-secondary me-2">Double Beds</span>
+                    }
+                    <span class="badge bg-secondary">@room.MaxGuests Guests</span>
+                </div>
+                
+                <p class="room-price">₱@room.Price.ToString("N0")</p>
+                <div class="d-flex justify-content-between">
+                    <a asp-controller="Rooms" asp-action="Details" asp-route-id="@room.Id" class="btn btn-outline-primary">View Details</a>
+                    <a asp-controller="Booking" asp-action="Book" asp-route-id="@room.Id" class="btn btn-primary">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <div class="col-12 text-center">
+        <p>No rooms match your filter criteria. Please try different options.</p>
+    </div>
+} 

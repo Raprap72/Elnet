@@ -1,0 +1,103 @@
+@model IEnumerable<RoyalStayHotel.Models.Room>
+
+@{
+    ViewData["Title"] = "Book a Room";
+}
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 text-center mb-5">
+            <h1 class="mb-4">Select Your Experience</h1>
+            <p class="lead">Discover our luxurious rooms and suites for your perfect stay.</p>
+        </div>
+    </div>
+    
+    <div class="mb-4">
+        <h4>Filter Rooms</h4>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <h5>Bed Type</h5>
+                    <div class="form-check">
+                        <input class="form-check-input filter-checkbox" type="checkbox" id="kingBed" data-filter="kingBed">
+                        <label class="form-check-label" for="kingBed">King Bed</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input filter-checkbox" type="checkbox" id="doubleBeds" data-filter="doubleBeds">
+                        <label class="form-check-label" for="doubleBeds">Double Beds</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <h5>Capacity</h5>
+                    <div class="form-check">
+                        <input class="form-check-input filter-checkbox" type="checkbox" id="threeGuests" data-filter="threeGuests">
+                        <label class="form-check-label" for="threeGuests">3+ Guests</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input filter-checkbox" type="checkbox" id="fourGuests" data-filter="fourGuests">
+                        <label class="form-check-label" for="fourGuests">4+ Guests</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        @foreach (var room in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card room-card">
+                    <img src="@room.ImageUrl" class="card-img-top" alt="@room.RoomType Room">
+                    <div class="card-body">
+                        <h5 class="card-title">@room.RoomType Room</h5>
+                        <p class="card-text">@room.Description</p>
+                        
+                        <div class="room-features mb-3">
+                            <span class="badge bg-secondary me-2">@room.BedType</span>
+                            <span class="badge bg-secondary">@room.MaxGuests Guests</span>
+                        </div>
+                        
+                        <p class="room-price">₱@room.PricePerNight.ToString("N0") per night</p>
+                        <div class="d-flex justify-content-between">
+                            <a href="#" class="btn btn-outline-primary">View Details</a>
+                            <a asp-controller="Booking" asp-action="Book" asp-route-id="@room.RoomId" class="btn btn-primary">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.filter-checkbox').change(function() {
+                var kingBed = $('#kingBed').is(':checked');
+                var doubleBeds = $('#doubleBeds').is(':checked');
+                var threeGuests = $('#threeGuests').is(':checked');
+                var fourGuests = $('#fourGuests').is(':checked');
+                
+                // Simple client-side filtering
+                $('.room-card').each(function() {
+                    var $room = $(this);
+                    var hasKingBed = $room.find('.badge:contains("King Bed")').length > 0;
+                    var hasDoubleBeds = $room.find('.badge:contains("Double Beds")').length > 0;
+                    var guestsText = $room.find('.badge:contains("Guests")').text();
+                    var maxGuests = parseInt(guestsText);
+                    
+                    var showRoom = true;
+                    
+                    if (kingBed && !hasKingBed && !doubleBeds) showRoom = false;
+                    if (doubleBeds && !hasDoubleBeds && !kingBed) showRoom = false;
+                    if (threeGuests && maxGuests < 3 && !fourGuests) showRoom = false;
+                    if (fourGuests && maxGuests < 4 && !threeGuests) showRoom = false;
+                    
+                    $room.closest('.col-md-4').toggle(showRoom);
+                });
+            });
+        });
+    </script>
+} 

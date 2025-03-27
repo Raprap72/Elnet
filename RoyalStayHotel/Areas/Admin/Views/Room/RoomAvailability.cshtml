@@ -1,0 +1,247 @@
+@{
+    ViewBag.Title = "Room Availability";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Room Availability Overview</h1>
+    <a href="@Url.Action("Index", "Room", new { area = "Admin" })" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <i class="fas fa-list fa-sm text-white-50"></i> Room List
+    </a>
+</div>
+
+<div class="row">
+    <!-- Total Rooms Card -->
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Total Rooms</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalRooms</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-hotel fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Available Rooms Card -->
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Available Rooms</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.AvailableRooms</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Occupied Rooms Card -->
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Occupied Rooms</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.OccupiedRooms</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-user fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Pie Chart -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Availability Distribution</h6>
+            </div>
+            <div class="card-body">
+                <div class="chart-pie pt-4 pb-2">
+                    <canvas id="availabilityPieChart"></canvas>
+                </div>
+                <div class="mt-4 text-center small">
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-success"></i> Available
+                    </span>
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-warning"></i> Occupied
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bar Chart -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Rooms by Type</h6>
+            </div>
+            <div class="card-body">
+                <div class="chart-bar">
+                    <canvas id="roomTypeBarChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Availability Calendar Card -->
+    <div class="col-lg-12 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Room Availability Calendar</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">Actions:</div>
+                        <a class="dropdown-item" href="#">Export Calendar</a>
+                        <a class="dropdown-item" href="#">Print View</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">View All Bookings</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="calendar" style="height: 400px;"></div>
+                <div class="text-center mt-3">
+                    <p class="text-muted">Interactive calendar view will be implemented in future updates.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Pie Chart for Room Availability
+        var availableRooms = @ViewBag.AvailableRooms;
+        var occupiedRooms = @ViewBag.OccupiedRooms;
+        
+        var pieCtx = document.getElementById("availabilityPieChart");
+        var pieChart = new Chart(pieCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ["Available", "Occupied"],
+                datasets: [{
+                    data: [availableRooms, occupiedRooms],
+                    backgroundColor: ['#1cc88a', '#f6c23e'],
+                    hoverBackgroundColor: ['#17a673', '#dda20a'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10,
+                },
+                legend: {
+                    display: false
+                },
+                cutoutPercentage: 70,
+            },
+        });
+        
+        // Bar Chart for Room Types using data from ViewBag
+        var roomTypes = @Html.Raw(Json.Serialize(ViewBag.RoomTypes));
+        var roomCounts = @Html.Raw(Json.Serialize(ViewBag.RoomCounts));
+        
+        var barCtx = document.getElementById("roomTypeBarChart");
+        var barChart = new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: roomTypes,
+                datasets: [{
+                    label: "Rooms",
+                    backgroundColor: "#4e73df",
+                    hoverBackgroundColor: "#2e59d9",
+                    borderColor: "#4e73df",
+                    data: roomCounts,
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 25,
+                        top: 25,
+                        bottom: 0
+                    }
+                },
+                scales: {
+                    xAxes: [{
+                        gridLines: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            maxTicksLimit: 6
+                        },
+                        maxBarThickness: 25,
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            max: Math.max(...roomCounts) + 2, // Dynamic max based on data
+                            maxTicksLimit: 5,
+                            padding: 10,
+                        },
+                        gridLines: {
+                            color: "rgb(234, 236, 244)",
+                            zeroLineColor: "rgb(234, 236, 244)",
+                            drawBorder: false,
+                            borderDash: [2],
+                            zeroLineBorderDash: [2]
+                        }
+                    }],
+                },
+                legend: {
+                    display: false
+                },
+                tooltips: {
+                    titleMarginBottom: 10,
+                    titleFontColor: '#6e707e',
+                    titleFontSize: 14,
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10,
+                },
+            }
+        });
+    </script>
+} 

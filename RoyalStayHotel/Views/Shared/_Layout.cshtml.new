@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Royal Stay Hotel</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/css/site.css" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="~/images/favicon_royal-stay.png" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <img src="~/images/logo_royal_stay.png" alt="Royal Stay Hotel" height="40" />
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Booking" asp-action="Index">Book Now</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Booking" asp-action="MyBookings">My Bookings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Login">Admin</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <footer class="border-top footer text-muted bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Royal Stay Hotel</h5>
+                    <p>Experience luxury and comfort.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a class="text-white" href="/">Home</a></li>
+                        <li><a class="text-white" href="/Booking">Book Now</a></li>
+                        <li><a class="text-white" href="/Booking/MyBookings">My Bookings</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <address>
+                        123 Royal Avenue<br />
+                        Luxury City, LC 12345<br />
+                        <i class="fas fa-phone"></i> (123) 456-7890<br />
+                        <i class="fas fa-envelope"></i> info@royalstayhotel.com
+                    </address>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                &copy; @DateTime.Now.Year - Royal Stay Hotel
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Libraries -->
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="~/js/site.js"></script>
+    
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html> 

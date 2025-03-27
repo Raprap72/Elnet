@@ -1,0 +1,222 @@
+@model RoyalStayHotel.Models.Room
+@{
+    ViewBag.Title = "Room Details";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Room Details</h1>
+    <div>
+        <a href="@Url.Action("Edit", "Room", new { id = Model.RoomId, area = "Admin" })" class="btn btn-info btn-sm shadow-sm mr-2">
+            <i class="fas fa-edit fa-sm text-white-50"></i> Edit Room
+        </a>
+        <a href="@Url.Action("Index", "Room", new { area = "Admin" })" class="btn btn-secondary btn-sm shadow-sm">
+            <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to List
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Room Information</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-4">
+                            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                            {
+                                <img src="@Model.ImageUrl" alt="Room Image" class="img-fluid rounded" style="max-height: 250px; width: 100%; object-fit: cover;" />
+                            }
+                            else
+                            {
+                                <img src="/images/placeholder-room.jpg" alt="Room Image" class="img-fluid rounded" style="max-height: 250px; width: 100%; object-fit: cover;" />
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h4 class="font-weight-bold">@Model.RoomType Room #@Model.RoomNumber</h4>
+                        
+                        <div class="mb-2">
+                            <p class="mb-0 font-weight-bold">Status:</p>
+                            @if (Model.IsAvailable)
+                            {
+                                <span class="badge badge-success">Available</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Occupied</span>
+                            }
+                        </div>
+                        
+                        <div class="mb-2">
+                            <p class="mb-0 font-weight-bold">Price per Night:</p>
+                            <p class="text-primary font-weight-bold">$@Model.Price.ToString("0.00")</p>
+                        </div>
+                        
+                        <div class="mb-2">
+                            <p class="mb-0 font-weight-bold">Capacity:</p>
+                            <p>@Model.Capacity @(Model.Capacity == 1 ? "Person" : "People")</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr />
+                
+                <div class="mt-3">
+                    <h5 class="font-weight-bold">Description</h5>
+                    <p>@Model.Description</p>
+                </div>
+                
+                <div class="mt-4">
+                    <h5 class="font-weight-bold">Room Features</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-wifi text-success mr-2"></i> Free Wi-Fi</li>
+                                <li><i class="fas fa-temperature-low text-success mr-2"></i> Air Conditioning</li>
+                                <li><i class="fas fa-tv text-success mr-2"></i> Flat-screen TV</li>
+                                <li><i class="fas fa-coffee text-success mr-2"></i> Coffee Machine</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-bath text-success mr-2"></i> Private Bathroom</li>
+                                <li><i class="fas fa-concierge-bell text-success mr-2"></i> Room Service</li>
+                                <li><i class="fas fa-snowflake text-success mr-2"></i> Mini Refrigerator</li>
+                                <li><i class="fas fa-door-closed text-success mr-2"></i> In-room Safe</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Recent Bookings</h6>
+            </div>
+            <div class="card-body">
+                @if (ViewBag.BookingHistory != null && ((IEnumerable<dynamic>)ViewBag.BookingHistory).Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Guest</th>
+                                    <th>Check-in</th>
+                                    <th>Check-out</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var booking in ViewBag.BookingHistory)
+                                {
+                                    <tr>
+                                        <td>@booking.User.FirstName @booking.User.LastName</td>
+                                        <td>@booking.CheckInDate.ToString("MM/dd/yyyy")</td>
+                                        <td>@booking.CheckOutDate.ToString("MM/dd/yyyy")</td>
+                                        <td>
+                                            @if (booking.Status == "Confirmed")
+                                            {
+                                                <span class="badge badge-success">@booking.Status</span>
+                                            }
+                                            else if (booking.Status == "Pending")
+                                            {
+                                                <span class="badge badge-warning">@booking.Status</span>
+                                            }
+                                            else if (booking.Status == "Cancelled")
+                                            {
+                                                <span class="badge badge-danger">@booking.Status</span>
+                                            }
+                                            else if (booking.Status == "Completed")
+                                            {
+                                                <span class="badge badge-info">@booking.Status</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-secondary">@booking.Status</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="@Url.Action("Index", "Booking", new { area = "Admin", roomId = Model.RoomId })" class="btn btn-outline-primary btn-sm">
+                            View All Bookings
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-3">
+                        <i class="fas fa-calendar-alt fa-3x text-gray-300 mb-3"></i>
+                        <p class="mb-0">No booking history found for this room.</p>
+                    </div>
+                }
+            </div>
+        </div>
+        
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Room Maintenance</h6>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-3">
+                    @if (Model.IsAvailable)
+                    {
+                        <form asp-action="ToggleAvailability" asp-route-id="@Model.RoomId" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-warning btn-block">
+                                <i class="fas fa-tools mr-2"></i>Mark as Unavailable for Maintenance
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-action="ToggleAvailability" asp-route-id="@Model.RoomId" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-success btn-block">
+                                <i class="fas fa-check-circle mr-2"></i>Mark as Available
+                            </button>
+                        </form>
+                    }
+                </div>
+                
+                <hr />
+                
+                <div class="text-center mt-3">
+                    <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#maintenanceHistoryModal">
+                        <i class="fas fa-history mr-2"></i>View Maintenance History
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Maintenance History Modal -->
+<div class="modal fade" id="maintenanceHistoryModal" tabindex="-1" role="dialog" aria-labelledby="maintenanceHistoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="maintenanceHistoryModalLabel">Maintenance History - Room #@Model.RoomNumber</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center text-muted">Maintenance history functionality will be implemented in future updates.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div> 
