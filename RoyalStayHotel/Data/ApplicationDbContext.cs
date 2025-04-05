@@ -12,6 +12,7 @@ namespace RoyalStayHotel.Data
         
         public DbSet<User> Users { get; set; }
         public DbSet<Room> Rooms { get; set; }
+        public DbSet<RoomTypeInventory> RoomTypeInventories { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<BookedService> BookedServices { get; set; }
@@ -25,6 +26,7 @@ namespace RoyalStayHotel.Data
             // Configure entity table names
             modelBuilder.Entity<User>().ToTable("Users");
             modelBuilder.Entity<Room>().ToTable("Rooms");
+            modelBuilder.Entity<RoomTypeInventory>().ToTable("RoomTypeInventories");
             modelBuilder.Entity<Booking>().ToTable("Bookings");
             modelBuilder.Entity<Service>().ToTable("Services");
             modelBuilder.Entity<BookedService>().ToTable("BookedServices");

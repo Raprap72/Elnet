@@ -1,183 +1,433 @@
 @model RoyalStayHotel.Models.Room
+@using RoyalStayHotel.Models
 @{
-    ViewBag.Title = "Create Room";
-    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Create Room";
+    Layout = "_AdminLayout";
+    var roomTypeInventories = ViewBag.RoomTypeInventories as List<RoomTypeInventory>;
 }
 
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Create New Room</h1>
-    <a href="@Url.Action("Index", "Room", new { area = "Admin" })" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
-        <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to List
-    </a>
-</div>
-
-<div class="row">
-    <div class="col-lg-8">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Room Details</h6>
-            </div>
-            <div class="card-body">
-                <form asp-action="Create" method="post" enctype="multipart/form-data">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                    <div class="form-group row">
-                        <label asp-for="RoomNumber" class="col-sm-3 col-form-label">Room Number</label>
-                        <div class="col-sm-9">
-                            <input asp-for="RoomNumber" class="form-control" required />
-                            <span asp-validation-for="RoomNumber" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label asp-for="RoomType" class="col-sm-3 col-form-label">Room Type</label>
-                        <div class="col-sm-9">
-                            <select asp-for="RoomType" class="form-control" required>
-                                <option value="">Select Room Type</option>
-                                <option value="Single">Single</option>
-                                <option value="Double">Double</option>
-                                <option value="Suite">Suite</option>
-                                <option value="Deluxe">Deluxe</option>
-                                <option value="Presidential">Presidential</option>
-                            </select>
-                            <span asp-validation-for="RoomType" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label asp-for="Description" class="col-sm-3 col-form-label">Description</label>
-                        <div class="col-sm-9">
-                            <textarea asp-for="Description" class="form-control" rows="4" required></textarea>
-                            <span asp-validation-for="Description" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label asp-for="Price" class="col-sm-3 col-form-label">Price per Night</label>
-                        <div class="col-sm-9">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">$</span>
-                                </div>
-                                <input asp-for="Price" type="number" step="0.01" min="0" class="form-control" required />
-                            </div>
-                            <span asp-validation-for="Price" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label asp-for="Capacity" class="col-sm-3 col-form-label">Capacity</label>
-                        <div class="col-sm-9">
-                            <input asp-for="Capacity" type="number" min="1" max="10" class="form-control" required />
-                            <span asp-validation-for="Capacity" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label asp-for="ImageUrl" class="col-sm-3 col-form-label">Image URL</label>
-                        <div class="col-sm-9">
-                            <input asp-for="ImageUrl" class="form-control" placeholder="Enter image URL" />
-                            <span asp-validation-for="ImageUrl" class="text-danger"></span>
-                            <small class="form-text text-muted">Enter a URL for the room image, or leave blank for default image.</small>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Availability</label>
-                        <div class="col-sm-9">
-                            <div class="form-check">
-                                <input asp-for="IsAvailable" class="form-check-input" />
-                                <label asp-for="IsAvailable" class="form-check-label">Room is available for booking</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group row mt-4">
-                        <div class="col-sm-9 offset-sm-3">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> Create Room
-                            </button>
-                            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Create New Room</h1>
+        <a asp-action="Index" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
+            <i class="fas fa-arrow-left fa-sm text-white-50 mr-1"></i> Back to Room List
+        </a>
     </div>
 
-    <div class="col-lg-4">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Room Type Info</h6>
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle mr-2"></i> Please correct the errors below.
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Room Details</h6>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <div class="form-group row">
+                            <label asp-for="RoomType" class="col-sm-3 col-form-label">Room Type</label>
+                            <div class="col-sm-9">
+                                <select asp-for="RoomType" class="form-control" id="roomTypeSelect">
+                                    <option value="">-- Select Room Type --</option>
+                                    @foreach (var roomType in Enum.GetValues<RoomType>())
+                                    {
+                                        var inventory = roomTypeInventories?.FirstOrDefault(r => r.RoomType == roomType);
+                                        var availableSlots = inventory?.TotalRooms - (inventory?.OccupiedRooms ?? 0);
+                                        
+                                        <option value="@((int)roomType)">
+                                            @roomType.ToString() 
+                                            @if (inventory != null)
+                                            {
+                                                <text>(Available: @(inventory.TotalRooms - inventory.OccupiedRooms) of @inventory.TotalRooms)</text>
+                                            }
+                                        </option>
+                                    }
+                                </select>
+                                <span asp-validation-for="RoomType" class="text-danger"></span>
+                                <small class="form-text text-muted">The type determines default pricing and capacity</small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label asp-for="RoomNumber" class="col-sm-3 col-form-label">Room Number</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="roomNumberPrefix">R</span>
+                                    </div>
+                                    <input asp-for="RoomNumber" class="form-control" id="roomNumberInput" 
+                                           placeholder="e.g. 101" aria-describedby="roomNumberPrefix" />
+                                </div>
+                                <span asp-validation-for="RoomNumber" class="text-danger"></span>
+                                <small class="form-text text-muted">A unique identifier for this room</small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label asp-for="Description" class="col-sm-3 col-form-label">Description</label>
+                            <div class="col-sm-9">
+                                <textarea asp-for="Description" class="form-control" rows="3" id="descriptionInput"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label asp-for="PricePerNight" class="col-sm-3 col-form-label">Price Per Night</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">₱</span>
+                                    </div>
+                                    <input asp-for="PricePerNight" class="form-control" type="number" step="0.01" min="0" id="priceInput" />
+                                </div>
+                                <span asp-validation-for="PricePerNight" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label asp-for="MaxGuests" class="col-sm-3 col-form-label">Max Guests</label>
+                            <div class="col-sm-9">
+                                <input asp-for="MaxGuests" class="form-control" type="number" min="1" id="maxGuestsInput" />
+                                <span asp-validation-for="MaxGuests" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label asp-for="BedType" class="col-sm-3 col-form-label">Bed Type</label>
+                            <div class="col-sm-9">
+                                <select asp-for="BedType" class="form-control" id="bedTypeInput">
+                                    <option value="Single">Single</option>
+                                    <option value="Double">Double</option>
+                                    <option value="Queen">Queen</option>
+                                    <option value="King">King</option>
+                                    <option value="Twin">Twin</option>
+                                </select>
+                                <span asp-validation-for="BedType" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label asp-for="RoomSize" class="col-sm-3 col-form-label">Room Size (sqm)</label>
+                            <div class="col-sm-9">
+                                <input asp-for="RoomSize" class="form-control" id="roomSizeInput" />
+                                <span asp-validation-for="RoomSize" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label asp-for="ImageUrl" class="col-sm-3 col-form-label">Image URL</label>
+                            <div class="col-sm-9">
+                                <input asp-for="ImageUrl" class="form-control" id="imageUrlInput" 
+                                       placeholder="https://example.com/room-image.jpg" />
+                                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                                <small class="form-text text-muted">Leave blank to use default image based on room type</small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <div class="col-sm-3">Availability</div>
+                            <div class="col-sm-9">
+                                <div class="custom-control custom-switch">
+                                    <input asp-for="IsAvailable" class="custom-control-input" id="isAvailableSwitch">
+                                    <label class="custom-control-label" for="isAvailableSwitch">Available for booking</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <div class="col-sm-9 offset-sm-3">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-plus-circle mr-1"></i> Create Room
+                                </button>
+                                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <h5>Single Room</h5>
-                    <p>A room assigned to one person with a single bed.</p>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary"><span id="previewRoomTypeName">Room</span> Preview</h6>
                 </div>
-                <div class="mb-3">
-                    <h5>Double Room</h5>
-                    <p>A room assigned to two people with one double bed or two single beds.</p>
-                </div>
-                <div class="mb-3">
-                    <h5>Suite</h5>
-                    <p>A larger accommodation with separate living space and bedroom(s).</p>
-                </div>
-                <div class="mb-3">
-                    <h5>Deluxe</h5>
-                    <p>A luxurious room with premium furnishings and amenities.</p>
-                </div>
-                <div class="mb-3">
-                    <h5>Presidential</h5>
-                    <p>The most luxurious and expensive room type, with multiple bedrooms and exclusive amenities.</p>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <img id="roomPreviewImage" src="/img/default_room.jpg" class="img-fluid rounded" style="max-height: 150px;" alt="Room Preview" />
+                    </div>
+                    
+                    <div class="row mb-2">
+                        <div class="col-5 text-muted">Room Number:</div>
+                        <div class="col-7 font-weight-bold" id="previewRoomNumber">-</div>
+                    </div>
+                    
+                    <div class="row mb-2">
+                        <div class="col-5 text-muted">Type:</div>
+                        <div class="col-7" id="previewRoomType">-</div>
+                    </div>
+                    
+                    <div class="row mb-2">
+                        <div class="col-5 text-muted">Price:</div>
+                        <div class="col-7" id="previewPrice">-</div>
+                    </div>
+                    
+                    <div class="row mb-2">
+                        <div class="col-5 text-muted">Capacity:</div>
+                        <div class="col-7" id="previewCapacity">-</div>
+                    </div>
+                    
+                    <div class="row mb-2">
+                        <div class="col-5 text-muted">Bed Type:</div>
+                        <div class="col-7" id="previewBedType">-</div>
+                    </div>
+                    
+                    <div class="row mb-2">
+                        <div class="col-5 text-muted">Size:</div>
+                        <div class="col-7" id="previewSize">-</div>
+                    </div>
+                    
+                    <div class="row mb-2">
+                        <div class="col-5 text-muted">Status:</div>
+                        <div class="col-7" id="previewStatus">
+                            <span class="badge badge-success">Available</span>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info mt-3 text-sm">
+                        <i class="fas fa-info-circle mr-1"></i> This preview shows how the room will appear in the system.
+                    </div>
                 </div>
             </div>
+            
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Room Type Guidelines</h6>
+                </div>
+                <div class="card-body">
+                    <div id="roomTypeInfo">
+                        <p>Select a room type to see specific guidelines and recommendations.</p>
+                    </div>
+                </div>
+            </div>
+            
+            @if (roomTypeInventories != null && roomTypeInventories.Any())
+            {
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Room Type Inventory</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Room Type</th>
+                                        <th class="text-center">Total</th>
+                                        <th class="text-center">Available</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var inventory in roomTypeInventories)
+                                    {
+                                        <tr>
+                                            <td>@inventory.RoomType</td>
+                                            <td class="text-center">@inventory.TotalRooms</td>
+                                            <td class="text-center">@(inventory.TotalRooms - inventory.OccupiedRooms)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>
 
 @section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
     <script>
         $(document).ready(function() {
-            // Room type selection change
-            $('#RoomType').change(function() {
-                var roomType = $(this).val();
-                var priceField = $('#Price');
+            // Room Type defaults
+            const roomTypeDefaults = {
+                0: { // Standard
+                    price: 1500,
+                    capacity: 2,
+                    bedType: "Single",
+                    size: 20,
+                    prefix: "S",
+                    description: "Basic room with essential amenities, perfect for budget travelers",
+                    imageUrl: "/img/standard_room.jpg",
+                    info: "Standard rooms are our most affordable option. They include basic amenities suitable for short stays and budget-conscious travelers."
+                },
+                1: { // Deluxe
+                    price: 2500,
+                    capacity: 2,
+                    bedType: "Queen",
+                    size: 25,
+                    prefix: "D",
+                    description: "Spacious room with premium amenities and city views",
+                    imageUrl: "/img/deluxe_room.jpg",
+                    info: "Deluxe rooms offer more space and upgraded amenities, with premium bedding and better views than standard rooms."
+                },
+                2: { // DeluxeSuite
+                    price: 3500,
+                    capacity: 4,
+                    bedType: "King",
+                    size: 40,
+                    prefix: "DS",
+                    description: "Luxury suite with separate living area and premium services",
+                    imageUrl: "/img/deluxesuite_room.jpg",
+                    info: "Deluxe Suites feature a separate living area and bedroom, perfect for families or guests seeking more space and privacy."
+                },
+                3: { // ExecutiveDeluxe
+                    price: 4500,
+                    capacity: 2,
+                    bedType: "King",
+                    size: 35,
+                    prefix: "ED",
+                    description: "Executive-level accommodation with exclusive lounge access",
+                    imageUrl: "/img/executivedeluxe_room.jpg",
+                    info: "Executive Deluxe rooms include access to the Executive Lounge with complimentary refreshments and business services."
+                },
+                4: { // Presidential
+                    price: 10000,
+                    capacity: 6,
+                    bedType: "King",
+                    size: 80,
+                    prefix: "P",
+                    description: "Our finest suite with maximum space, luxury amenities and butler service",
+                    imageUrl: "/img/presidential_room.jpg",
+                    info: "The Presidential Suite is our most luxurious accommodation, featuring multiple rooms, premium amenities, and personalized butler service."
+                }
+            };
+            
+            // Update preview
+            function updatePreview() {
+                const roomType = $('#roomTypeSelect').val();
+                const roomNumber = $('#roomNumberInput').val();
+                const price = $('#priceInput').val();
+                const maxGuests = $('#maxGuestsInput').val();
+                const bedType = $('#bedTypeInput').val();
+                const roomSize = $('#roomSizeInput').val();
+                const isAvailable = $('#isAvailableSwitch').is(':checked');
+                const imageUrl = $('#imageUrlInput').val();
                 
-                // Set default price based on room type
-                switch(roomType) {
-                    case 'Single':
-                        priceField.val(100);
-                        break;
-                    case 'Double':
-                        priceField.val(150);
-                        break;
-                    case 'Suite':
-                        priceField.val(250);
-                        break;
-                    case 'Deluxe':
-                        priceField.val(350);
-                        break;
-                    case 'Presidential':
-                        priceField.val(500);
-                        break;
-                    default:
-                        priceField.val('');
+                // Update preview elements
+                $('#previewRoomNumber').text(roomNumber || '-');
+                
+                let roomTypeName = $('#roomTypeSelect option:selected').text();
+                // Strip out the availability part if present
+                if (roomTypeName.includes('(Available:')) {
+                    roomTypeName = roomTypeName.substring(0, roomTypeName.indexOf('(Available:')).trim();
+                }
+                if (roomTypeName === '-- Select Room Type --') roomTypeName = 'Room';
+                $('#previewRoomType').text(roomTypeName);
+                $('#previewRoomTypeName').text(roomTypeName);
+                
+                $('#previewPrice').text(price ? `₱${parseFloat(price).toLocaleString()}` : '-');
+                $('#previewCapacity').text(maxGuests ? `${maxGuests} guests` : '-');
+                $('#previewBedType').text(bedType || '-');
+                $('#previewSize').text(roomSize ? `${roomSize} sqm` : '-');
+                
+                if (isAvailable) {
+                    $('#previewStatus').html('<span class="badge badge-success">Available</span>');
+                } else {
+                    $('#previewStatus').html('<span class="badge badge-danger">Not Available</span>');
                 }
                 
-                // Set default capacity
-                if (roomType === 'Single') {
-                    $('#Capacity').val(1);
-                } else if (roomType === 'Double') {
-                    $('#Capacity').val(2);
-                } else if (roomType === 'Suite') {
-                    $('#Capacity').val(4);
-                } else if (roomType === 'Deluxe') {
-                    $('#Capacity').val(2);
-                } else if (roomType === 'Presidential') {
-                    $('#Capacity').val(6);
+                // Set room image
+                if (imageUrl) {
+                    $('#roomPreviewImage').attr('src', imageUrl);
+                } else if (roomType && roomTypeDefaults[roomType]) {
+                    $('#roomPreviewImage').attr('src', roomTypeDefaults[roomType].imageUrl);
+                } else {
+                    $('#roomPreviewImage').attr('src', '/img/default_room.jpg');
                 }
+            }
+            
+            // Apply room type defaults
+            $('#roomTypeSelect').change(function() {
+                const roomType = $(this).val();
+                
+                if (roomType && roomTypeDefaults[roomType]) {
+                    const defaults = roomTypeDefaults[roomType];
+                    
+                    // Only set default values if fields are empty or unchanged from previous defaults
+                    if (!$('#priceInput').val() || $('#priceInput').data('auto-filled')) {
+                        $('#priceInput').val(defaults.price).data('auto-filled', true);
+                    }
+                    
+                    if (!$('#maxGuestsInput').val() || $('#maxGuestsInput').data('auto-filled')) {
+                        $('#maxGuestsInput').val(defaults.capacity).data('auto-filled', true);
+                    }
+                    
+                    if (!$('#bedTypeInput').val() || $('#bedTypeInput').data('auto-filled')) {
+                        $('#bedTypeInput').val(defaults.bedType).data('auto-filled', true);
+                    }
+                    
+                    if (!$('#roomSizeInput').val() || $('#roomSizeInput').data('auto-filled')) {
+                        $('#roomSizeInput').val(defaults.size).data('auto-filled', true);
+                    }
+                    
+                    if (!$('#descriptionInput').val() || $('#descriptionInput').data('auto-filled')) {
+                        $('#descriptionInput').val(defaults.description).data('auto-filled', true);
+                    }
+                    
+                    // Update room number prefix
+                    $('#roomNumberPrefix').text(defaults.prefix);
+                    
+                    // Update room type info
+                    $('#roomTypeInfo').html(`
+                        <div class="alert alert-primary mb-2">
+                            <strong>${$('#roomTypeSelect option:selected').text()}</strong>
+                        </div>
+                        <p>${defaults.info}</p>
+                        <dl class="row mb-0">
+                            <dt class="col-sm-6">Typical Price:</dt>
+                            <dd class="col-sm-6">₱${defaults.price.toLocaleString()}</dd>
+                            
+                            <dt class="col-sm-6">Standard Size:</dt>
+                            <dd class="col-sm-6">${defaults.size} sqm</dd>
+                            
+                            <dt class="col-sm-6">Recommended Bed:</dt>
+                            <dd class="col-sm-6">${defaults.bedType}</dd>
+                            
+                            <dt class="col-sm-6">Typical Capacity:</dt>
+                            <dd class="col-sm-6">${defaults.capacity} guests</dd>
+                        </dl>
+                    `);
+                } else {
+                    // Reset room number prefix
+                    $('#roomNumberPrefix').text('R');
+                    
+                    // Reset room type info
+                    $('#roomTypeInfo').html('<p>Select a room type to see specific guidelines and recommendations.</p>');
+                }
+                
+                updatePreview();
             });
+            
+            // Update preview on input changes
+            $('#roomNumberInput, #priceInput, #maxGuestsInput, #bedTypeInput, #roomSizeInput, #imageUrlInput').on('input', function() {
+                $(this).data('auto-filled', false);
+                updatePreview();
+            });
+            
+            $('#isAvailableSwitch').change(updatePreview);
+            
+            // Initialize preview
+            updatePreview();
         });
     </script>
 } 

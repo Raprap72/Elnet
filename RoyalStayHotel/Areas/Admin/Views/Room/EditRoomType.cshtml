@@ -1,0 +1,104 @@
+@model RoyalStayHotel.Models.RoomTypeInventory
+@{
+    ViewBag.Title = "Edit Room Type";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Edit Room Type</h1>
+        <a href="@Url.Action("RoomTypes", "Room", new { area = "Admin" })" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
+            <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to Room Types
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Edit @Model.RoomType.ToString() Type</h6>
+                </div>
+                <div class="card-body">
+                    <form asp-action="EditRoomType" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="RoomType" />
+                        
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Room Type</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" value="@Model.RoomType.ToString()" readonly />
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label asp-for="TotalRooms" class="col-sm-3 col-form-label"></label>
+                            <div class="col-sm-9">
+                                <input asp-for="TotalRooms" class="form-control" />
+                                <span asp-validation-for="TotalRooms" class="text-danger"></span>
+                                <small class="form-text text-muted">The total number of rooms of this type in your hotel.</small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label asp-for="Description" class="col-sm-3 col-form-label"></label>
+                            <div class="col-sm-9">
+                                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <div class="col-sm-9 offset-sm-3">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save mr-1"></i> Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Current Status</h6>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-bed fa-4x text-primary mb-3"></i>
+                        <h4 class="font-weight-bold">@Model.RoomType.ToString() Rooms</h4>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Total</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalRooms</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Available</div>
+                            <div class="h5 mb-0 font-weight-bold text-success">@Model.AvailableRooms</div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Occupied</div>
+                            <div class="h5 mb-0 font-weight-bold text-warning">@Model.OccupiedRooms</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-xs font-weight-bold text-uppercase mb-1">Occupancy</div>
+                            <div class="h5 mb-0 font-weight-bold text-info">
+                                @(Model.TotalRooms > 0 ? Math.Round((double)Model.OccupiedRooms / Model.TotalRooms * 100, 1) : 0)%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

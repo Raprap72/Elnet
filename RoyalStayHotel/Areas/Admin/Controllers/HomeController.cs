@@ -49,7 +49,7 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
             // If already logged in, redirect to dashboard
             if (IsAdminAuthenticated())
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Dashboard");
             }
             
             return View();
@@ -73,7 +73,8 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
                 HttpContext.Session.SetInt32("AdminId", admin.UserId);
                 HttpContext.Session.SetString("AdminName", admin.FullName);
                 
-                return RedirectToAction("Index");
+                // Redirect to dashboard
+                return RedirectToAction("Index", "Dashboard");
             }
             
             ModelState.AddModelError("", "Invalid login attempt. Please check your username and password.");

@@ -1,207 +1,362 @@
 @model RoyalStayHotel.Models.Room
 @{
-    ViewBag.Title = "Edit Room";
-    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Edit Room";
+    Layout = "_AdminLayout";
+    var hasActiveBookings = ViewBag.HasActiveBookings != null ? ViewBag.HasActiveBookings : false;
 }
 
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Edit Room</h1>
-    <a href="@Url.Action("Index", "Room", new { area = "Admin" })" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
-        <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to List
-    </a>
-</div>
-
-<div class="row">
-    <div class="col-lg-8">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Room Details</h6>
-            </div>
-            <div class="card-body">
-                <form asp-action="Edit" method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="RoomId" />
-
-                    <div class="form-group row">
-                        <label asp-for="RoomNumber" class="col-sm-3 col-form-label">Room Number</label>
-                        <div class="col-sm-9">
-                            <input asp-for="RoomNumber" class="form-control" required />
-                            <span asp-validation-for="RoomNumber" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label asp-for="RoomType" class="col-sm-3 col-form-label">Room Type</label>
-                        <div class="col-sm-9">
-                            <select asp-for="RoomType" class="form-control" required>
-                                <option value="">Select Room Type</option>
-                                <option value="Single">Single</option>
-                                <option value="Double">Double</option>
-                                <option value="Suite">Suite</option>
-                                <option value="Deluxe">Deluxe</option>
-                                <option value="Presidential">Presidential</option>
-                            </select>
-                            <span asp-validation-for="RoomType" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label asp-for="Description" class="col-sm-3 col-form-label">Description</label>
-                        <div class="col-sm-9">
-                            <textarea asp-for="Description" class="form-control" rows="4" required></textarea>
-                            <span asp-validation-for="Description" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label asp-for="Price" class="col-sm-3 col-form-label">Price per Night</label>
-                        <div class="col-sm-9">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">$</span>
-                                </div>
-                                <input asp-for="Price" type="number" step="0.01" min="0" class="form-control" required />
-                            </div>
-                            <span asp-validation-for="Price" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label asp-for="Capacity" class="col-sm-3 col-form-label">Capacity</label>
-                        <div class="col-sm-9">
-                            <input asp-for="Capacity" type="number" min="1" max="10" class="form-control" required />
-                            <span asp-validation-for="Capacity" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label asp-for="ImageUrl" class="col-sm-3 col-form-label">Image URL</label>
-                        <div class="col-sm-9">
-                            <input asp-for="ImageUrl" class="form-control" placeholder="Enter image URL" />
-                            <span asp-validation-for="ImageUrl" class="text-danger"></span>
-                            <small class="form-text text-muted">Enter a URL for the room image, or leave blank for default image.</small>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Availability</label>
-                        <div class="col-sm-9">
-                            <div class="form-check">
-                                <input asp-for="IsAvailable" class="form-check-input" />
-                                <label asp-for="IsAvailable" class="form-check-label">Room is available for booking</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group row mt-4">
-                        <div class="col-sm-9 offset-sm-3">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> Save Changes
-                            </button>
-                            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-                        </div>
-                    </div>
-                </form>
-            </div>
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Edit Room</h1>
+        <div>
+            <a asp-action="Details" asp-route-id="@Model.RoomId" class="d-none d-sm-inline-block btn btn-sm btn-info shadow-sm mr-2">
+                <i class="fas fa-info-circle fa-sm text-white-50 mr-1"></i> View Details
+            </a>
+            <a asp-action="Index" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
+                <i class="fas fa-arrow-left fa-sm text-white-50 mr-1"></i> Back to Room List
+            </a>
         </div>
     </div>
 
-    <div class="col-lg-4">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Room Preview</h6>
-            </div>
-            <div class="card-body text-center">
-                @if (!string.IsNullOrEmpty(Model.ImageUrl))
-                {
-                    <img id="roomImage" src="@Model.ImageUrl" alt="Room Image" class="img-fluid rounded mb-3" style="max-height: 200px; width: auto;" />
-                }
-                else
-                {
-                    <img id="roomImage" src="/images/placeholder-room.jpg" alt="Room Image" class="img-fluid rounded mb-3" style="max-height: 200px; width: auto;" />
-                }
-                <div class="mt-3">
-                    <h5 id="previewRoomType">@Model.RoomType Room</h5>
-                    <p class="mb-1">Room #<span id="previewRoomNumber">@Model.RoomNumber</span></p>
-                    <p class="mb-1">Capacity: <span id="previewCapacity">@Model.Capacity</span> persons</p>
-                    <p class="mb-1">Price: <span id="previewPrice">$@Model.Price</span> / night</p>
-                    <p class="mb-1">Status: 
-                        @if (Model.IsAvailable)
-                        {
-                            <span id="previewStatus" class="badge badge-success">Available</span>
-                        }
-                        else
-                        {
-                            <span id="previewStatus" class="badge badge-danger">Occupied</span>
-                        }
-                    </p>
+    @if (hasActiveBookings)
+    {
+        <div class="alert alert-warning mb-4">
+            <i class="fas fa-exclamation-triangle mr-2"></i> 
+            <strong>Warning:</strong> This room has active bookings. Some changes may affect current reservations.
+        </div>
+    }
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle mr-2"></i> Please correct the errors below.
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Room Details</h6>
+                    <div>
+                        <span class="badge badge-@(Model.IsAvailable ? "success" : "danger") p-2">
+                            <i class="fas fa-@(Model.IsAvailable ? "check-circle" : "times-circle") mr-1"></i>
+                            @(Model.IsAvailable ? "Available" : "Not Available")
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="RoomId" />
+                        <input type="hidden" id="originalRoomType" value="@Model.RoomType" />
+                        
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <div class="form-group row">
+                            <label asp-for="RoomNumber" class="col-sm-3 col-form-label">Room Number</label>
+                            <div class="col-sm-9">
+                                <input asp-for="RoomNumber" class="form-control" id="roomNumberInput" />
+                                <span asp-validation-for="RoomNumber" class="text-danger"></span>
+                                <small class="form-text text-muted">A unique identifier for this room</small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label asp-for="RoomType" class="col-sm-3 col-form-label">Room Type</label>
+                            <div class="col-sm-9">
+                                <select asp-for="RoomType" asp-items="Html.GetEnumSelectList<RoyalStayHotel.Models.RoomType>()" 
+                                        class="form-control" id="roomTypeSelect">
+                                </select>
+                                <span asp-validation-for="RoomType" class="text-danger"></span>
+                                <div id="roomTypeChangeWarning" class="alert alert-warning mt-2" style="display:none;">
+                                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                                    Changing room type will update room attributes and affect inventory counts
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label asp-for="Description" class="col-sm-3 col-form-label">Description</label>
+                            <div class="col-sm-9">
+                                <textarea asp-for="Description" class="form-control" rows="3" id="descriptionInput"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label asp-for="PricePerNight" class="col-sm-3 col-form-label">Price Per Night</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">₱</span>
+                                    </div>
+                                    <input asp-for="PricePerNight" class="form-control" type="number" step="0.01" min="0" id="priceInput" />
+                                </div>
+                                <span asp-validation-for="PricePerNight" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label asp-for="MaxGuests" class="col-sm-3 col-form-label">Max Guests</label>
+                            <div class="col-sm-9">
+                                <input asp-for="MaxGuests" class="form-control" type="number" min="1" id="maxGuestsInput" />
+                                <span asp-validation-for="MaxGuests" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label asp-for="BedType" class="col-sm-3 col-form-label">Bed Type</label>
+                            <div class="col-sm-9">
+                                <select asp-for="BedType" class="form-control" id="bedTypeInput">
+                                    <option value="Single">Single</option>
+                                    <option value="Double">Double</option>
+                                    <option value="Queen">Queen</option>
+                                    <option value="King">King</option>
+                                    <option value="Twin">Twin</option>
+                                </select>
+                                <span asp-validation-for="BedType" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label asp-for="RoomSize" class="col-sm-3 col-form-label">Room Size (sqm)</label>
+                            <div class="col-sm-9">
+                                <input asp-for="RoomSize" class="form-control" type="number" min="10" id="roomSizeInput" />
+                                <span asp-validation-for="RoomSize" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label asp-for="ImageUrl" class="col-sm-3 col-form-label">Image URL</label>
+                            <div class="col-sm-9">
+                                <input asp-for="ImageUrl" class="form-control" id="imageUrlInput" />
+                                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                                <small class="form-text text-muted">Leave blank to use default image based on room type</small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <div class="col-sm-3">Availability</div>
+                            <div class="col-sm-9">
+                                <div class="custom-control custom-switch">
+                                    <input asp-for="IsAvailable" class="custom-control-input" id="isAvailableSwitch">
+                                    <label class="custom-control-label" for="isAvailableSwitch">Available for booking</label>
+                                </div>
+                                @if (hasActiveBookings)
+                                {
+                                    <div class="alert alert-danger mt-2">
+                                        <i class="fas fa-exclamation-circle mr-2"></i>
+                                        This room has active bookings. Marking it as unavailable may affect current guests.
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <div class="col-sm-9 offset-sm-3">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save mr-1"></i> Save Changes
+                                </button>
+                                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Booking Status</h6>
-            </div>
-            <div class="card-body">
-                <div class="text-center mb-3">
-                    @if (Model.IsAvailable)
-                    {
-                        <div class="alert alert-success">
-                            <i class="fas fa-check-circle mr-2"></i>This room is currently available
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="alert alert-warning">
-                            <i class="fas fa-exclamation-triangle mr-2"></i>This room is currently occupied
-                        </div>
-                    }
+        
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Changes Preview</h6>
                 </div>
-                <p class="small text-muted text-center">
-                    Changing the availability status might affect future bookings.
-                </p>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <img id="roomPreviewImage" src="@(string.IsNullOrEmpty(Model.ImageUrl) ? $"/img/{Model.RoomType.ToString().ToLower()}_room.jpg" : Model.ImageUrl)" 
+                             class="img-fluid rounded" style="max-height: 150px;" alt="Room Preview" />
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body p-2 text-center">
+                                    <span class="font-weight-bold" id="previewRoomNumber">@Model.RoomNumber</span>
+                                    <span class="badge badge-primary ml-2" id="previewRoomType">@Model.RoomType</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-2">
+                        <div class="col-5 text-muted">Price:</div>
+                        <div class="col-7" id="previewPrice">₱@Model.PricePerNight.ToString("N2")</div>
+                    </div>
+                    
+                    <div class="row mb-2">
+                        <div class="col-5 text-muted">Capacity:</div>
+                        <div class="col-7" id="previewCapacity">@Model.MaxGuests guests</div>
+                    </div>
+                    
+                    <div class="row mb-2">
+                        <div class="col-5 text-muted">Bed Type:</div>
+                        <div class="col-7" id="previewBedType">@Model.BedType</div>
+                    </div>
+                    
+                    <div class="row mb-2">
+                        <div class="col-5 text-muted">Size:</div>
+                        <div class="col-7" id="previewSize">@Model.RoomSize sqm</div>
+                    </div>
+                    
+                    <div class="row mb-2">
+                        <div class="col-5 text-muted">Status:</div>
+                        <div class="col-7" id="previewStatus">
+                            <span class="badge badge-@(Model.IsAvailable ? "success" : "danger")">
+                                @(Model.IsAvailable ? "Available" : "Not Available")
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
+            
+            @if (hasActiveBookings)
+            {
+                <div class="card shadow mb-4 border-left-warning">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-warning">Booking Status</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle mr-2"></i> This room has active bookings
+                        </div>
+                        <p class="mb-2">Please note:</p>
+                        <ul class="mb-0">
+                            <li>Changing room type may affect current bookings</li>
+                            <li>Modifying capacity could impact guest reservations</li>
+                            <li>Price changes won't affect existing bookings</li>
+                        </ul>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>
 
 @section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
     <script>
         $(document).ready(function() {
-            // Update preview when inputs change
-            $('#RoomNumber').on('input', function() {
-                $('#previewRoomNumber').text($(this).val());
-            });
-            
-            $('#RoomType').change(function() {
-                $('#previewRoomType').text($(this).val() + ' Room');
-            });
-            
-            $('#Price').on('input', function() {
-                $('#previewPrice').text('$' + $(this).val());
-            });
-            
-            $('#Capacity').on('input', function() {
-                $('#previewCapacity').text($(this).val());
-            });
-            
-            $('#IsAvailable').change(function() {
-                if ($(this).is(':checked')) {
-                    $('#previewStatus').removeClass('badge-danger').addClass('badge-success').text('Available');
-                } else {
-                    $('#previewStatus').removeClass('badge-success').addClass('badge-danger').text('Occupied');
+            // Room Type defaults
+            const roomTypeDefaults = {
+                0: { // Standard
+                    price: 1500,
+                    capacity: 2,
+                    bedType: "Single",
+                    size: 20,
+                    description: "Basic room with essential amenities, perfect for budget travelers",
+                    imageUrl: "/img/standard_room.jpg"
+                },
+                1: { // Deluxe
+                    price: 2500,
+                    capacity: 2,
+                    bedType: "Queen",
+                    size: 25,
+                    description: "Spacious room with premium amenities and city views",
+                    imageUrl: "/img/deluxe_room.jpg"
+                },
+                2: { // DeluxeSuite
+                    price: 3500,
+                    capacity: 4,
+                    bedType: "King",
+                    size: 40,
+                    description: "Luxury suite with separate living area and premium services",
+                    imageUrl: "/img/deluxesuite_room.jpg"
+                },
+                3: { // ExecutiveDeluxe
+                    price: 4500,
+                    capacity: 2,
+                    bedType: "King",
+                    size: 35,
+                    description: "Executive-level accommodation with exclusive lounge access",
+                    imageUrl: "/img/executivedeluxe_room.jpg"
+                },
+                4: { // Presidential
+                    price: 10000,
+                    capacity: 6,
+                    bedType: "King",
+                    size: 80,
+                    description: "Our finest suite with maximum space, luxury amenities and butler service",
+                    imageUrl: "/img/presidential_room.jpg"
                 }
+            };
+            
+            const originalRoomType = $('#originalRoomType').val();
+            
+            // Check for room type change
+            $('#roomTypeSelect').change(function() {
+                const newRoomType = $(this).val();
+                
+                // Show warning if room type has been changed
+                if (newRoomType !== originalRoomType) {
+                    $('#roomTypeChangeWarning').show();
+                    
+                    // Offer to apply default values for the new room type
+                    if (confirm('Would you like to apply default values for this room type?')) {
+                        const defaults = roomTypeDefaults[newRoomType];
+                        if (defaults) {
+                            $('#priceInput').val(defaults.price);
+                            $('#maxGuestsInput').val(defaults.capacity);
+                            $('#bedTypeInput').val(defaults.bedType);
+                            $('#roomSizeInput').val(defaults.size);
+                            $('#descriptionInput').val(defaults.description);
+                        }
+                    }
+                } else {
+                    $('#roomTypeChangeWarning').hide();
+                }
+                
+                updatePreview();
             });
             
-            $('#ImageUrl').on('input', function() {
-                var imageUrl = $(this).val();
+            // Update preview
+            function updatePreview() {
+                const roomType = $('#roomTypeSelect').val();
+                const roomNumber = $('#roomNumberInput').val();
+                const price = $('#priceInput').val();
+                const maxGuests = $('#maxGuestsInput').val();
+                const bedType = $('#bedTypeInput').val();
+                const roomSize = $('#roomSizeInput').val();
+                const isAvailable = $('#isAvailableSwitch').is(':checked');
+                const imageUrl = $('#imageUrlInput').val();
+                
+                // Update preview elements
+                $('#previewRoomNumber').text(roomNumber);
+                $('#previewRoomType').text($('#roomTypeSelect option:selected').text());
+                $('#previewPrice').text(price ? `₱${parseFloat(price).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : '-');
+                $('#previewCapacity').text(maxGuests ? `${maxGuests} guests` : '-');
+                $('#previewBedType').text(bedType || '-');
+                $('#previewSize').text(roomSize ? `${roomSize} sqm` : '-');
+                
+                if (isAvailable) {
+                    $('#previewStatus').html('<span class="badge badge-success">Available</span>');
+                } else {
+                    $('#previewStatus').html('<span class="badge badge-danger">Not Available</span>');
+                }
+                
+                // Set room image
                 if (imageUrl) {
-                    $('#roomImage').attr('src', imageUrl);
-                } else {
-                    $('#roomImage').attr('src', '/images/placeholder-room.jpg');
+                    $('#roomPreviewImage').attr('src', imageUrl);
+                } else if (roomType && roomTypeDefaults[roomType]) {
+                    $('#roomPreviewImage').attr('src', roomTypeDefaults[roomType].imageUrl);
                 }
-            });
+            }
+            
+            // Update preview on input changes
+            $('#roomNumberInput, #priceInput, #maxGuestsInput, #bedTypeInput, #roomSizeInput, #imageUrlInput').on('input', updatePreview);
+            $('#isAvailableSwitch').change(updatePreview);
+            
+            // Initialize
+            updatePreview();
         });
     </script>
 } 

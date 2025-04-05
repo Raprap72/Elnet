@@ -172,6 +172,81 @@
         </div>
     </div>
 
+    <!-- Room Type Stats Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Room Types Overview</h6>
+                    <a href="@Url.Action("RoomTypes", "Room", new { area = "Admin" })" class="btn btn-sm btn-primary">
+                        <i class="fas fa-cog fa-sm"></i> Manage
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Room Type</th>
+                                    <th>Total</th>
+                                    <th>Available</th>
+                                    <th>Occupied</th>
+                                    <th>Occupancy Rate</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (ViewBag.RoomTypeStats != null)
+                                {
+                                    foreach (var stat in ViewBag.RoomTypeStats)
+                                    {
+                                        <tr>
+                                            <td>@stat.RoomType</td>
+                                            <td>@stat.TotalRooms</td>
+                                            <td>
+                                                <span class="badge badge-success px-2 py-1">@stat.AvailableRooms</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-warning px-2 py-1">@stat.OccupiedRooms</span>
+                                            </td>
+                                            <td>
+                                                @{
+                                                    var occupancyRate = stat.TotalRooms > 0 
+                                                        ? Math.Round((double)stat.OccupiedRooms / stat.TotalRooms * 100, 1) 
+                                                        : 0;
+                                                    
+                                                    var progressClass = occupancyRate > 75 
+                                                        ? "bg-danger" 
+                                                        : occupancyRate > 50 
+                                                            ? "bg-warning" 
+                                                            : "bg-success";
+                                                }
+                                                <div class="progress">
+                                                    <div class="progress-bar @progressClass" role="progressbar" 
+                                                         style="width: @occupancyRate%" 
+                                                         aria-valuenow="@occupancyRate" aria-valuemin="0" aria-valuemax="100">
+                                                        @occupancyRate%
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="5" class="text-center">
+                                            No room type data available
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Recent Bookings -->
     <div class="row">
         <div class="col-12">

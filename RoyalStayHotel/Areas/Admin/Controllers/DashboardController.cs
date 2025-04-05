@@ -32,11 +32,24 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
             ViewBag.TodayCheckOuts = await _context.Bookings.CountAsync(b => b.CheckOutDate.Date == today && b.Status == BookingStatus.CheckedIn);
             
             // Payment statistics
-            ViewBag.CompletedPayments = await _context.Bookings.CountAsync(b => b.Payments.Any(p => p.PaymentStatus == PaymentStatus.Completed));
-            ViewBag.PendingPayments = await _context.Bookings.CountAsync(b => b.Payments.Any(p => p.PaymentStatus == PaymentStatus.Pending));
+            ViewBag.CompletedPayments = await _context.Bookings.CountAsync(b => b.Payments != null && b.Payments.Any(p => p.PaymentStatus == PaymentStatus.Completed));
+            ViewBag.PendingPayments = await _context.Bookings.CountAsync(b => b.Payments != null && b.Payments.Any(p => p.PaymentStatus == PaymentStatus.Pending));
             ViewBag.TotalRevenue = await _context.Payments
                 .Where(p => p.PaymentStatus == PaymentStatus.Completed)
                 .SumAsync(p => p.Amount);
+            
+            // Add room type statistics for dashboard
+            var roomTypeStats = await _context.RoomTypeInventories
+                .Select(rt => new
+                {
+                    RoomType = rt.RoomType.ToString(),
+                    TotalRooms = rt.TotalRooms,
+                    AvailableRooms = _context.Rooms.Count(r => r.RoomType == rt.RoomType && r.IsAvailable),
+                    OccupiedRooms = _context.Rooms.Count(r => r.RoomType == rt.RoomType && !r.IsAvailable)
+                })
+                .ToListAsync();
+
+            ViewBag.RoomTypeStats = roomTypeStats;
             
             // Recent bookings for dashboard
             var recentBookings = await _context.Bookings

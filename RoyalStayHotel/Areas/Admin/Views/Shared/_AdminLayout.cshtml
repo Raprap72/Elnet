@@ -319,8 +319,13 @@
                     </a>
                 </li>
                 <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Rooms" ? "active" : "")">
-                    <a href="@Url.Action("Index", "Rooms", new { area = "Admin" })">
+                    <a href="@Url.Action("Index", "Room", new { area = "Admin" })">
                         <i class="fas fa-bed"></i> Rooms
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["action"]?.ToString() == "RoomTypes" ? "active" : "")">
+                    <a href="@Url.Action("RoomTypes", "Room", new { area = "Admin" })">
+                        <i class="fas fa-list-alt"></i> Room Types
                     </a>
                 </li>
                 <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Services" ? "active" : "")">
