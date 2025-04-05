@@ -1,0 +1,334 @@
+@model IEnumerable<RoyalStayHotel.Models.Booking>
+@using RoyalStayHotel.Models
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
+        </a>
+    </div>
+
+    <!-- Dashboard Stats Row -->
+    <div class="row">
+        <!-- Total Bookings Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Bookings
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalBookings</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmed Bookings Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Confirmed Bookings
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.ConfirmedBookings</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Bookings Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Pending Bookings
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.PendingBookings</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clock fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Today's Check-ins Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Today's Check-ins
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TodayCheckIns</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-door-open fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Room Statistics Row -->
+    <div class="row">
+        <!-- Total Rooms Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-secondary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+                                Total Rooms
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalRooms</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-bed fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Available Rooms Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Available Rooms
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.AvailableRooms</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-key fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Stats -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                Revenue
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">₱@ViewBag.TotalRevenue?.ToString("N2")</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completed Payments -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Paid Bookings
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.CompletedPayments</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-credit-card fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Bookings -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Bookings</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                            <div class="dropdown-header">Booking Options:</div>
+                            <a class="dropdown-item" href="@Url.Action("Index", "Bookings", new { area = "Admin" })">View All Bookings</a>
+                            <a class="dropdown-item" href="@Url.Action("Create", "Bookings", new { area = "Admin" })">Create New Booking</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (Model != null && Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover" width="100%">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>Booking ID</th>
+                                        <th>Guest</th>
+                                        <th>Room</th>
+                                        <th>Check In</th>
+                                        <th>Check Out</th>
+                                        <th>Status</th>
+                                        <th>Payment</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var booking in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a href="@Url.Action("Details", "Bookings", new { area = "Admin", id = booking.BookingId })">
+                                                    #@booking.BookingId
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; margin-right: 8px;">
+                                                        @if (booking.User != null)
+                                                        {
+                                                            @booking.User.FullName.Substring(0, 1).ToUpper()
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="fas fa-user-alt"></i>
+                                                        }
+                                                    </div>
+                                                    <div>
+                                                        @booking.User?.FullName
+                                                        <div class="small text-muted">@booking.User?.Email</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    @booking.Room?.RoomNumber
+                                                    <div class="small text-muted">@booking.Room?.RoomType</div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @if (booking.CheckInDate.Date == DateTime.Today)
+                                                {
+                                                    <span class="badge badge-info mr-1">Today</span>
+                                                }
+                                                @booking.CheckInDate.ToShortDateString()
+                                            </td>
+                                            <td>
+                                                @if (booking.CheckOutDate.Date == DateTime.Today)
+                                                {
+                                                    <span class="badge badge-info mr-1">Today</span>
+                                                }
+                                                @booking.CheckOutDate.ToShortDateString()
+                                            </td>
+                                            <td>
+                                                @if (booking.Status == BookingStatus.Confirmed)
+                                                {
+                                                    <span class="badge badge-success px-2 py-1">Confirmed</span>
+                                                }
+                                                else if (booking.Status == BookingStatus.Pending)
+                                                {
+                                                    <span class="badge badge-warning px-2 py-1">Pending</span>
+                                                }
+                                                else if (booking.Status == BookingStatus.Cancelled)
+                                                {
+                                                    <span class="badge badge-danger px-2 py-1">Cancelled</span>
+                                                }
+                                                else if (booking.Status == BookingStatus.CheckedIn)
+                                                {
+                                                    <span class="badge badge-info px-2 py-1">Checked In</span>
+                                                }
+                                                else if (booking.Status == BookingStatus.CheckedOut)
+                                                {
+                                                    <span class="badge badge-secondary px-2 py-1">Checked Out</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @{
+                                                    var payment = booking.Payments?.FirstOrDefault();
+                                                    var paymentStatus = payment != null ? payment.PaymentStatus : PaymentStatus.Pending;
+                                                }
+
+                                                @if (paymentStatus == PaymentStatus.Completed)
+                                                {
+                                                    <span class="badge badge-success px-2 py-1">
+                                                        <i class="fas fa-check-circle mr-1"></i> Paid
+                                                    </span>
+                                                }
+                                                else if (paymentStatus == PaymentStatus.Pending)
+                                                {
+                                                    <span class="badge badge-warning px-2 py-1">
+                                                        <i class="fas fa-clock mr-1"></i> Pending
+                                                    </span>
+                                                }
+                                                else if (paymentStatus == PaymentStatus.Failed)
+                                                {
+                                                    <span class="badge badge-danger px-2 py-1">
+                                                        <i class="fas fa-times-circle mr-1"></i> Failed
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <a href="@Url.Action("Details", "Bookings", new { area = "Admin", id = booking.BookingId })" class="btn btn-sm btn-primary">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <a href="@Url.Action("Edit", "Bookings", new { area = "Admin", id = booking.BookingId })" class="btn btn-sm btn-info">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <img src="/images/no-booking.svg" alt="No bookings" style="max-width: 200px; opacity: 0.5;" class="mb-3" />
+                            <h5 class="text-muted">No recent bookings found</h5>
+                            <p class="text-muted">New bookings will appear here</p>
+                            <a href="@Url.Action("Create", "Bookings", new { area = "Admin" })" class="btn btn-primary mt-2">
+                                <i class="fas fa-plus-circle mr-1"></i> Create New Booking
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
