@@ -59,6 +59,7 @@ namespace RoyalStayHotel.Models
     {
         Pending,
         Confirmed,
+        Declined,
         CheckedIn,
         CheckedOut,
         Cancelled,

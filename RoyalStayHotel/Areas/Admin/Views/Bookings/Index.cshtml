@@ -2,64 +2,211 @@
 @using RoyalStayHotel.Models
 @using RoyalStayHotel.Areas.Admin.Controllers
 @{
-    ViewBag.Title = "Bookings Management";
+    ViewData["Title"] = "Bookings Management";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Bookings Management</h1>
-    <a href="@Url.Action("Index", "Room", new { area = "Admin" })" class="btn btn-primary btn-sm">
-        <i class="fas fa-bed fa-sm text-white-50 mr-1"></i> Manage Rooms
-    </a>
+<!-- Alerts Section -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show mb-4 shadow-sm" role="alert">
+        <i class="fas fa-check-circle mr-1"></i> @TempData["SuccessMessage"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show mb-4 shadow-sm" role="alert">
+        <i class="fas fa-exclamation-circle mr-1"></i> @TempData["ErrorMessage"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+@if (TempData["InfoMessage"] != null)
+{
+    <div class="alert alert-info alert-dismissible fade show mb-4 shadow-sm" role="alert">
+        <i class="fas fa-info-circle mr-1"></i> @TempData["InfoMessage"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<!-- Dashboard Stats -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Bookings</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count()</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Confirmed</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(b => b.Status == BookingStatus.Confirmed)</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(b => b.Status == BookingStatus.Pending)</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-clock fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Today's Check-Ins</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(b => b.CheckInDate.Date == DateTime.Now.Date)</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-door-open fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="card shadow mb-4">
+<!-- Admin capabilities info card -->
+<div class="card mb-4 shadow-sm" style="border-left: 4px solid #17a2b8;">
+    <div class="card-body">
+        <div class="d-flex align-items-center">
+            <div class="rounded-circle bg-info p-3 mr-4 text-white">
+                <i class="fas fa-info fa-lg"></i>
+            </div>
+            <div>
+                <h5 class="font-weight-bold mb-2">Booking Management</h5>
+                <p class="mb-0">In the booking management, you can:</p>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="badge badge-pill badge-info mr-2"><i class="fas fa-eye"></i></span>
+                            <strong>View</strong> - See booking details including guest information and room details
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="badge badge-pill badge-primary mr-2"><i class="fas fa-edit"></i></span>
+                            <strong>Status</strong> - Change the status (pending, approved, declined, etc.)
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="badge badge-pill badge-danger mr-2"><i class="fas fa-trash"></i></span>
+                            <strong>Delete</strong> - Remove booking reservation (if no payments exist)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
     <div class="card-header py-3 d-flex justify-content-between align-items-center">
         <h6 class="m-0 font-weight-bold text-primary">All Bookings</h6>
-        <div>
-            <form asp-action="Index" method="get" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+        <div class="d-flex">
+            <form asp-action="Index" method="get" class="form-inline">
                 <div class="input-group">
-                    <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                    <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control search-box" placeholder="Search bookings..." aria-label="Search">
                     <div class="input-group-append">
-                        <button class="btn btn-primary" type="submit">
-                            <i class="fas fa-search fa-sm"></i>
+                        <button class="btn search-btn" type="submit">
+                            <i class="fas fa-search"></i>
                         </button>
                     </div>
                 </div>
             </form>
+            <div class="ml-2">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-toggle="dropdown">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="@Url.Action("Index", new { status = "All" })">All Bookings</a>
+                    <a class="dropdown-item" href="@Url.Action("Index", new { status = "Pending" })">Pending</a>
+                    <a class="dropdown-item" href="@Url.Action("Index", new { status = "Confirmed" })">Confirmed</a>
+                    <a class="dropdown-item" href="@Url.Action("Index", new { status = "Declined" })">Declined</a>
+                    <a class="dropdown-item" href="@Url.Action("Index", new { status = "CheckedIn" })">Checked In</a>
+                    <a class="dropdown-item" href="@Url.Action("Index", new { status = "CheckedOut" })">Checked Out</a>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="card-body">
+    <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-bordered" width="100%" cellspacing="0">
+            <table class="table table-hover table-striped mb-0">
                 <thead>
                     <tr>
-                        <th>
-                            <a asp-action="Index" asp-route-sortOrder="@ViewData["IdSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">ID</a>
-                        </th>
-                        <th>
-                            <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Guest</a>
-                        </th>
+                        <th>ID</th>
+                        <th>Guest</th>
                         <th>Room</th>
-                        <th>
-                            <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Check-in</a>
-                        </th>
+                        <th>Check-in</th>
                         <th>Check-out</th>
-                        <th>
-                            <a asp-action="Index" asp-route-sortOrder="@ViewData["StatusSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Status</a>
-                        </th>
-                        <th>Actions</th>
+                        <th>Status</th>
+                        <th>Payment</th>
+                        <th>Total</th>
+                        <th class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var booking in Model)
                     {
-                        <tr>
-                            <td>@booking.BookingId</td>
+                        var payment = booking.Payments?.FirstOrDefault();
+                        var paymentStatus = payment != null ? payment.PaymentStatus : PaymentStatus.Pending;
+                        var paymentMethod = payment != null ? payment.PaymentMethod : "Not Set";
+                        var today = DateTime.Now.Date;
+                        var isToday = booking.CheckInDate.Date == today || booking.CheckOutDate.Date == today;
+                        
+                        <tr class="@(isToday ? "table-active" : "")">
+                            <td class="font-weight-bold">@booking.BookingId</td>
                             <td>
                                 @if (booking.User != null)
                                 {
-                                    @booking.User.FullName
+                                    <div class="d-flex align-items-center">
+                                        <div class="rounded-circle bg-primary text-white p-2 mr-2 d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                                            @booking.User.FullName.Substring(0, 1).ToUpper()
+                                        </div>
+                                        <div>
+                                            <p class="mb-0 font-weight-bold">@booking.User.FullName</p>
+                                            <small class="text-muted">@booking.User.Email</small>
+                                        </div>
+                                    </div>
                                 }
                                 else
                                 {
@@ -69,54 +216,128 @@
                             <td>
                                 @if (booking.Room != null)
                                 {
-                                    <span>@booking.Room.RoomType Room #@booking.Room.RoomNumber</span>
+                                    <div class="d-flex align-items-center">
+                                        <div class="rounded-circle bg-info text-white p-2 mr-2 d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                                            <i class="fas fa-bed"></i>
+                                        </div>
+                                        <div>
+                                            <p class="mb-0 font-weight-bold">@booking.Room.RoomType</p>
+                                            <small class="text-muted">Room #@booking.Room.RoomNumber</small>
+                                        </div>
+                                    </div>
                                 }
                                 else
                                 {
                                     <span class="text-muted">N/A</span>
                                 }
                             </td>
-                            <td>@booking.CheckInDate.ToString("MMM dd, yyyy")</td>
-                            <td>@booking.CheckOutDate.ToString("MMM dd, yyyy")</td>
+                            <td>
+                                <div class="d-flex flex-column">
+                                    <span>@booking.CheckInDate.ToString("MMM dd, yyyy")</span>
+                                    @if (booking.CheckInDate.Date == today)
+                                    {
+                                        <span class="badge badge-pill badge-warning">Today</span>
+                                    }
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column">
+                                    <span>@booking.CheckOutDate.ToString("MMM dd, yyyy")</span>
+                                    @if (booking.CheckOutDate.Date == today)
+                                    {
+                                        <span class="badge badge-pill badge-warning">Today</span>
+                                    }
+                                </div>
+                            </td>
                             <td>
                                 @if (booking.Status == BookingStatus.Confirmed)
                                 {
-                                    <span class="badge badge-success">@booking.Status</span>
+                                    <span class="badge badge-success px-2 py-1">Confirmed</span>
                                 }
                                 else if (booking.Status == BookingStatus.Pending)
                                 {
-                                    <span class="badge badge-warning">@booking.Status</span>
+                                    <span class="badge badge-warning px-2 py-1">Pending</span>
                                 }
                                 else if (booking.Status == BookingStatus.Cancelled)
                                 {
-                                    <span class="badge badge-danger">@booking.Status</span>
+                                    <span class="badge badge-danger px-2 py-1">Cancelled</span>
+                                }
+                                else if (booking.Status == BookingStatus.Declined)
+                                {
+                                    <span class="badge badge-danger px-2 py-1">Declined</span>
                                 }
                                 else if (booking.Status == BookingStatus.CheckedIn)
                                 {
-                                    <span class="badge badge-primary">@booking.Status</span>
+                                    <span class="badge badge-info px-2 py-1">Checked In</span>
                                 }
                                 else if (booking.Status == BookingStatus.CheckedOut)
                                 {
-                                    <span class="badge badge-secondary">@booking.Status</span>
+                                    <span class="badge badge-secondary px-2 py-1">Checked Out</span>
                                 }
                                 else if (booking.Status == BookingStatus.NoShow)
                                 {
-                                    <span class="badge badge-dark">@booking.Status</span>
+                                    <span class="badge badge-dark px-2 py-1">No Show</span>
                                 }
                                 else
                                 {
-                                    <span class="badge badge-info">@booking.Status</span>
+                                    <span class="badge badge-info px-2 py-1">@booking.Status</span>
                                 }
                             </td>
                             <td>
-                                <div class="btn-group">
-                                    <a href="@Url.Action("Details", new { id = booking.BookingId })" class="btn btn-info btn-sm">
-                                        <i class="fas fa-info-circle"></i>
+                                @if (paymentStatus == PaymentStatus.Completed)
+                                {
+                                    <span class="badge badge-success px-2 py-1">
+                                        <i class="fas fa-check-circle mr-1"></i> Paid
+                                    </span>
+                                }
+                                else if (paymentStatus == PaymentStatus.Pending)
+                                {
+                                    <span class="badge badge-warning px-2 py-1">
+                                        <i class="fas fa-clock mr-1"></i> Pending
+                                    </span>
+                                }
+                                else if (paymentStatus == PaymentStatus.Failed)
+                                {
+                                    <span class="badge badge-danger px-2 py-1">
+                                        <i class="fas fa-times-circle mr-1"></i> Failed
+                                    </span>
+                                }
+                                else if (paymentStatus == PaymentStatus.Refunded)
+                                {
+                                    <span class="badge badge-info px-2 py-1">
+                                        <i class="fas fa-undo mr-1"></i> Refunded
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-secondary px-2 py-1">@paymentStatus</span>
+                                }
+                            </td>
+                            <td class="font-weight-bold">₱@booking.TotalPrice.ToString("N2")</td>
+                            <td>
+                                <div class="d-flex justify-content-center">
+                                    <!-- VIEW details button -->
+                                    <a href="@Url.Action("Details", "Bookings", new { id = booking.BookingId, area = "Admin" })" 
+                                       class="btn btn-sm btn-info mr-1" 
+                                       data-toggle="tooltip" 
+                                       title="View Details">
+                                        <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="@Url.Action("Edit", new { id = booking.BookingId })" class="btn btn-primary btn-sm">
+                                    
+                                    <!-- EDIT status button -->
+                                    <a href="@Url.Action("Edit", "Bookings", new { id = booking.BookingId, area = "Admin" })" 
+                                       class="btn btn-sm btn-primary mr-1"
+                                       data-toggle="tooltip" 
+                                       title="Edit Status"
+                                       onclick="console.log('Status button clicked for booking ID: @booking.BookingId');">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="@Url.Action("Delete", new { id = booking.BookingId })" class="btn btn-danger btn-sm">
+                                    
+                                    <!-- DELETE button -->
+                                    <a href="@Url.Action("Delete", "Bookings", new { id = booking.BookingId, area = "Admin" })" 
+                                       class="btn btn-sm btn-danger"
+                                       data-toggle="tooltip" 
+                                       title="Delete Booking">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </div>
@@ -127,29 +348,82 @@
             </table>
         </div>
         
-        @{
-            var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-            var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <img src="/images/no-data.svg" alt="No bookings found" style="max-width: 150px;" />
+                <h5 class="mt-3 text-muted">No bookings found</h5>
+                <p class="text-muted">Try adjusting your search criteria or create a new booking</p>
+            </div>
         }
-
-        <div class="d-flex justify-content-between mt-3">
-            <a asp-action="Index"
-               asp-route-sortOrder="@ViewData["CurrentSort"]"
-               asp-route-pageNumber="@(Model.PageIndex - 1)"
-               asp-route-currentFilter="@ViewData["CurrentFilter"]"
-               class="btn btn-outline-primary @prevDisabled">
-                <i class="fas fa-chevron-left mr-1"></i> Previous
-            </a>
+    </div>
+    <div class="card-footer">
+        <div class="d-flex justify-content-between align-items-center">
             <div>
                 <span class="text-muted">Page @Model.PageIndex of @Model.TotalPages</span>
             </div>
-            <a asp-action="Index"
-               asp-route-sortOrder="@ViewData["CurrentSort"]"
-               asp-route-pageNumber="@(Model.PageIndex + 1)"
-               asp-route-currentFilter="@ViewData["CurrentFilter"]"
-               class="btn btn-outline-primary @nextDisabled">
-                Next <i class="fas fa-chevron-right ml-1"></i>
-            </a>
+            <div>
+                <nav>
+                    <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { pageNumber = Model.PageIndex - 1, currentFilter = ViewData["CurrentFilter"] })">
+                                <i class="fas fa-chevron-left"></i> Previous
+                            </a>
+                        </li>
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new { pageNumber = i, currentFilter = ViewData["CurrentFilter"] })">
+                                    @i
+                                </a>
+                            </li>
+                        }
+                        <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { pageNumber = Model.PageIndex + 1, currentFilter = ViewData["CurrentFilter"] })">
+                                Next <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
-</div> 
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Initialize tooltips
+            $('[data-toggle="tooltip"]').tooltip();
+            
+            // Add hover effect to rows
+            $('.table tbody tr').hover(
+                function() {
+                    $(this).addClass('bg-light');
+                },
+                function() {
+                    $(this).removeClass('bg-light');
+                }
+            );
+            
+            // Make table responsive for mobile
+            function adjustTableForMobile() {
+                if(window.innerWidth < 768) {
+                    $('.table th:nth-child(3), .table td:nth-child(3)').addClass('d-none'); // Hide Room column
+                    $('.table th:nth-child(5), .table td:nth-child(5)').addClass('d-none'); // Hide Check-out column
+                } else {
+                    $('.table th:nth-child(3), .table td:nth-child(3)').removeClass('d-none');
+                    $('.table th:nth-child(5), .table td:nth-child(5)').removeClass('d-none');
+                }
+            }
+            
+            // Run on page load
+            adjustTableForMobile();
+            
+            // Run on window resize
+            $(window).resize(function() {
+                adjustTableForMobile();
+            });
+        });
+    </script>
+} 

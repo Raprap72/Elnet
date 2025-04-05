@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 
 namespace RoyalStayHotel.Areas.Admin.Controllers
 {
@@ -21,12 +22,10 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
         }
 
         // GET: Admin/Bookings
-        public async Task<IActionResult> Index(string sortOrder, string searchString, string currentFilter, int? pageNumber)
+        public async Task<IActionResult> Index(string searchString, string currentFilter, int? pageNumber)
         {
-            ViewData["CurrentSort"] = sortOrder;
-            ViewData["NameSortParm"] = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
-            ViewData["StatusSortParm"] = sortOrder == "Status" ? "status_desc" : "Status";
+            // Log debug info
+            System.Diagnostics.Debug.WriteLine("Loading Index page for bookings");
             
             if (searchString != null)
             {
@@ -42,27 +41,35 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
             var bookings = _context.Bookings
                 .Include(b => b.User)
                 .Include(b => b.Room)
+                .Include(b => b.Payments)
                 .AsQueryable();
-                           
-            if (!string.IsNullOrEmpty(searchString))
+
+            // Log the number of bookings found
+            var bookingCount = await bookings.CountAsync();
+            System.Diagnostics.Debug.WriteLine($"Total bookings in database: {bookingCount}");
+            
+            if (bookingCount > 0)
+            {
+                // Get the first booking ID for diagnostic purposes
+                var firstBookingId = await bookings.FirstOrDefaultAsync();
+                if (firstBookingId != null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"First booking ID: {firstBookingId.BookingId}");
+                }
+            }
+            
+            // Filter bookings if search string provided
+            if (!String.IsNullOrEmpty(searchString))
             {
                 bookings = bookings.Where(b => 
                     (b.User != null && b.User.FullName.Contains(searchString)) ||
-                    (b.User != null && b.User.Email.Contains(searchString)) ||
                     (b.Room != null && b.Room.RoomType.ToString().Contains(searchString)) ||
-                    b.Status.ToString().Contains(searchString));
+                    b.BookingId.ToString().Contains(searchString));
             }
-            
-            bookings = sortOrder switch
-            {
-                "name_desc" => bookings.OrderByDescending(b => b.User != null ? b.User.FullName : string.Empty),
-                "Date" => bookings.OrderBy(b => b.CheckInDate),
-                "date_desc" => bookings.OrderByDescending(b => b.CheckInDate),
-                "Status" => bookings.OrderBy(b => b.Status),
-                "status_desc" => bookings.OrderByDescending(b => b.Status),
-                _ => bookings.OrderBy(b => b.User != null ? b.User.FullName : string.Empty),
-            };
-            
+
+            // Order by booking date (newest first)
+            bookings = bookings.OrderByDescending(b => b.CreatedAt);
+
             int pageSize = 10;
             return View(await PaginatedList<Booking>.CreateAsync(bookings.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
@@ -72,20 +79,76 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Booking ID is required.";
+                return RedirectToAction(nameof(Index));
             }
 
+            // Add logging to diagnose the issue
+            System.Diagnostics.Debug.WriteLine($"Looking for booking with ID: {id}");
+
+            // Try to find booking by BookingId first
             var booking = await _context.Bookings
                 .Include(b => b.User)
                 .Include(b => b.Room)
-                .Include(b => b.BookedServices)
                 .Include(b => b.Payments)
+                .Include(b => b.BookedServices)
+                    .ThenInclude(bs => bs.Service)
                 .FirstOrDefaultAsync(m => m.BookingId == id);
                 
             if (booking == null)
             {
-                return NotFound();
+                // Try by the Id property if BookingId failed
+                booking = await _context.Bookings
+                    .Include(b => b.User)
+                    .Include(b => b.Room)
+                    .Include(b => b.Payments)
+                    .Include(b => b.BookedServices)
+                        .ThenInclude(bs => bs.Service)
+                    .FirstOrDefaultAsync(m => m.Id == id);
             }
+
+            if (booking == null)
+            {
+                // Log more detailed error message
+                System.Diagnostics.Debug.WriteLine($"Booking with ID {id} was not found in the database.");
+                
+                // Check if there are any bookings in the database
+                var bookingCount = await _context.Bookings.CountAsync();
+                System.Diagnostics.Debug.WriteLine($"Total bookings in database: {bookingCount}");
+                
+                if (bookingCount > 0)
+                {
+                    // Get the IDs of the first 10 bookings for diagnostic purposes
+                    var bookingIds = await _context.Bookings.Take(10).Select(b => new { b.BookingId, b.Id, UserId = b.UserId }).ToListAsync();
+                    System.Diagnostics.Debug.WriteLine($"First few booking IDs: {string.Join(", ", bookingIds.Select(b => $"BookingId: {b.BookingId}, Id: {b.Id}, UserId: {b.UserId}"))}");
+                }
+                
+                TempData["ErrorMessage"] = $"Booking with ID {id} not found";
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Ensure user information is loaded
+            if (booking.User == null && booking.UserId > 0)
+            {
+                booking.User = await _context.Users.FirstOrDefaultAsync(u => u.UserId == booking.UserId);
+                if (booking.User != null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"User information loaded for UserId: {booking.UserId}");
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"User with ID {booking.UserId} not found in database.");
+                }
+            }
+
+            // Get additional info for admin
+            ViewBag.AllStatuses = Enum.GetValues(typeof(BookingStatus))
+                .Cast<BookingStatus>()
+                .Select(s => new SelectListItem
+                {
+                    Value = s.ToString(),
+                    Text = s.ToString()
+                }).ToList();
 
             return View(booking);
         }
@@ -95,28 +158,42 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Booking ID is required.";
+                return RedirectToAction(nameof(Index));
             }
+
+            // Add logging to diagnose the issue
+            System.Diagnostics.Debug.WriteLine($"Loading Edit view for booking with ID: {id}");
 
             var booking = await _context.Bookings
                 .Include(b => b.User)
                 .Include(b => b.Room)
+                .Include(b => b.Payments)
                 .FirstOrDefaultAsync(m => m.BookingId == id);
                 
             if (booking == null)
             {
-                return NotFound();
+                // Try by the Id property if BookingId failed
+                booking = await _context.Bookings
+                    .Include(b => b.User)
+                    .Include(b => b.Room)
+                    .Include(b => b.Payments)
+                    .FirstOrDefaultAsync(m => m.Id == id);
+            }
+
+            if (booking == null)
+            {
+                TempData["ErrorMessage"] = $"Booking with ID {id} not found.";
+                return RedirectToAction(nameof(Index));
             }
             
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "FullName", booking.UserId);
-            ViewData["RoomId"] = new SelectList(_context.Rooms, "RoomId", "RoomType", booking.RoomId);
-            ViewData["BookingStatuses"] = Enum.GetValues(typeof(BookingStatus))
+            // Load ViewBag data for dropdowns
+            ViewBag.UserId = new SelectList(_context.Users, "UserId", "FullName", booking.UserId);
+            ViewBag.RoomId = new SelectList(_context.Rooms, "RoomId", "RoomNumber", booking.RoomId);
+            ViewBag.BookingStatuses = new SelectList(Enum.GetValues(typeof(BookingStatus))
                 .Cast<BookingStatus>()
-                .Select(s => new SelectListItem
-                {
-                    Value = s.ToString(),
-                    Text = s.ToString()
-                }).ToList();
+                .Select(s => new { Value = s.ToString(), Text = s.ToString() }), 
+                "Value", "Text", booking.Status);
                 
             return View(booking);
         }
@@ -124,70 +201,30 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
         // POST: Admin/Bookings/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BookingId,UserId,RoomId,CheckInDate,CheckOutDate,NumberOfGuests,TotalPrice,Status,CreatedAt")] Booking booking)
+        public async Task<IActionResult> Edit(int id, [Bind("BookingId,Status")] Booking booking)
         {
-            if (id != booking.BookingId)
+            System.Diagnostics.Debug.WriteLine($"Edit POST called with id: {id}, BookingId: {booking.BookingId}, Status: {booking.Status}");
+            
+            if (id <= 0)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Invalid booking ID.";
+                return RedirectToAction(nameof(Index));
             }
 
-            if (ModelState.IsValid)
+            // Get the actual booking from database
+            var existingBooking = await _context.Bookings
+                .Include(b => b.Room)
+                .Include(b => b.User)
+                .FirstOrDefaultAsync(m => m.BookingId == id || m.Id == id);
+                
+            if (existingBooking == null)
             {
-                try
-                {
-                    _context.Update(booking);
-                    await _context.SaveChangesAsync();
-                    
-                    // If booking status changed to Confirmed, update room availability
-                    if (booking.Status == BookingStatus.Confirmed)
-                    {
-                        var room = await _context.Rooms.FindAsync(booking.RoomId);
-                        if (room != null)
-                        {
-                            room.AvailabilityStatus = AvailabilityStatus.Booked;
-                            _context.Update(room);
-                            await _context.SaveChangesAsync();
-                        }
-                    }
-                    // If booking status changed to Cancelled, update room availability
-                    else if (booking.Status == BookingStatus.Cancelled || booking.Status == BookingStatus.CheckedOut)
-                    {
-                        var room = await _context.Rooms.FindAsync(booking.RoomId);
-                        if (room != null)
-                        {
-                            room.AvailabilityStatus = AvailabilityStatus.Available;
-                            _context.Update(room);
-                            await _context.SaveChangesAsync();
-                        }
-                    }
-                    
-                    TempData["SuccessMessage"] = "Booking updated successfully!";
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BookingExists(booking.BookingId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                TempData["ErrorMessage"] = $"Booking with ID {id} not found.";
                 return RedirectToAction(nameof(Index));
             }
             
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "FullName", booking.UserId);
-            ViewData["RoomId"] = new SelectList(_context.Rooms, "RoomId", "RoomType", booking.RoomId);
-            ViewData["BookingStatuses"] = Enum.GetValues(typeof(BookingStatus))
-                .Cast<BookingStatus>()
-                .Select(s => new SelectListItem
-                {
-                    Value = s.ToString(),
-                    Text = s.ToString()
-                }).ToList();
-                
-            return View(booking);
+            // Use the correct booking ID for the update status call
+            return RedirectToAction(nameof(UpdateStatus), new { id = existingBooking.BookingId, status = booking.Status });
         }
 
         // GET: Admin/Bookings/Delete/5
@@ -195,17 +232,27 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Booking ID is required.";
+                return RedirectToAction(nameof(Index));
             }
 
             var booking = await _context.Bookings
                 .Include(b => b.User)
                 .Include(b => b.Room)
+                .Include(b => b.Payments)
                 .FirstOrDefaultAsync(m => m.BookingId == id);
                 
             if (booking == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = $"Booking with ID {id} not found.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Check if booking has payments
+            if (booking.Payments != null && booking.Payments.Any())
+            {
+                TempData["ErrorMessage"] = "Cannot delete booking with existing payments. Please refund or void the payments first.";
+                return RedirectToAction(nameof(Details), new { id = booking.BookingId });
             }
 
             return View(booking);
@@ -217,33 +264,38 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var booking = await _context.Bookings
-                .Include(b => b.BookedServices)
                 .Include(b => b.Payments)
+                .Include(b => b.Room)
                 .FirstOrDefaultAsync(m => m.BookingId == id);
-                
+
             if (booking == null)
             {
-                return NotFound();
-            }
-            
-            // Check if there are any payments
-            if (booking.Payments != null && booking.Payments.Count > 0)
-            {
-                TempData["ErrorMessage"] = "Cannot delete booking as it has existing payments.";
+                TempData["ErrorMessage"] = "Booking not found.";
                 return RedirectToAction(nameof(Index));
             }
-            
-            // Remove any booked services
-            if (booking.BookedServices != null && booking.BookedServices.Count > 0)
+
+            // Double check if booking has payments
+            if (booking.Payments != null && booking.Payments.Any())
             {
-                _context.BookedServices.RemoveRange(booking.BookedServices);
+                TempData["ErrorMessage"] = "Cannot delete booking with existing payments. Please refund or void the payments first.";
+                return RedirectToAction(nameof(Index));
             }
-            
+
+            // If booking was confirmed or checked in, free up the room's availability
+            if (booking.Status == BookingStatus.Confirmed || booking.Status == BookingStatus.CheckedIn)
+            {
+                var room = booking.Room;
+                if (room != null)
+                {
+                    room.IsAvailable = true;
+                    _context.Update(room);
+                }
+            }
+
             _context.Bookings.Remove(booking);
             await _context.SaveChangesAsync();
             
-            TempData["SuccessMessage"] = "Booking deleted successfully!";
-            
+            TempData["SuccessMessage"] = $"Booking #{id} has been successfully deleted.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -252,39 +304,192 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateStatus(int id, BookingStatus status)
         {
-            var booking = await _context.Bookings.FindAsync(id);
+            // Debug logging
+            System.Diagnostics.Debug.WriteLine($"********* STARTING UpdateStatus *********");
+            System.Diagnostics.Debug.WriteLine($"UpdateStatus called with id: {id}, new status: {status}");
             
-            if (booking == null)
+            if (id <= 0)
             {
-                return NotFound();
+                System.Diagnostics.Debug.WriteLine($"*** ERROR: Invalid booking ID: {id}");
+                TempData["ErrorMessage"] = $"Invalid booking ID: {id}";
+                return RedirectToAction(nameof(Index));
             }
             
-            booking.Status = status;
-            
-            // If status is CheckedOut or Cancelled, make the room available
-            if (status == BookingStatus.CheckedOut || status == BookingStatus.Cancelled)
+            try 
             {
-                var room = await _context.Rooms.FindAsync(booking.RoomId);
-                if (room != null && !room.IsAvailable)
+                // Direct database update using raw SQL to ensure the update happens regardless of tracking issues
+                var sql = $"UPDATE Bookings SET Status = {(int)status} WHERE BookingId = {id} OR Id = {id}";
+                System.Diagnostics.Debug.WriteLine($"Executing SQL: {sql}");
+                
+                // Execute the update and get actual rows affected
+                var rowsAffected = await _context.Database.ExecuteSqlRawAsync(sql);
+                System.Diagnostics.Debug.WriteLine($"Status update complete - rows affected: {rowsAffected}");
+                
+                if (rowsAffected == 0)
                 {
-                    room.IsAvailable = true;
+                    System.Diagnostics.Debug.WriteLine($"*** ERROR: No rows affected by status update for ID {id}");
+                    TempData["ErrorMessage"] = $"No booking found with ID {id}. Status update failed.";
+                    return RedirectToAction(nameof(Index));
                 }
-            }
-            // If status is CheckedIn, make sure room is marked as unavailable
-            else if (status == BookingStatus.CheckedIn)
-            {
-                var room = await _context.Rooms.FindAsync(booking.RoomId);
-                if (room != null && room.IsAvailable)
+                
+                // Get the updated booking from the database
+                var booking = await _context.Bookings
+                    .Include(b => b.Room)
+                    .Include(b => b.User)
+                    .FirstOrDefaultAsync(m => m.BookingId == id || m.Id == id);
+                
+                if (booking == null)
                 {
-                    room.IsAvailable = false;
+                    System.Diagnostics.Debug.WriteLine($"*** ERROR: Booking with ID {id} not found after status update");
+                    TempData["ErrorMessage"] = "Status was updated, but couldn't retrieve the booking details.";
+                    return RedirectToAction(nameof(Index));
                 }
+                
+                System.Diagnostics.Debug.WriteLine($"Retrieved booking: ID={booking.BookingId}, Status={booking.Status}");
+                
+                // Update room availability based on the new status
+                var room = booking.Room;
+                if (room != null)
+                {
+                    bool shouldBeAvailable = false;
+                    
+                    // Determine if the room should be available
+                    if (status == BookingStatus.Confirmed || status == BookingStatus.CheckedIn)
+                    {
+                        // If booking is confirmed or checked in, mark room as unavailable
+                        shouldBeAvailable = false;
+                    }
+                    else if (status == BookingStatus.Declined || status == BookingStatus.Cancelled || 
+                             status == BookingStatus.CheckedOut || status == BookingStatus.NoShow)
+                    {
+                        // If booking is declined/cancelled/checked-out/no-show, mark room as available
+                        shouldBeAvailable = true;
+                    }
+                    
+                    System.Diagnostics.Debug.WriteLine($"Room availability check - Room ID: {room.RoomId}, Current: {room.IsAvailable}, Should be: {shouldBeAvailable}");
+                    
+                    // Update room availability if needed
+                    if (room.IsAvailable != shouldBeAvailable)
+                    {
+                        var roomUpdateSql = $"UPDATE Rooms SET IsAvailable = '{shouldBeAvailable}' WHERE RoomId = {room.RoomId}";
+                        await _context.Database.ExecuteSqlRawAsync(roomUpdateSql);
+                        System.Diagnostics.Debug.WriteLine($"Room #{room.RoomNumber} availability updated to {shouldBeAvailable}");
+                    }
+                }
+                
+                // Set appropriate success message based on the status change
+                var guestName = booking.User?.FullName ?? "Guest";
+                string successMessage = $"Booking status for {guestName} updated to {status}";
+                
+                System.Diagnostics.Debug.WriteLine($"SUCCESS: {successMessage}");
+                TempData["SuccessMessage"] = successMessage;
             }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"*** ERROR updating database: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                TempData["ErrorMessage"] = $"An error occurred while updating the booking status: {ex.Message}";
+            }
+
+            System.Diagnostics.Debug.WriteLine($"********* ENDING UpdateStatus *********");
             
-            await _context.SaveChangesAsync();
-            
-            TempData["SuccessMessage"] = $"Booking status updated to {status}.";
-            
-            return RedirectToAction(nameof(Details), new { id });
+            // Redirect back to the booking details page
+            return RedirectToAction(nameof(Details), new { id = id });
+        }
+
+        // POST: Admin/Bookings/DirectUpdateStatus
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DirectUpdateStatus(int id, int status)
+        {
+            try
+            {
+                // Convert to BookingStatus enum
+                var bookingStatus = (BookingStatus)status;
+                
+                // Execute direct update using ADO.NET for maximum reliability
+                using (var connection = new Microsoft.Data.SqlClient.SqlConnection(_context.Database.GetConnectionString()))
+                {
+                    connection.Open();
+                    
+                    // Update booking status directly
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = "UPDATE Bookings SET Status = @status WHERE BookingId = @id";
+                        command.Parameters.AddWithValue("@status", (int)bookingStatus);
+                        command.Parameters.AddWithValue("@id", id);
+                        
+                        var rowsAffected = command.ExecuteNonQuery();
+                        
+                        if (rowsAffected == 0)
+                        {
+                            // Try with Id field
+                            command.Parameters.Clear();
+                            command.CommandText = "UPDATE Bookings SET Status = @status WHERE Id = @id";
+                            command.Parameters.AddWithValue("@status", (int)bookingStatus);
+                            command.Parameters.AddWithValue("@id", id);
+                            rowsAffected = command.ExecuteNonQuery();
+                            
+                            if (rowsAffected == 0)
+                            {
+                                return Json(new { success = false, message = "Booking not found" });
+                            }
+                        }
+                    }
+                    
+                    // Get the room details for availability update
+                    int? roomId = null;
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = "SELECT RoomId FROM Bookings WHERE BookingId = @id OR Id = @id";
+                        command.Parameters.AddWithValue("@id", id);
+                        
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                roomId = reader.IsDBNull(0) ? null : (int?)reader.GetInt32(0);
+                            }
+                        }
+                    }
+                    
+                    // Update room availability if needed
+                    if (roomId.HasValue)
+                    {
+                        bool shouldBeAvailable = false;
+                        
+                        // Determine if the room should be available
+                        if (bookingStatus == BookingStatus.Confirmed || bookingStatus == BookingStatus.CheckedIn)
+                        {
+                            // Room should be unavailable
+                            shouldBeAvailable = false;
+                        }
+                        else if (bookingStatus == BookingStatus.Declined || bookingStatus == BookingStatus.Cancelled || 
+                                 bookingStatus == BookingStatus.CheckedOut || bookingStatus == BookingStatus.NoShow)
+                        {
+                            // Room should be available
+                            shouldBeAvailable = true;
+                        }
+                        
+                        using (var command = connection.CreateCommand())
+                        {
+                            command.CommandText = "UPDATE Rooms SET IsAvailable = @isAvailable WHERE RoomId = @roomId";
+                            command.Parameters.AddWithValue("@isAvailable", shouldBeAvailable);
+                            command.Parameters.AddWithValue("@roomId", roomId.Value);
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+                
+                // Set success message
+                TempData["SuccessMessage"] = $"Booking status has been updated to {(BookingStatus)status}";
+                
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Error updating status: {ex.Message}" });
+            }
         }
 
         private bool BookingExists(int id)

@@ -25,10 +25,18 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
             ViewBag.TotalBookings = await _context.Bookings.CountAsync();
             ViewBag.PendingBookings = await _context.Bookings.CountAsync(b => b.Status == BookingStatus.Pending);
             
+            // Payment statistics
+            ViewBag.CompletedPayments = await _context.Payments.CountAsync(p => p.PaymentStatus == PaymentStatus.Completed);
+            ViewBag.PendingPayments = await _context.Payments.CountAsync(p => p.PaymentStatus == PaymentStatus.Pending);
+            ViewBag.TotalRevenue = await _context.Payments
+                .Where(p => p.PaymentStatus == PaymentStatus.Completed)
+                .SumAsync(p => p.Amount);
+            
             // Recent bookings for dashboard
             var recentBookings = await _context.Bookings
                 .Include(b => b.User)
                 .Include(b => b.Room)
+                .Include(b => b.Payments)
                 .OrderByDescending(b => b.CreatedAt)
                 .Take(5)
                 .ToListAsync();

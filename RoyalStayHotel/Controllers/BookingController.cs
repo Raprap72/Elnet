@@ -17,10 +17,10 @@ namespace RoyalStayHotel.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var rooms = await _context.Rooms.Where(r => r.AvailabilityStatus == AvailabilityStatus.Available).ToListAsync();
-            return View(rooms);
+            // Redirect to the unified Rooms/Booking page
+            return RedirectToAction("Index", "Rooms");
         }
 
         public async Task<IActionResult> Book(int id)
@@ -31,8 +31,8 @@ namespace RoyalStayHotel.Controllers
                 return NotFound();
             }
             
-            ViewBag.Room = room;
-            return View();
+            // Redirect to the unified Rooms/Booking page with a query parameter to open the booking modal
+            return RedirectToAction("Index", "Rooms", new { bookRoomId = id });
         }
 
         [HttpPost]
@@ -88,7 +88,7 @@ namespace RoyalStayHotel.Controllers
                 CheckOutDate = checkOut,
                 NumberOfGuests = numberOfGuests,
                 TotalPrice = totalPrice,
-                Status = BookingStatus.Confirmed,
+                Status = BookingStatus.Pending,
                 CreatedAt = DateTime.Now
             };
 

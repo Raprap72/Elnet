@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,56 +10,40 @@ namespace RoyalStayHotel.Models
         public int PaymentId { get; set; }
         
         [Required]
-        [ForeignKey("Booking")]
-        public int BookingId { get; set; }
-        
-        [Required]
         [ForeignKey("User")]
         public int UserId { get; set; }
         
         [Required]
-        public PaymentMethod PaymentMethod { get; set; }
+        [ForeignKey("Booking")]
+        public int BookingId { get; set; }
         
         [Required]
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18,2)")]
-        public decimal AmountPaid { get; set; }
-        
-        // Add Amount property for backward compatibility
-        public decimal Amount { get => AmountPaid; set => AmountPaid = value; }
+        public decimal Amount { get; set; }
         
         [Required]
-        public TransactionStatus TransactionStatus { get; set; }
-        
-        // Add Status property for backward compatibility
-        public TransactionStatus Status { get => TransactionStatus; set => TransactionStatus = value; }
+        public string PaymentMethod { get; set; } = string.Empty;
         
         [Required]
-        public DateTime TransactionDate { get; set; } = DateTime.Now;
+        public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Pending;
         
-        // Add PaymentDate property for backward compatibility
-        public DateTime PaymentDate { get => TransactionDate; set => TransactionDate = value; }
+        public string? PaymentDetails { get; set; }
+        
+        [Required]
+        public DateTime PaymentDate { get; set; } = DateTime.Now;
         
         // Navigation properties
-        public virtual Booking? Booking { get; set; }
         public virtual User? User { get; set; }
+        public virtual Booking? Booking { get; set; }
     }
     
-    public enum PaymentMethod
-    {
-        CreditCard,
-        DebitCard,
-        Cash,
-        BankTransfer,
-        PayPal,
-        GCash
-    }
-    
-    public enum TransactionStatus
+    public enum PaymentStatus
     {
         Pending,
         Completed,
         Failed,
-        Refunded
+        Refunded,
+        Cancelled
     }
 } 

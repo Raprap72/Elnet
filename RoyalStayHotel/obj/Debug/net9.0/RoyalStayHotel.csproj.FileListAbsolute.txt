@@ -235,13 +235,6 @@ C:\Users\Ralph Theodore Alon\Documents\GitHub\Frontend_Elnet\RoyalStayHotel\obj\
 C:\Users\Ralph Theodore Alon\Documents\GitHub\Frontend_Elnet\RoyalStayHotel\obj\Debug\net9.0\ref\RoyalStayHotel.dll
 C:\Users\Ralph Theodore Alon\Documents\GitHub\Frontend_Elnet\RoyalStayHotel\bin\Debug\net9.0\libman.json
 C:\Users\Ralph Theodore Alon\Documents\GitHub\Frontend_Elnet\RoyalStayHotel\obj\Debug\net9.0\compressed\ifywnd9btf-7j511xzsx0.gz
-C:\Users\Ralph Theodore Alon\Documents\GitHub\Frontend_Elnet\RoyalStayHotel\obj\Debug\net9.0\compressed\0kuv7krtet-ts1afbeun3.gz
-C:\Users\Ralph Theodore Alon\Documents\GitHub\Frontend_Elnet\RoyalStayHotel\obj\Debug\net9.0\compressed\7h002h3i7x-qct3lgekgq.gz
-C:\Users\Ralph Theodore Alon\Documents\GitHub\Frontend_Elnet\RoyalStayHotel\obj\Debug\net9.0\compressed\fjweinxyhf-b7456906j7.gz
-C:\Users\Ralph Theodore Alon\Documents\GitHub\Frontend_Elnet\RoyalStayHotel\obj\Debug\net9.0\compressed\vr6a62v6py-489d71qxd2.gz
-C:\Users\Ralph Theodore Alon\Documents\GitHub\Frontend_Elnet\RoyalStayHotel\obj\Debug\net9.0\compressed\fnhn8rfpcc-tvelva1rnj.gz
-C:\Users\Ralph Theodore Alon\Documents\GitHub\Frontend_Elnet\RoyalStayHotel\obj\Debug\net9.0\compressed\v0p7v0aebz-bx9zxpoytq.gz
-C:\Users\Ralph Theodore Alon\Documents\GitHub\Frontend_Elnet\RoyalStayHotel\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\Ralph Theodore Alon\Documents\GitHub\Frontend_Elnet\RoyalStayHotel\obj\Debug\net9.0\compressed\zc6gfttcrq-4qewknlhhe.gz
 C:\Users\Ralph Theodore Alon\Documents\GitHub\Frontend_Elnet\RoyalStayHotel\obj\Debug\net9.0\compressed\qh2jc0ti3k-lni73340tj.gz
 C:\Users\Ralph Theodore Alon\Documents\GitHub\Frontend_Elnet\RoyalStayHotel\obj\Debug\net9.0\compressed\5kv3vyhnu8-dldhcrg7tj.gz
