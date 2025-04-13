@@ -10,7 +10,10 @@ namespace RoyalStayHotel.Models
         
         [Required]
         public RoomType RoomType { get; set; }
-        
+
+        [Required]
+        public int Price { get; set; }
+
         [Required]
         [Range(0, int.MaxValue)]
         [Display(Name = "Total Rooms")]

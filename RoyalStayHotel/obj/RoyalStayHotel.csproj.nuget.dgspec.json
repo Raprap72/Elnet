@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Ralph Theodore Alon\\Documents\\GitHub\\Frontend_Elnet\\RoyalStayHotel\\RoyalStayHotel.csproj": {}
+    "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\RoyalStayHotel.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Ralph Theodore Alon\\Documents\\GitHub\\Frontend_Elnet\\RoyalStayHotel\\RoyalStayHotel.csproj": {
+    "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\RoyalStayHotel.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Ralph Theodore Alon\\Documents\\GitHub\\Frontend_Elnet\\RoyalStayHotel\\RoyalStayHotel.csproj",
+        "projectUniqueName": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\RoyalStayHotel.csproj",
         "projectName": "RoyalStayHotel",
-        "projectPath": "C:\\Users\\Ralph Theodore Alon\\Documents\\GitHub\\Frontend_Elnet\\RoyalStayHotel\\RoyalStayHotel.csproj",
+        "projectPath": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\RoyalStayHotel.csproj",
         "packagesPath": "C:\\Users\\Ralph Theodore Alon\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Ralph Theodore Alon\\Documents\\GitHub\\Frontend_Elnet\\RoyalStayHotel\\obj\\",
+        "outputPath": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

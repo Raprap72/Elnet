@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RoyalStayHotel")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+20d5d43a6a7c912b6fbbc3aa213f99a9ae01363e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8003a4e0c1a31be127c951bcdf5c19b207cc5ff7")]
 [assembly: System.Reflection.AssemblyProductAttribute("RoyalStayHotel")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RoyalStayHotel")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -2,8 +2,14 @@
   "ExpandedNodes": [
     "",
     "\\RoyalStayHotel",
-    "\\RoyalStayHotel\\Views"
+    "\\RoyalStayHotel\\Areas",
+    "\\RoyalStayHotel\\Areas\\Admin",
+    "\\RoyalStayHotel\\Areas\\Admin\\Views",
+    "\\RoyalStayHotel\\Areas\\Admin\\Views\\Bookings",
+    "\\RoyalStayHotel\\Data",
+    "\\RoyalStayHotel\\Views",
+    "\\RoyalStayHotel\\wwwroot\\js"
   ],
-  "SelectedNode": "\\RoyalStayHotel\\Views",
+  "SelectedNode": "\\RoyalStayHotel\\Data\\ApplicationDbContext.cs",
   "PreviewInSolutionExplorer": false
 }
