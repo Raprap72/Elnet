@@ -1,0 +1,221 @@
+@model IEnumerable<RoyalStayHotel.Models.HotelService>
+@{
+    ViewData["Title"] = "Services Management";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="bg-light rounded h-100 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="mb-0">Hotel Services Management</h3>
+                    <a href="@Url.Action("Create", "Services", new { area = "Admin" })" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Add New Service
+                    </a>
+                </div>
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card bg-info text-white mb-3">
+                            <div class="card-body py-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">Total Services</h6>
+                                        <h4 class="mb-0">@Model.Count()</h4>
+                                    </div>
+                                    <i class="fas fa-concierge-bell fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card bg-success text-white mb-3">
+                            <div class="card-body py-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">Active Services</h6>
+                                        <h4 class="mb-0">@Model.Count(s => s.IsAvailable)</h4>
+                                    </div>
+                                    <i class="fas fa-check-circle fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <a href="@Url.Action("Index", "Services", new { area = "Admin", sortOrder = ViewData["IdSort"] })">
+                                        ID
+                                        @if (ViewData["CurrentSort"].ToString() == "id_asc")
+                                        {
+                                            <i class="fas fa-sort-up"></i>
+                                        }
+                                        else if (ViewData["CurrentSort"].ToString() == "id_desc")
+                                        {
+                                            <i class="fas fa-sort-down"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-sort text-muted"></i>
+                                        }
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href="@Url.Action("Index", "Services", new { area = "Admin", sortOrder = ViewData["NameSort"] })">
+                                        Service Name
+                                        @if (ViewData["CurrentSort"].ToString() == "name_asc")
+                                        {
+                                            <i class="fas fa-sort-up"></i>
+                                        }
+                                        else if (ViewData["CurrentSort"].ToString() == "name_desc")
+                                        {
+                                            <i class="fas fa-sort-down"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-sort text-muted"></i>
+                                        }
+                                    </a>
+                                </th>
+                                <th>Description</th>
+                                <th>
+                                    <a href="@Url.Action("Index", "Services", new { area = "Admin", sortOrder = ViewData["PriceSort"] })">
+                                        Price
+                                        @if (ViewData["CurrentSort"].ToString() == "price_asc")
+                                        {
+                                            <i class="fas fa-sort-up"></i>
+                                        }
+                                        else if (ViewData["CurrentSort"].ToString() == "price_desc")
+                                        {
+                                            <i class="fas fa-sort-down"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-sort text-muted"></i>
+                                        }
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href="@Url.Action("Index", "Services", new { area = "Admin", sortOrder = ViewData["TypeSort"] })">
+                                        Service Type
+                                        @if (ViewData["CurrentSort"].ToString() == "type_asc")
+                                        {
+                                            <i class="fas fa-sort-up"></i>
+                                        }
+                                        else if (ViewData["CurrentSort"].ToString() == "type_desc")
+                                        {
+                                            <i class="fas fa-sort-down"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-sort text-muted"></i>
+                                        }
+                                    </a>
+                                </th>
+                                <th>
+                                    <a href="@Url.Action("Index", "Services", new { area = "Admin", sortOrder = ViewData["StatusSort"] })">
+                                        Status
+                                        @if (ViewData["CurrentSort"].ToString() == "status_asc")
+                                        {
+                                            <i class="fas fa-sort-up"></i>
+                                        }
+                                        else if (ViewData["CurrentSort"].ToString() == "status_desc")
+                                        {
+                                            <i class="fas fa-sort-down"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-sort text-muted"></i>
+                                        }
+                                    </a>
+                                </th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var service in Model)
+                            {
+                                <tr>
+                                    <td>@service.Id</td>
+                                    <td>@service.Name</td>
+                                    <td>
+                                        @if (service.Description.Length > 50)
+                                        {
+                                            @(service.Description.Substring(0, 50) + "...")
+                                        }
+                                        else
+                                        {
+                                            @service.Description
+                                        }
+                                    </td>
+                                    <td>@(service.Price == 0 ? "Free" : $"₱{service.Price:N2}")</td>
+                                    <td>
+                                        <span class="badge bg-@(service.ServiceType == RoyalStayHotel.Models.ServiceType.Main ? "primary" : "info")">
+                                            @service.ServiceType
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-@(service.IsAvailable ? "success" : "danger")">
+                                            @(service.IsAvailable ? "Available" : "Unavailable")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="@Url.Action("Edit", "Services", new { area = "Admin", id = service.Id })" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="@Url.Action("Delete", "Services", new { area = "Admin", id = service.Id })" class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-@(service.IsAvailable ? "warning" : "success") btn-sm" 
+                                                    onclick="toggleServiceStatus(@service.Id)">
+                                                <i class="fas fa-@(service.IsAvailable ? "ban" : "check")"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                @if (!Model.Any())
+                {
+                    <div class="text-center p-4">
+                        <p class="text-muted mb-0">No services found. Click the "Add New Service" button to create one.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="toggleStatusForm" method="post" style="display: none;">
+    <input type="hidden" id="serviceId" name="id" />
+</form>
+
+@section Scripts {
+    <script>
+        function toggleServiceStatus(id) {
+            if (confirm('Are you sure you want to change the status of this service?')) {
+                document.getElementById('serviceId').value = id;
+                document.getElementById('toggleStatusForm').action = '@Url.Action("ToggleStatus", "Services", new { area = "Admin" })';
+                document.getElementById('toggleStatusForm').submit();
+            }
+        }
+    </script>
+} 

@@ -1,0 +1,216 @@
+@model IEnumerable<RoyalStayHotel.Models.HousekeepingTask>
+@using RoyalStayHotel.Models
+@{
+    ViewData["Title"] = "Housekeeping Tasks";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0">
+                    <h6>Housekeeping Tasks</h6>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Room</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Task</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Type</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Priority</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Created</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var task in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex px-2 py-1">
+                                                <div class="d-flex flex-column justify-content-center">
+                                                    <h6 class="mb-0 text-sm">@task.Room?.RoomNumber</h6>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <p class="text-xs font-weight-bold mb-0">@task.TaskDescription</p>
+                                        </td>
+                                        <td>
+                                            <span class="text-secondary text-xs font-weight-bold">@task.TaskType</span>
+                                        </td>
+                                        <td>
+                                            <span class="text-secondary text-xs font-weight-bold">
+                                                @switch (task.Priority)
+                                                {
+                                                    case 1:
+                                                        <span class="badge bg-danger">High</span>
+                                                        break;
+                                                    case 2:
+                                                        <span class="badge bg-warning">Medium</span>
+                                                        break;
+                                                    case 3:
+                                                        <span class="badge bg-success">Low</span>
+                                                        break;
+                                                }
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <select class="form-select form-select-sm task-status" data-task-id="@task.TaskId">
+                                                @foreach (HousekeepingTaskStatus status in Enum.GetValues(typeof(HousekeepingTaskStatus)))
+                                                {
+                                                    <option value="@((int)status)" @(task.Status == status ? "selected" : "")>@status</option>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <span class="text-secondary text-xs font-weight-bold">@task.CreatedAt.ToString("MM/dd/yyyy HH:mm")</span>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-info view-room-details" data-room-id="@task.RoomId">
+                                                <i class="fas fa-info-circle"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-warning report-maintenance" data-room-id="@task.RoomId">
+                                                <i class="fas fa-tools"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Room Details Modal -->
+<div class="modal fade" id="roomDetailsModal" tabindex="-1" role="dialog" aria-labelledby="roomDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="roomDetailsModalLabel">Room Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Room Number:</label>
+                    <p id="roomNumber"></p>
+                </div>
+                <div class="form-group">
+                    <label>Room Type:</label>
+                    <p id="roomType"></p>
+                </div>
+                <div class="form-group">
+                    <label>Status:</label>
+                    <p id="roomStatus"></p>
+                </div>
+                <div class="form-group">
+                    <label>Last Cleaned:</label>
+                    <p id="lastCleaned"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Report Maintenance Modal -->
+<div class="modal fade" id="reportMaintenanceModal" tabindex="-1" role="dialog" aria-labelledby="reportMaintenanceModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reportMaintenanceModalLabel">Report Maintenance Issue</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="maintenanceForm">
+                    <input type="hidden" id="maintenanceRoomId" name="roomId" />
+                    <div class="form-group">
+                        <label for="issue">Issue Description</label>
+                        <textarea class="form-control" id="issue" name="issue" rows="3" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="submitMaintenance">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Update task status
+            $('.task-status').change(function() {
+                var taskId = $(this).data('task-id');
+                var status = $(this).val();
+                
+                $.post('/Staff/Housekeeping/UpdateStatus', { taskId: taskId, status: status })
+                    .done(function(response) {
+                        if (response.success) {
+                            toastr.success('Task status updated successfully');
+                        } else {
+                            toastr.error('Failed to update task status');
+                        }
+                    })
+                    .fail(function() {
+                        toastr.error('Failed to update task status');
+                    });
+            });
+
+            // View room details
+            $('.view-room-details').click(function() {
+                var roomId = $(this).data('room-id');
+                
+                $.get('/Staff/Housekeeping/GetRoomDetails', { roomId: roomId })
+                    .done(function(room) {
+                        $('#roomNumber').text(room.roomNumber);
+                        $('#roomType').text(room.roomType);
+                        $('#roomStatus').text(room.availabilityStatus);
+                        $('#lastCleaned').text(room.lastCleaned ? new Date(room.lastCleaned).toLocaleString() : 'Never');
+                        $('#roomDetailsModal').modal('show');
+                    })
+                    .fail(function() {
+                        toastr.error('Failed to load room details');
+                    });
+            });
+
+            // Report maintenance
+            $('.report-maintenance').click(function() {
+                var roomId = $(this).data('room-id');
+                $('#maintenanceRoomId').val(roomId);
+                $('#reportMaintenanceModal').modal('show');
+            });
+
+            // Submit maintenance report
+            $('#submitMaintenance').click(function() {
+                var roomId = $('#maintenanceRoomId').val();
+                var issue = $('#issue').val();
+                
+                $.post('/Staff/Housekeeping/ReportMaintenance', { roomId: roomId, issue: issue })
+                    .done(function(response) {
+                        if (response.success) {
+                            toastr.success('Maintenance request submitted successfully');
+                            $('#reportMaintenanceModal').modal('hide');
+                            $('#issue').val('');
+                        } else {
+                            toastr.error('Failed to submit maintenance request');
+                        }
+                    })
+                    .fail(function() {
+                        toastr.error('Failed to submit maintenance request');
+                    });
+            });
+        });
+    </script>
+} 

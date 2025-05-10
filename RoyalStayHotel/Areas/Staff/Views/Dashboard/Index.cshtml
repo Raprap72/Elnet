@@ -1,0 +1,230 @@
+@model RoyalStayHotel.Models.ViewModels.StaffDashboardViewModel
+@{
+    ViewData["Title"] = "Staff Dashboard";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-capitalize font-weight-bold">Today's Tasks</p>
+                                <h5 class="font-weight-bolder mb-0">
+                                    @Model.HousekeepingTasks.Count()
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                                <i class="ni ni-calendar-grid-58 text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-capitalize font-weight-bold">Pending Maintenance</p>
+                                <h5 class="font-weight-bolder mb-0">
+                                    @Model.MaintenanceRequests.Count()
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-danger shadow text-center border-radius-md">
+                                <i class="ni ni-tools text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-capitalize font-weight-bold">Today's Check-ins</p>
+                                <h5 class="font-weight-bolder mb-0">
+                                    @Model.TodayCheckIns.Count()
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-success shadow text-center border-radius-md">
+                                <i class="ni ni-key-25 text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-capitalize font-weight-bold">Today's Check-outs</p>
+                                <h5 class="font-weight-bolder mb-0">
+                                    @Model.TodayCheckOuts.Count()
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-warning shadow text-center border-radius-md">
+                                <i class="ni ni-single-copy-04 text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-lg-6 mb-lg-0 mb-4">
+            <div class="card">
+                <div class="card-header pb-0">
+                    <h6>Today's Tasks</h6>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Room</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Task</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Priority</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var task in Model.HousekeepingTasks)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex px-2 py-1">
+                                                <div class="d-flex flex-column justify-content-center">
+                                                    <h6 class="mb-0 text-sm">@task.Room?.RoomNumber</h6>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <p class="text-xs font-weight-bold mb-0">@task.TaskDescription</p>
+                                        </td>
+                                        <td>
+                                            <span class="text-secondary text-xs font-weight-bold">
+                                                @switch (task.Priority)
+                                                {
+                                                    case 1:
+                                                        <span class="badge bg-danger">High</span>
+                                                        break;
+                                                    case 2:
+                                                        <span class="badge bg-warning">Medium</span>
+                                                        break;
+                                                    case 3:
+                                                        <span class="badge bg-success">Low</span>
+                                                        break;
+                                                }
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="text-secondary text-xs font-weight-bold">@task.Status</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header pb-0">
+                    <h6>Pending Maintenance</h6>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Room</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Issue</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Priority</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var request in Model.MaintenanceRequests)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex px-2 py-1">
+                                                <div class="d-flex flex-column justify-content-center">
+                                                    <h6 class="mb-0 text-sm">@request.Room?.RoomNumber</h6>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <p class="text-xs font-weight-bold mb-0">@request.Title</p>
+                                        </td>
+                                        <td>
+                                            <span class="text-secondary text-xs font-weight-bold">
+                                                @switch (request.Priority)
+                                                {
+                                                    case 1:
+                                                        <span class="badge bg-danger">Critical</span>
+                                                        break;
+                                                    case 2:
+                                                        <span class="badge bg-warning">High</span>
+                                                        break;
+                                                    case 3:
+                                                        <span class="badge bg-info">Medium</span>
+                                                        break;
+                                                    case 4:
+                                                        <span class="badge bg-success">Low</span>
+                                                        break;
+                                                }
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="text-secondary text-xs font-weight-bold">@request.Status</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.mark-as-read').click(function() {
+                var btn = $(this);
+                var notificationId = btn.data('id');
+                
+                $.post('/Staff/Dashboard/MarkNotificationAsRead', { notificationId: notificationId })
+                    .done(function(response) {
+                        if (response.success) {
+                            btn.closest('.list-group-item').fadeOut();
+                        }
+                    });
+            });
+        });
+    </script>
+} 

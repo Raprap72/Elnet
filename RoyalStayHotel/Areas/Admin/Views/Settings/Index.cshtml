@@ -1,0 +1,378 @@
+@{
+    ViewData["Title"] = "System Settings";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-3 text-center">
+                            <i class="fas fa-cog fa-3x text-primary"></i>
+                        </div>
+                        <div class="col-9">
+                            <h5 class="font-weight-bold text-primary">General</h5>
+                            <p class="mb-0 small">Basic site configuration</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="#general" class="btn btn-primary btn-sm w-100" data-toggle="tab">Manage</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-3 text-center">
+                            <i class="fas fa-envelope fa-3x text-success"></i>
+                        </div>
+                        <div class="col-9">
+                            <h5 class="font-weight-bold text-success">Email</h5>
+                            <p class="mb-0 small">Configure email settings</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="#email" class="btn btn-success btn-sm w-100" data-toggle="tab">Manage</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-3 text-center">
+                            <i class="fas fa-credit-card fa-3x text-warning"></i>
+                        </div>
+                        <div class="col-9">
+                            <h5 class="font-weight-bold text-warning">Payment</h5>
+                            <p class="mb-0 small">Configure payment options</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="#payment" class="btn btn-warning btn-sm w-100" data-toggle="tab">Manage</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-3 text-center">
+                            <i class="fas fa-calendar-check fa-3x text-info"></i>
+                        </div>
+                        <div class="col-9">
+                            <h5 class="font-weight-bold text-info">Booking</h5>
+                            <p class="mb-0 small">Booking system settings</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="#booking" class="btn btn-info btn-sm w-100" data-toggle="tab">Manage</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-left-danger shadow h-100">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-3 text-center">
+                            <i class="fas fa-users fa-3x text-danger"></i>
+                        </div>
+                        <div class="col-9">
+                            <h5 class="font-weight-bold text-danger">User Management</h5>
+                            <p class="mb-0 small">Manage system users</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a asp-action="ManageUsers" class="btn btn-danger btn-sm w-100">Manage</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-left-secondary shadow h-100">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-3 text-center">
+                            <i class="fas fa-database fa-3x text-secondary"></i>
+                        </div>
+                        <div class="col-9">
+                            <h5 class="font-weight-bold text-secondary">Database</h5>
+                            <p class="mb-0 small">Backup and restore</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a asp-action="BackupDatabase" class="btn btn-secondary btn-sm w-100">Manage</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-left-dark shadow h-100">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-3 text-center">
+                            <i class="fas fa-file-alt fa-3x text-dark"></i>
+                        </div>
+                        <div class="col-9">
+                            <h5 class="font-weight-bold text-dark">System Logs</h5>
+                            <p class="mb-0 small">View system logs</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a asp-action="SystemLogs" class="btn btn-dark btn-sm w-100">View</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-cog mr-1"></i>
+            System Settings
+        </div>
+        <div class="card-body">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            
+            <div class="tab-content">
+                <!-- General Settings -->
+                <div class="tab-pane fade show active" id="general">
+                    <h5 class="border-bottom pb-2">General Settings</h5>
+                    <form asp-action="UpdateSettings" method="post">
+                        @Html.AntiForgeryToken()
+                        
+                        @if (ViewBag.GeneralSettings != null)
+                        {
+                            foreach (var setting in ViewBag.GeneralSettings)
+                            {
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label for="@setting.Key" class="form-label">@setting.DisplayName</label>
+                                        <input type="hidden" name="keys" value="@setting.Key" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        @if (setting.Type == "text")
+                                        {
+                                            <input type="text" class="form-control" id="@setting.Key" name="values" value="@setting.Value" />
+                                        }
+                                        else if (setting.Type == "toggle")
+                                        {
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="@setting.Key" name="values" value="true" @(setting.Value == "true" ? "checked" : "") />
+                                            </div>
+                                        }
+                                        else if (setting.Type == "textarea")
+                                        {
+                                            <textarea class="form-control" id="@setting.Key" name="values" rows="3">@setting.Value</textarea>
+                                        }
+                                        <small class="text-muted">@setting.Description</small>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save mr-1"></i> Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Email Settings -->
+                <div class="tab-pane fade" id="email">
+                    <h5 class="border-bottom pb-2">Email Settings</h5>
+                    <form asp-action="UpdateSettings" method="post">
+                        @Html.AntiForgeryToken()
+                        
+                        @if (ViewBag.EmailSettings != null)
+                        {
+                            foreach (var setting in ViewBag.EmailSettings)
+                            {
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label for="@setting.Key" class="form-label">@setting.DisplayName</label>
+                                        <input type="hidden" name="keys" value="@setting.Key" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        @if (setting.Type == "text")
+                                        {
+                                            <input type="text" class="form-control" id="@setting.Key" name="values" value="@setting.Value" />
+                                        }
+                                        else if (setting.Type == "toggle")
+                                        {
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="@setting.Key" name="values" value="true" @(setting.Value == "true" ? "checked" : "") />
+                                            </div>
+                                        }
+                                        else if (setting.Type == "textarea")
+                                        {
+                                            <textarea class="form-control" id="@setting.Key" name="values" rows="3">@setting.Value</textarea>
+                                        }
+                                        <small class="text-muted">@setting.Description</small>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save mr-1"></i> Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Payment Settings -->
+                <div class="tab-pane fade" id="payment">
+                    <h5 class="border-bottom pb-2">Payment Settings</h5>
+                    <form asp-action="UpdateSettings" method="post">
+                        @Html.AntiForgeryToken()
+                        
+                        @if (ViewBag.PaymentSettings != null)
+                        {
+                            foreach (var setting in ViewBag.PaymentSettings)
+                            {
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label for="@setting.Key" class="form-label">@setting.DisplayName</label>
+                                        <input type="hidden" name="keys" value="@setting.Key" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        @if (setting.Type == "text")
+                                        {
+                                            <input type="text" class="form-control" id="@setting.Key" name="values" value="@setting.Value" />
+                                        }
+                                        else if (setting.Type == "toggle")
+                                        {
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="@setting.Key" name="values" value="true" @(setting.Value == "true" ? "checked" : "") />
+                                            </div>
+                                        }
+                                        else if (setting.Type == "textarea")
+                                        {
+                                            <textarea class="form-control" id="@setting.Key" name="values" rows="3">@setting.Value</textarea>
+                                        }
+                                        <small class="text-muted">@setting.Description</small>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="fas fa-save mr-1"></i> Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Booking Settings -->
+                <div class="tab-pane fade" id="booking">
+                    <h5 class="border-bottom pb-2">Booking Settings</h5>
+                    <form asp-action="UpdateSettings" method="post">
+                        @Html.AntiForgeryToken()
+                        
+                        @if (ViewBag.BookingSettings != null)
+                        {
+                            foreach (var setting in ViewBag.BookingSettings)
+                            {
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label for="@setting.Key" class="form-label">@setting.DisplayName</label>
+                                        <input type="hidden" name="keys" value="@setting.Key" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        @if (setting.Type == "text")
+                                        {
+                                            <input type="text" class="form-control" id="@setting.Key" name="values" value="@setting.Value" />
+                                        }
+                                        else if (setting.Type == "toggle")
+                                        {
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="@setting.Key" name="values" value="true" @(setting.Value == "true" ? "checked" : "") />
+                                            </div>
+                                        }
+                                        else if (setting.Type == "textarea")
+                                        {
+                                            <textarea class="form-control" id="@setting.Key" name="values" rows="3">@setting.Value</textarea>
+                                        }
+                                        <small class="text-muted">@setting.Description</small>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-info">
+                                    <i class="fas fa-save mr-1"></i> Save Changes
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Enable tab functionality
+            $('a[data-toggle="tab"]').on('click', function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+            });
+            
+            // Show tab based on hash in URL
+            var hash = window.location.hash;
+            if (hash) {
+                $('a[href="' + hash + '"]').tab('show');
+            }
+            
+            // Update URL hash when tab changes
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                window.location.hash = e.target.hash;
+            });
+        });
+    </script>
+} 

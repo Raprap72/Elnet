@@ -1,0 +1,246 @@
+@model RoyalStayHotel.Models.Discount
+
+@{
+    ViewData["Title"] = "Discount Details";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    
+    // Format dates consistently
+    string startDateFormatted = Model.StartDate.ToString("MM/dd/yyyy");
+    string endDateFormatted = Model.EndDate.ToString("MM/dd/yyyy");
+    
+    // Progress calculation
+    double progressPercentage = 0;
+    string progressBarClass = "bg-warning";
+    string statusText = "Upcoming";
+    
+    if (Model.EndDate < DateTime.Now)
+    {
+        progressPercentage = 100;
+        progressBarClass = "bg-danger";
+        statusText = "Expired";
+    }
+    else if (Model.StartDate <= DateTime.Now)
+    {
+        var totalDays = (Model.EndDate - Model.StartDate).TotalDays;
+        var daysElapsed = (DateTime.Now - Model.StartDate).TotalDays;
+        progressPercentage = Math.Min((daysElapsed / totalDays) * 100, 100);
+        progressBarClass = "bg-success";
+        statusText = "Active";
+    }
+    
+    int daysLeft = Math.Max((Model.EndDate - DateTime.Now).Days, 0);
+    
+    // Usage progress
+    double usagePercentage = 0;
+    if (Model.MaxUsage.HasValue && Model.MaxUsage.Value > 0)
+    {
+        usagePercentage = ((double)Model.UsageCount / Model.MaxUsage.Value) * 100;
+    }
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Discount Details</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/Admin/Dashboard">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="/Admin/Discounts">Discounts</a></li>
+        <li class="breadcrumb-item active">Details</li>
+    </ol>
+
+    <div class="row">
+        <div class="col-xl-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-tag me-1"></i>
+                    Discount Information
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <h5 class="text-primary">@Model.Name</h5>
+                                <p>@Model.Description</p>
+                            </div>
+
+                            <table class="table table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <th style="width: 40%">Discount Type:</th>
+                                        <td>@Model.Type</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Discount Value:</th>
+                                        <td>
+                                            @if (Model.IsPercentage)
+                                            {
+                                                <span>@Model.DiscountAmount%</span>
+                                            }
+                                            else
+                                            {
+                                                <span>₱@Model.DiscountAmount.ToString("N2")</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Discount Code:</th>
+                                        <td>
+                                            <code class="bg-light p-1 rounded">@Model.Code</code>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Valid Period:</th>
+                                        <td>
+                                            @startDateFormatted to @endDateFormatted
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="mb-0">Status</h6>
+                                    <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger") p-2">
+                                        @(Model.IsActive ? "Active" : "Inactive")
+                                    </span>
+                                </div>
+                                <div class="progress mb-3" style="height: 10px;">
+                                    <div class="progress-bar @progressBarClass" role="progressbar" 
+                                         style="width: @progressPercentage%;" 
+                                         aria-valuenow="@progressPercentage" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                
+                                @if (Model.EndDate > DateTime.Now)
+                                {
+                                    <small class="text-success">@daysLeft days remaining</small>
+                                }
+                                else
+                                {
+                                    <small class="text-danger">Expired</small>
+                                }
+                            </div>
+
+                            <table class="table table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <th style="width: 50%">Usage Count:</th>
+                                        <td>
+                                            @if (Model.MaxUsage.HasValue)
+                                            {
+                                                <span>@Model.UsageCount / @Model.MaxUsage</span>
+                                                <div class="progress mt-1" style="height: 5px;">
+                                                    <div class="progress-bar bg-info" role="progressbar" 
+                                                        style="width: @usagePercentage%;" 
+                                                        aria-valuenow="@Model.UsageCount" aria-valuemin="0" aria-valuemax="@Model.MaxUsage"></div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <span>@Model.UsageCount (Unlimited)</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Minimum Spend:</th>
+                                        <td>
+                                            @if (Model.MinimumSpend.HasValue)
+                                            {
+                                                <span>₱@Model.MinimumSpend.Value.ToString("N2")</span>
+                                            }
+                                            else
+                                            {
+                                                <span>No Minimum</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Minimum Stay:</th>
+                                        <td>
+                                            @if (Model.MinimumStay.HasValue)
+                                            {
+                                                <span>@Model.MinimumStay days</span>
+                                            }
+                                            else
+                                            {
+                                                <span>No Minimum</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Room Type Restriction:</th>
+                                        <td>
+                                            @if (Model.RoomTypeId.HasValue)
+                                            {
+                                                <span>@Model.ApplicableRoomType Rooms</span>
+                                            }
+                                            else
+                                            {
+                                                <span>All Room Types</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <a asp-action="Edit" asp-route-id="@Model.DiscountId" class="btn btn-primary">
+                            <i class="fas fa-edit me-1"></i> Edit
+                        </a>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-chart-bar me-1"></i>
+                    Usage Statistics
+                </div>
+                <div class="card-body">
+                    @if (Model.AppliedBookings != null && Model.AppliedBookings.Any())
+                    {
+                        <div>
+                            <h6>Applied to @Model.AppliedBookings.Count Bookings</h6>
+                            <div class="list-group mt-3">
+                                @foreach (var booking in Model.AppliedBookings.Take(3))
+                                {
+                                    <div class="list-group-item list-group-item-action">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1">Booking #@booking.BookingId</h6>
+                                            <small>@booking.CreatedAt.ToString("MM/dd/yyyy")</small>
+                                        </div>
+                                        <p class="mb-1">
+                                            @(booking.User?.FullName ?? "Guest") - 
+                                            <span class="text-success">₱@booking.DiscountAmount?.ToString("N2") saved</span>
+                                        </p>
+                                        <small>
+                                            @booking.CheckInDate.ToString("MM/dd/yyyy") - @booking.CheckOutDate.ToString("MM/dd/yyyy")
+                                        </small>
+                                    </div>
+                                }
+                            </div>
+                            @if (Model.AppliedBookings.Count > 3)
+                            {
+                                <div class="text-center mt-2">
+                                    <small class="text-muted">Showing 3 of @Model.AppliedBookings.Count bookings</small>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-ticket-alt fa-3x text-muted mb-3"></i>
+                            <p>No bookings have used this discount yet.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

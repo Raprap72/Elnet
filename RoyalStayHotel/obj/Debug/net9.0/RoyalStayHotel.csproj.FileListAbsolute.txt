@@ -477,10 +477,8 @@ C:\UC\Elnet2ndChecking\RoyalStayHotel\obj\Debug\net9.0\RoyalStayHotel.sourcelink
 C:\UC\Elnet2ndChecking\RoyalStayHotel\obj\Debug\net9.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\UC\Elnet2ndChecking\RoyalStayHotel\obj\Debug\net9.0\scopedcss\bundle\RoyalStayHotel.styles.css
 C:\UC\Elnet2ndChecking\RoyalStayHotel\obj\Debug\net9.0\scopedcss\projectbundle\RoyalStayHotel.bundle.scp.css
-C:\UC\Elnet2ndChecking\RoyalStayHotel\obj\Debug\net9.0\compressed\3ajmy1kiti-g5uqm53td7.gz
 C:\UC\Elnet2ndChecking\RoyalStayHotel\obj\Debug\net9.0\compressed\ifywnd9btf-7j511xzsx0.gz
 C:\UC\Elnet2ndChecking\RoyalStayHotel\obj\Debug\net9.0\compressed\e2d84q183z-61n19gt1b8.gz
-C:\UC\Elnet2ndChecking\RoyalStayHotel\obj\Debug\net9.0\compressed\xm3n5fi5o6-5fzltc1aso.gz
 C:\UC\Elnet2ndChecking\RoyalStayHotel\obj\Debug\net9.0\compressed\zc6gfttcrq-wnh45v2gz0.gz
 C:\UC\Elnet2ndChecking\RoyalStayHotel\obj\Debug\net9.0\compressed\qh2jc0ti3k-lni73340tj.gz
 C:\UC\Elnet2ndChecking\RoyalStayHotel\obj\Debug\net9.0\compressed\5kv3vyhnu8-szhmigcn3p.gz
@@ -642,3 +640,10 @@ C:\UC\Elnet2ndChecking\RoyalStayHotel\obj\Debug\net9.0\refint\RoyalStayHotel.dll
 C:\UC\Elnet2ndChecking\RoyalStayHotel\obj\Debug\net9.0\RoyalStayHotel.pdb
 C:\UC\Elnet2ndChecking\RoyalStayHotel\obj\Debug\net9.0\RoyalStayHotel.genruntimeconfig.cache
 C:\UC\Elnet2ndChecking\RoyalStayHotel\obj\Debug\net9.0\ref\RoyalStayHotel.dll
+C:\UC\Elnet2ndChecking\RoyalStayHotel\obj\Debug\net9.0\compressed\j448oxg26e-7o8i1o3vwt.gz
+C:\UC\Elnet2ndChecking\RoyalStayHotel\obj\Debug\net9.0\compressed\3ajmy1kiti-wq5pjgfbwx.gz
+C:\UC\Elnet2ndChecking\RoyalStayHotel\bin\Debug\net9.0\System.Text.Json.dll
+C:\UC\Elnet2ndChecking\RoyalStayHotel\obj\Debug\net9.0\compressed\xm3n5fi5o6-4iztbxhue2.gz
+C:\UC\Elnet2ndChecking\RoyalStayHotel\obj\Debug\net9.0\RoyalStayHotel.MvcApplicationPartsAssemblyInfo.cs
+C:\UC\Elnet2ndChecking\RoyalStayHotel\bin\Debug\net9.0\X.PagedList.dll
+C:\UC\Elnet2ndChecking\RoyalStayHotel\bin\Debug\net9.0\X.PagedList.Mvc.Core.dll

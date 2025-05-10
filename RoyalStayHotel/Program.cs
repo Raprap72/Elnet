@@ -41,7 +41,58 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+// Add authentication and authorization services
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = "Cookies";
+    options.DefaultChallengeScheme = "Cookies";
+})
+.AddCookie("Cookies", options =>
+{
+    options.LoginPath = "/Admin/Account/Login";
+    options.LogoutPath = "/Admin/Account/Logout";
+    options.AccessDeniedPath = "/Admin/Account/AccessDenied";
+    options.ExpireTimeSpan = TimeSpan.FromHours(2);
+    options.SlidingExpiration = true;
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdminRole", policy =>
+        policy.RequireAssertion(context =>
+            context.User.HasClaim(c => c.Type == "UserType" && c.Value == UserType.Admin.ToString())));
+});
+
 var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+
+// Ensure static files are properly served
+app.UseStaticFiles();
+
+app.UseRouting();
+
+// Add authentication and authorization middleware
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseSession();
+
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
+    
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 // Ensure database is created and seeded
 using (var scope = app.Services.CreateScope())
@@ -53,49 +104,83 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
         
-        // Delete and recreate database
-        logger.LogInformation("Deleting and recreating database...");
-        bool recreateSuccessful = false;
+        // Check if database exists before trying migrations
+        bool dbExists = context.Database.CanConnect();
+        logger.LogInformation($"Database exists: {dbExists}");
         
-        try
+        if (dbExists)
         {
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
-            recreateSuccessful = true;
-            logger.LogInformation("Database recreated successfully.");
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error occurred while recreating database. Trying alternate approach.");
-            
-            // If the above failed, try using migrations
             try
             {
-                context.Database.Migrate();
-                recreateSuccessful = true;
-                logger.LogInformation("Database migrated successfully.");
+                // If database exists, try to update schema without full migrations
+                // This is safer than running full migrations when tables already exist
+                logger.LogInformation("Database exists, ensuring schema is up to date...");
+                context.Database.EnsureCreated();
+                logger.LogInformation("Database schema updated successfully.");
             }
-            catch (Exception migrationEx)
+            catch (Exception ex)
             {
-                logger.LogError(migrationEx, "Error occurred during database migration. Will try to use existing database.");
+                logger.LogError(ex, "Error occurred while updating database schema. This is not critical if database is already set up.");
             }
         }
-        
-        // Only seed if we have a valid database
-        if (recreateSuccessful || context.Database.CanConnect())
+        else
         {
-            logger.LogInformation("Seeding database...");
+            // If database doesn't exist, create it with all tables
+            logger.LogInformation("Database does not exist, creating new database...");
+            context.Database.EnsureCreated();
+            logger.LogInformation("Database created successfully.");
+        }
+        
+        // Check if we can connect to the database
+        if (context.Database.CanConnect())
+        {
+            logger.LogInformation("Connected to database successfully, proceeding with data seeding if needed.");
+            
+            // Helper method to hash passwords - same as in AccountController
+            string HashPassword(string password)
+            {
+                using (var sha256 = System.Security.Cryptography.SHA256.Create())
+                {
+                    var hashedBytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                    var hashedPassword = Convert.ToBase64String(hashedBytes);
+                    Console.WriteLine($"DEBUG - Original password: {password}");
+                    Console.WriteLine($"DEBUG - Hashed password: {hashedPassword}");
+                    return hashedPassword;
+                }
+            }
             
             // Check if admin user exists, if not create one
             if (!context.Users.Any(u => u.UserType == UserType.Admin))
             {
                 logger.LogInformation("Creating admin user...");
+                
+                // Create a test user with PLAIN TEXT password for testing
+                var testUser = new User
+                {
+                    FullName = "Test Admin",
+                    Email = "test@test.com",
+                    Username = "test",
+                    Password = "test123", // Plain text for testing
+                    PhoneNumber = "123-456-7890",
+                    UserType = UserType.Admin,
+                    CreatedAt = DateTime.Now
+                };
+                
+                context.Users.Add(testUser);
+                context.SaveChanges();
+                
+                logger.LogInformation($"Test admin created with Username: 'test' and Password: 'test123'");
+                
+                // Create the regular admin user with hashed password
+                var adminPassword = "Admin123!";
+                var hashedPassword = HashPassword(adminPassword);
+                
                 context.Users.Add(new User
                 {
                     FullName = "Admin User",
                     Email = "admin@royalstay.com",
                     Username = "admin",
-                    Password = "Admin123!", // In production, use a password hasher
+                    Password = hashedPassword,
                     PhoneNumber = "123-456-7890",
                     UserType = UserType.Admin,
                     CreatedAt = DateTime.Now
@@ -188,6 +273,17 @@ using (var scope = app.Services.CreateScope())
             }
             
             logger.LogInformation("Database seeding completed successfully.");
+            
+            // Seed contact form submissions
+            try
+            {
+                SeedData.Initialize(services);
+                logger.LogInformation("Contact form submissions seeded successfully.");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred while seeding contact form submissions.");
+            }
         }
         else
         {
@@ -199,32 +295,5 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "An error occurred while seeding the database.");
     }
 }
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-
-// Ensure static files are properly served
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.UseSession();
-
-app.MapControllerRoute(
-    name: "areas",
-    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
-    
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

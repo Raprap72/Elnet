@@ -1,0 +1,116 @@
+@model RoyalStayHotel.Models.Discount
+
+@{
+    ViewData["Title"] = "Delete Discount";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Delete Discount</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/Admin/Dashboard">Dashboard</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index">Discounts</a></li>
+        <li class="breadcrumb-item active">Delete</li>
+    </ol>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header bg-danger text-white">
+                    <i class="fas fa-exclamation-triangle me-1"></i>
+                    Warning
+                </div>
+                <div class="card-body">
+                    <h5 class="text-danger">Are you sure you want to delete this discount?</h5>
+                    <p>This action cannot be undone and will remove all discount records.</p>
+                    
+                    @if (Model.AppliedBookings != null && Model.AppliedBookings.Any())
+                    {
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <strong>Warning:</strong> This discount has been applied to @Model.AppliedBookings.Count bookings. 
+                            Deleting it will not affect existing bookings where this discount has been applied.
+                        </div>
+                    }
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Discount Details
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-4">Discount Name</dt>
+                        <dd class="col-sm-8">@Model.Name</dd>
+                        
+                        <dt class="col-sm-4">Description</dt>
+                        <dd class="col-sm-8">@Model.Description</dd>
+                        
+                        <dt class="col-sm-4">Discount Type</dt>
+                        <dd class="col-sm-8">@Model.Type</dd>
+                        
+                        <dt class="col-sm-4">Discount Amount</dt>
+                        <dd class="col-sm-8">
+                            @(Model.IsPercentage 
+                                ? $"{Model.DiscountAmount}%" 
+                                : $"₱{Model.DiscountAmount:N2}")
+                        </dd>
+                        
+                        <dt class="col-sm-4">Discount Code</dt>
+                        <dd class="col-sm-8">
+                            @(string.IsNullOrEmpty(Model.Code) ? "-" : Model.Code)
+                        </dd>
+                        
+                        <dt class="col-sm-4">Valid Period</dt>
+                        <dd class="col-sm-8">
+                            @Model.StartDate.ToString("MMM dd, yyyy") - @Model.EndDate.ToString("MMM dd, yyyy")
+                        </dd>
+                        
+                        <dt class="col-sm-4">Status</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-@(Model.IsActive ? "success" : "danger")">
+                                @(Model.IsActive ? "Active" : "Inactive")
+                            </span>
+                        </dd>
+                        
+                        <dt class="col-sm-4">Usage</dt>
+                        <dd class="col-sm-8">
+                            @Model.UsageCount @(Model.MaxUsage.HasValue ? $"/ {Model.MaxUsage.Value}" : "/ ∞")
+                        </dd>
+                        
+                        @if (Model.MinimumSpend.HasValue)
+                        {
+                            <dt class="col-sm-4">Minimum Spend</dt>
+                            <dd class="col-sm-8">₱@Model.MinimumSpend.Value.ToString("N2")</dd>
+                        }
+                        
+                        @if (Model.MinimumStay.HasValue)
+                        {
+                            <dt class="col-sm-4">Minimum Stay</dt>
+                            <dd class="col-sm-8">@Model.MinimumStay.Value days</dd>
+                        }
+                        
+                        @if (Model.RoomTypeId.HasValue)
+                        {
+                            <dt class="col-sm-4">Applicable Room Type</dt>
+                            <dd class="col-sm-8">@Model.ApplicableRoomType</dd>
+                        }
+                    </dl>
+                    
+                    <form asp-action="Delete" method="post" class="mt-3">
+                        <input type="hidden" name="id" value="@Model.DiscountId" />
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-1"></i> Delete Discount
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back to List
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

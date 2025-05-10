@@ -45,8 +45,8 @@
       "PackagePath": "staticwebassets\\images\\deluxe_room.png"
     },
     {
-      "Id": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\images\\delx_suite.png",
-      "PackagePath": "staticwebassets\\images\\delx_suite.png"
+      "Id": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\images\\deluxe_room1.png",
+      "PackagePath": "staticwebassets\\images\\deluxe_room1.png"
     },
     {
       "Id": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\images\\delxe.png",
@@ -99,6 +99,10 @@
     {
       "Id": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\images\\stndrd_logo.png",
       "PackagePath": "staticwebassets\\images\\stndrd_logo.png"
+    },
+    {
+      "Id": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\js\\admin.js",
+      "PackagePath": "staticwebassets\\js\\admin.js"
     },
     {
       "Id": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\js\\site.js",

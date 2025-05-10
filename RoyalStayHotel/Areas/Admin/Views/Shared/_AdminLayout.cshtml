@@ -4,313 +4,34 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Royal Stay Hotel Admin</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- CSS Main Files -->
-    <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-    <link rel="stylesheet" href="~/css/common.css">
-    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <style>
-        /* Global admin dashboard styles */
-        :root {
-            --primary-color: #4e73df;
-            --success-color: #1cc88a;
-            --info-color: #36b9cc;
-            --warning-color: #f6c23e;
-            --danger-color: #e74a3b;
-            --secondary-color: #858796;
-            --light-color: #f8f9fc;
-            --dark-color: #5a5c69;
-        }
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f8f9fa;
-        }
-        
-        /* Sidebar styles */
-        #sidebar {
-            min-width: 250px;
-            max-width: 250px;
-            min-height: 100vh;
-            background: linear-gradient(180deg, #2c3e50 0%, #1a252f 100%);
-            color: white;
-            transition: all 0.3s;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            z-index: 100;
-        }
-        
-        #sidebar .sidebar-header {
-            padding: 20px;
-            background: rgba(0,0,0,0.2);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        #sidebar ul li a {
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            color: rgba(255,255,255,0.8);
-            border-left: 3px solid transparent;
-            transition: all 0.3s;
-            text-decoration: none;
-        }
-        
-        #sidebar ul li a:hover, 
-        #sidebar ul li.active a {
-            color: white;
-            background: rgba(255,255,255,0.1);
-            border-left: 3px solid var(--primary-color);
-        }
-        
-        #sidebar ul li a i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-        
-        /* Content styles */
-        #content {
-            width: 100%;
-            min-height: 100vh;
-            transition: all 0.3s;
-            padding: 0;
-            background-color: #f5f7fa;
-        }
-        
-        /* Card styling */
-        .card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-            margin-bottom: 24px;
-            overflow: hidden;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .card-header {
-            background-color: #fff;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            font-weight: 600;
-            padding: 15px 20px;
-        }
-        
-        .border-left-info {
-            border-left: 4px solid #17a2b8;
-        }
-        
-        .border-left-success {
-            border-left: 4px solid #28a745;
-        }
-        
-        .border-left-warning {
-            border-left: 4px solid #ffc107;
-        }
-        
-        .border-left-danger {
-            border-left: 4px solid #dc3545;
-        }
-        
-        /* Button styling */
-        .btn {
-            border-radius: 6px;
-            font-weight: 500;
-            padding: 7px 16px;
-            transition: all 0.2s;
-        }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-        
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-            border-color: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        .btn-outline-primary {
-            color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-        
-        .btn-outline-primary:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        /* Table styling */
-        .table {
-            border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 0;
-        }
-        
-        .table th {
-            background-color: #f8f9fa;
-            border-top: none;
-            font-weight: 600;
-            color: #495057;
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: 0.5px;
-            padding: 15px;
-        }
-        
-        .table td {
-            padding: 15px;
-            vertical-align: middle;
-        }
-        
-        .table-hover tbody tr:hover {
-            background-color: rgba(32, 201, 151, 0.05);
-        }
-        
-        /* Badge styling */
-        .badge {
-            padding: 6px 10px;
-            font-weight: 500;
-            border-radius: 6px;
-            letter-spacing: 0.5px;
-            font-size: 0.8rem;
-        }
-        
-        /* Alert styling */
-        .alert {
-            border-radius: 10px;
-            padding: 15px 20px;
-            border: none;
-            margin-bottom: 24px;
-        }
-        
-        /* Top navbar */
-        .top-navbar {
-            background-color: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            padding: 15px 30px;
-            margin-bottom: 30px;
-        }
-        
-        /* Mobile sidebar controls */
-        media (max-width: 768px) {
-            #sidebar {
-                margin-left: -250px;
-                position: fixed;
-                height: 100%;
-            }
-            #sidebar.active {
-                margin-left: 0;
-            }
-            #content {
-                width: 100%;
-            }
-            .table-responsive { 
-                border: none; 
-            }
-        }
-        
-        /* Pagination styling */
-        .pagination .page-link {
-            border: none;
-            color: #495057;
-            margin: 0 3px;
-            border-radius: 4px;
-        }
-        
-        .pagination .page-item.active .page-link {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .pagination .page-link:focus {
-            box-shadow: none;
-        }
-        
-        /* Search box */
-        .search-box {
-            border-radius: 30px;
-            padding-left: 20px;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        
-        .search-btn {
-            border-radius: 0 30px 30px 0;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-        }
-        
-        /* User dropdown */
-        .user-dropdown img {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-        
-        /* Footer */
-        footer {
-            padding: 20px;
-            color: #6c757d;
-            border-top: 1px solid rgba(0,0,0,0.05);
-            margin-top: 30px;
-        }
-        
-        /* Main content area */
-        .main-content {
-            padding: 30px;
-        }
-        
-        /* Table enhancements */
-        .table th { font-weight: 600; }
-        .table-hover tbody tr:hover { background-color: rgba(78, 115, 223, 0.05); }
-        
-        /* Card enhancements */
-        .card { border: none; box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15); }
-        .card-header { background-color: #f8f9fc; border-bottom: 1px solid #ededed; }
-        
-        /* Search box styling */
-        .search-box { border-radius: 0.35rem 0 0 0.35rem; }
-        .search-btn { 
-            background-color: var(--primary-color); 
-            color: white; 
-            border-radius: 0 0.35rem 0.35rem 0;
-        }
-        
-        /* Make action buttons more visible */
-        .btn-sm { padding: 0.25rem 0.5rem; }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/datatables/css/dataTables.bootstrap5.min.css" />
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
-    <div class="d-flex">
+    <div class="wrapper">
         <!-- Sidebar -->
-        <nav id="sidebar">
-            <div class="sidebar-header text-center py-4">
-                <a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })">
-                    <img src="/images/royal_stay_logo.png" alt="Royal Stay Hotel" class="img-fluid" style="max-height: 60px;" />
-                </a>
-                <h5 class="mt-3">Royal Stay Hotel</h5>
-                <p class="small text-muted">Admin Dashboard</p>
+        <nav id="sidebar" class="bg-dark">
+            <div class="sidebar-header">
+                <h3>Royal Stay Hotel</h3>
             </div>
 
-            <ul class="list-unstyled">
+            <ul class="list-unstyled components">
                 <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
                     <a href="@Url.Action("Index", "Dashboard", new { area = "Admin" })">
                         <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "User" ? "active" : "")">
+                    <a href="@Url.Action("Index", "User", new { area = "Admin" })">
+                        <i class="fas fa-users"></i> Users
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Room" ? "active" : "")">
+                    <a href="@Url.Action("Index", "Room", new { area = "Admin" })">
+                        <i class="fas fa-bed"></i> Rooms
                     </a>
                 </li>
                 <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Bookings" ? "active" : "")">
@@ -318,29 +39,14 @@
                         <i class="fas fa-calendar-check"></i> Bookings
                     </a>
                 </li>
-                <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Rooms" ? "active" : "")">
-                    <a href="@Url.Action("Index", "Room", new { area = "Admin" })">
-                        <i class="fas fa-bed"></i> Rooms
-                    </a>
-                </li>
-                <li class="@(ViewContext.RouteData.Values["action"]?.ToString() == "RoomTypes" ? "active" : "")">
-                    <a href="@Url.Action("RoomTypes", "Room", new { area = "Admin" })">
-                        <i class="fas fa-list-alt"></i> Room Types
-                    </a>
-                </li>
-                <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Services" ? "active" : "")">
-                    <a href="@Url.Action("Index", "Services", new { area = "Admin" })">
-                        <i class="fas fa-concierge-bell"></i> Services
-                    </a>
-                </li>
-                <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Users" ? "active" : "")">
-                    <a href="@Url.Action("Index", "Users", new { area = "Admin" })">
-                        <i class="fas fa-users"></i> Users
-                    </a>
-                </li>
                 <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Payments" ? "active" : "")">
                     <a href="@Url.Action("Index", "Payments", new { area = "Admin" })">
                         <i class="fas fa-credit-card"></i> Payments
+                    </a>
+                </li>
+                <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Maintenance" ? "active" : "")">
+                    <a href="@Url.Action("Index", "Maintenance", new { area = "Admin" })">
+                        <i class="fas fa-tools"></i> Maintenance
                     </a>
                 </li>
                 <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Reports" ? "active" : "")">
@@ -348,19 +54,26 @@
                         <i class="fas fa-chart-bar"></i> Reports
                     </a>
                 </li>
-                <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Settings" ? "active" : "")">
-                    <a href="@Url.Action("Index", "Settings", new { area = "Admin" })">
-                        <i class="fas fa-cog"></i> Settings
+                <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Services" ? "active" : "")">
+                    <a href="#servicesSubmenu" data-bs-toggle="collapse" aria-expanded="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Services" ? "true" : "false")" class="dropdown-toggle">
+                        <i class="fas fa-concierge-bell"></i> Services
                     </a>
+                    <ul class="collapse list-unstyled @(ViewContext.RouteData.Values["controller"]?.ToString() == "Services" ? "show" : "")" id="servicesSubmenu">
+                        <li>
+                            <a href="@Url.Action("Index", "Services", new { area = "Admin" })">
+                                <i class="fas fa-list-alt"></i> Manage Services
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Bookings", "Services", new { area = "Admin" })">
+                                <i class="fas fa-calendar-alt"></i> Service Bookings
+                            </a>
+                        </li>
+                    </ul>
                 </li>
-                <li>
-                    <a href="@Url.Action("Index", "Home", new { area = "" })" target="_blank">
-                        <i class="fas fa-external-link-alt"></i> Visit Website
-                    </a>
-                </li>
-                <li>
-                    <a href="@Url.Action("Logout", "Account", new { area = "" })">
-                        <i class="fas fa-sign-out-alt"></i> Logout
+                <li class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Discounts" ? "active" : "")">
+                    <a href="@Url.Action("Index", "Discounts", new { area = "Admin" })">
+                        <i class="fas fa-tags"></i> Discounts
                     </a>
                 </li>
             </ul>
@@ -368,206 +81,59 @@
 
         <!-- Page Content -->
         <div id="content">
-            <nav class="navbar navbar-expand-lg navbar-light top-navbar">
+            <!-- Top Navigation -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
-                    <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                    <button type="button" id="sidebarCollapse" class="btn btn-dark">
                         <i class="fas fa-bars"></i>
                     </button>
                     
-                    <h4 class="mb-0 ml-3 d-none d-md-block font-weight-bold">@ViewData["Title"]</h4>
-                    
-                    <div class="ml-auto d-flex align-items-center">
-                        <!-- Notifications Dropdown -->
-                        <div class="dropdown mx-3">
-                            <a class="nav-link dropdown-toggle position-relative" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-lg"></i>
-                                <span class="badge badge-danger rounded-circle position-absolute" style="top: 0; right: 5px;">3</span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow-sm" style="min-width: 320px;">
-                                <h6 class="dropdown-header bg-primary text-white py-2">
-                                    <i class="fas fa-bell mr-2"></i> Notifications
-                                </h6>
-                                <a class="dropdown-item py-3 d-flex" href="#">
-                                    <div class="mr-3">
-                                        <div class="bg-primary rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                            <i class="fas fa-user-clock text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="mb-0 font-weight-bold">New booking request</p>
-                                        <small class="text-muted">John Doe - Deluxe Room for 3 nights</small>
-                                        <br>
-                                        <small class="text-muted">5 minutes ago</small>
-                                    </div>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item dropdown me-3">
+                                <a class="nav-link position-relative" href="@Url.Action("Index", "Notifications", new { area = "Admin" })">
+                                    <i class="fas fa-bell"></i>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        8
+                                        <span class="visually-hidden">unread notifications</span>
+                                    </span>
                                 </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item py-3 d-flex" href="#">
-                                    <div class="mr-3">
-                                        <div class="bg-success rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                            <i class="fas fa-check-circle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="mb-0 font-weight-bold">Payment confirmed</p>
-                                        <small class="text-muted">BookingID #1234 - ₱4,500.00</small>
-                                        <br>
-                                        <small class="text-muted">1 hour ago</small>
-                                    </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user-circle"></i>
                                 </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item py-3 d-flex" href="#">
-                                    <div class="mr-3">
-                                        <div class="bg-warning rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                            <i class="fas fa-exclamation-triangle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="mb-0 font-weight-bold">Room maintenance required</p>
-                                        <small class="text-muted">Room #205 - Air conditioning issue</small>
-                                        <br>
-                                        <small class="text-muted">3 hours ago</small>
-                                    </div>
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item text-center small text-primary py-2" href="#">
-                                    <i class="fas fa-angle-double-right mr-1"></i> View All Notifications
-                                </a>
-                            </div>
-                        </div>
-                        
-                        <!-- User Dropdown -->
-                        <div class="dropdown user-dropdown">
-                            <button class="btn dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: none; box-shadow: none;">
-                                <div class="d-flex align-items-center">
-                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mr-2" style="width: 40px; height: 40px;">
-                                        @if (!string.IsNullOrEmpty(User.Identity.Name))
-                                        {
-                                            <span class="font-weight-bold">@User.Identity.Name.Substring(0, 1).ToUpper()</span>
-                                        }
-                                        else
-                                        {
-                                            <i class="fas fa-user"></i>
-                                        }
-                                    </div>
-                                    <div class="d-none d-md-block">
-                                        <p class="mb-0 font-weight-bold">@(User.Identity.Name ?? "Admin")</p>
-                                        <small class="text-muted">Administrator</small>
-                                    </div>
-                                </div>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="userDropdown">
-                                <a class="dropdown-item py-2" href="#">
-                                    <i class="fas fa-user text-primary mr-2"></i> My Profile
-                                </a>
-                                <a class="dropdown-item py-2" href="#">
-                                    <i class="fas fa-cog text-secondary mr-2"></i> Account Settings
-                                </a>
-                                <a class="dropdown-item py-2" href="@Url.Action("Index", "Home", new { area = "" })">
-                                    <i class="fas fa-home text-success mr-2"></i> Main Website
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item py-2" href="@Url.Action("Logout", "Account", new { area = "" })">
-                                    <i class="fas fa-sign-out-alt text-danger mr-2"></i> Logout
-                                </a>
-                            </div>
-                        </div>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="@Url.Action("Profile", "Account", new { area = "Admin" })">Profile</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Logout", "Account", new { area = "Admin" })">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </nav>
             
-            <!-- Display TempData alerts -->
-            <div class="main-content">
-                @if (TempData["SuccessMessage"] != null)
-                {
-                    <div class="alert alert-success alert-dismissible fade show">
-                        <i class="fas fa-check-circle mr-2"></i> @TempData["SuccessMessage"]
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                }
-                
-                @if (TempData["ErrorMessage"] != null)
-                {
-                    <div class="alert alert-danger alert-dismissible fade show">
-                        <i class="fas fa-exclamation-circle mr-2"></i> @TempData["ErrorMessage"]
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                }
-                
-                @if (TempData["InfoMessage"] != null)
-                {
-                    <div class="alert alert-info alert-dismissible fade show">
-                        <i class="fas fa-info-circle mr-2"></i> @TempData["InfoMessage"]
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                }
-                
-                <main role="main">
+            <!-- Main Content -->
+            <main role="main" class="pb-3">
                     @RenderBody()
                 </main>
-            </div>
-            
-            <footer class="text-center">
-                <p class="text-muted">&copy; @DateTime.Now.Year Royal Stay Hotel | All Rights Reserved</p>
-            </footer>
         </div>
     </div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables/js/dataTables.bootstrap5.min.js"></script>
+    <script src="~/js/admin.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
     <script>
         $(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
-                $('#content').toggleClass('active');
-            });
-            
-            // Initialize tooltips
-            $('[data-toggle="tooltip"]').tooltip();
-            
-            // Auto-close alerts after 5 seconds
-            setTimeout(function() {
-                $('.alert').alert('close');
-            }, 5000);
-            
-            // Responsive sidebar behavior
-            function handleResponsiveSidebar() {
-                if (window.innerWidth < 768) {
-                    $("body").addClass("sidebar-toggled");
-                    $(".sidebar").addClass("toggled");
-                    $("#sidebar").addClass("active");
-                    $("#content").addClass("active");
-                } else {
-                    $("body").removeClass("sidebar-toggled");
-                    $(".sidebar").removeClass("toggled");
-                    $("#sidebar").removeClass("active");
-                    $("#content").removeClass("active");
-                }
-            }
-            
-            // Run on page load
-            handleResponsiveSidebar();
-            
-            // Run on window resize
-            $(window).resize(function() {
-                handleResponsiveSidebar();
-            });
-            
-            // Toggle sidebar
-            $("#sidebarToggle, #sidebarToggleTop").on('click', function() {
-                $("body").toggleClass("sidebar-toggled");
-                $(".sidebar").toggleClass("toggled");
-                $("#sidebar").toggleClass("active");
-                $("#content").toggleClass("active");
             });
         });
     </script>
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html> 

@@ -1,0 +1,217 @@
+@model RoyalStayHotel.Models.Booking
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Booking Details";
+    var culture = CultureInfo.InvariantCulture;
+}
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h2 class="mb-4">Booking Details</h2>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <a asp-action="MyBookings" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Back to My Bookings
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+            <i class="fas fa-check-circle me-1"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+            <i class="fas fa-exclamation-circle me-1"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Booking #@Model.BookingId</h5>
+                <span class="badge bg-light text-dark">@Model.CreatedAt.ToString("d", culture)</span>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="border-bottom pb-2 mb-3">Booking Information</h5>
+                    <dl class="row">
+                        <dt class="col-sm-4">Status:</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-@(Model.Status == RoyalStayHotel.Models.BookingStatus.Confirmed ? "success" : 
+                                                Model.Status == RoyalStayHotel.Models.BookingStatus.Pending ? "warning" : 
+                                                Model.Status == RoyalStayHotel.Models.BookingStatus.Cancelled ? "danger" : 
+                                                Model.Status == RoyalStayHotel.Models.BookingStatus.CheckedIn ? "primary" : 
+                                                Model.Status == RoyalStayHotel.Models.BookingStatus.CheckedOut ? "secondary" : 
+                                                "info")">
+                                @Model.Status
+                            </span>
+                        </dd>
+
+                        <dt class="col-sm-4">Check-in:</dt>
+                        <dd class="col-sm-8">@Model.CheckInDate.ToString("d", culture)</dd>
+
+                        <dt class="col-sm-4">Check-out:</dt>
+                        <dd class="col-sm-8">@Model.CheckOutDate.ToString("d", culture)</dd>
+
+                        <dt class="col-sm-4">Nights:</dt>
+                        <dd class="col-sm-8">@((Model.CheckOutDate - Model.CheckInDate).Days)</dd>
+
+                        <dt class="col-sm-4">Guests:</dt>
+                        <dd class="col-sm-8">@Model.NumberOfGuests</dd>
+
+                        <dt class="col-sm-4">Total Price:</dt>
+                        <dd class="col-sm-8">@Model.TotalPrice.ToString("C", culture)</dd>
+
+                        @if (Model.DiscountAmount > 0)
+                        {
+                            <dt class="col-sm-4">Original Price:</dt>
+                            <dd class="col-sm-8">@(Model.OriginalPrice?.ToString("C", culture) ?? "N/A")</dd>
+
+                            <dt class="col-sm-4">Discount:</dt>
+                            <dd class="col-sm-8">@(Model.DiscountAmount?.ToString("C", culture) ?? "N/A")</dd>
+                        }
+                    </dl>
+                </div>
+
+                <div class="col-md-6">
+                    <h5 class="border-bottom pb-2 mb-3">Room Information</h5>
+                    @if (Model.Room != null)
+                    {
+                        <div class="text-center mb-3">
+                            @if (!string.IsNullOrEmpty(Model.Room.ImageUrl))
+                            {
+                                <img src="@Model.Room.ImageUrl" alt="@Model.Room.RoomType Room" class="img-fluid rounded shadow-sm" style="max-height: 200px;" />
+                            }
+                        </div>
+                        <dl class="row">
+                            <dt class="col-sm-4">Room Type:</dt>
+                            <dd class="col-sm-8">@Model.Room.RoomType</dd>
+
+                            <dt class="col-sm-4">Room Number:</dt>
+                            <dd class="col-sm-8">#@Model.Room.RoomNumber</dd>
+
+                            <dt class="col-sm-4">Capacity:</dt>
+                            <dd class="col-sm-8">@Model.Room.MaxGuests guests</dd>
+
+                            <dt class="col-sm-4">Size:</dt>
+                            <dd class="col-sm-8">@(Model.Room.RoomSize ?? "N/A")</dd>
+                        </dl>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Room information is not available
+                        </div>
+                    }
+                </div>
+            </div>
+
+            @if (Model.BookedServices != null && Model.BookedServices.Any())
+            {
+                <div class="mt-4">
+                    <h5 class="border-bottom pb-2 mb-3">Booked Services</h5>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Quantity</th>
+                                    <th class="text-end">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var service in Model.BookedServices)
+                                {
+                                    <tr>
+                                        <td>@(service.Service?.Name ?? "Unknown Service")</td>
+                                        <td>@service.RequestDate.ToString("d", culture)</td>
+                                        <td>
+                                            @{
+                                                try
+                                                {
+                                                    @service.RequestTime.ToString("hh\\:mm tt")
+                                                }
+                                                catch
+                                                {
+                                                    <text>Not specified</text>
+                                                }
+                                            }
+                                        </td>
+                                        <td>@service.Quantity</td>
+                                        <td class="text-end">@service.TotalPrice.ToString("C", culture)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.SpecialRequests))
+            {
+                <div class="mt-4">
+                    <h5 class="border-bottom pb-2 mb-3">Special Requests</h5>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        @Model.SpecialRequests
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="card-footer">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <small class="text-muted">Booking created on @Model.CreatedAt.ToString("D", culture) at @Model.CreatedAt.ToString("t", culture)</small>
+                </div>
+                <div>
+                    @if (Model.Status != RoyalStayHotel.Models.BookingStatus.Cancelled && 
+                         Model.Status != RoyalStayHotel.Models.BookingStatus.Completed &&
+                         Model.CheckInDate > DateTime.Now)
+                    {
+                        <form asp-controller="Booking" asp-action="Delete" asp-route-id="@Model.BookingId" method="post" style="display: inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this booking?');">
+                                <i class="fas fa-times-circle me-1"></i> Cancel Booking
+                            </button>
+                        </form>
+                    }
+                    <button type="button" class="btn btn-outline-primary ms-2" onclick="window.print();">
+                        <i class="fas fa-print me-1"></i> Print
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style media="print">
+        .btn, .alert { display: none !important; }
+        .card { border: none !important; }
+        .card-header { background-color: #f8f9fa !important; color: #000 !important; }
+        .shadow { box-shadow: none !important; }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(function () {
+            $('.alert').alert('close');
+        }, 5000);
+    </script>
+} 

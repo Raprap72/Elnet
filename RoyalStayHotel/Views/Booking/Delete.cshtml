@@ -1,0 +1,129 @@
+@model RoyalStayHotel.Models.Booking
+
+@{
+    ViewData["Title"] = "Cancel Booking";
+}
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h2 class="mb-4">Cancel Booking</h2>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <a asp-action="MyBookings" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Back to My Bookings
+            </a>
+        </div>
+    </div>
+    
+    <div class="card shadow mb-4">
+        <div class="card-header bg-danger text-white">
+            <h5 class="mb-0">Are you sure you want to cancel this booking?</h5>
+        </div>
+        <div class="card-body">
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                    <i class="fas fa-exclamation-circle me-1"></i> @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <dl class="row">
+                <dt class="col-sm-3">Booking Reference</dt>
+                <dd class="col-sm-9">@Model.BookingReference</dd>
+
+                <dt class="col-sm-3">Room</dt>
+                <dd class="col-sm-9">
+                    @if (Model.Room != null)
+                    {
+                        <span>@Model.Room.RoomNumber (@Model.Room.RoomType)</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Room not found</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">Check In</dt>
+                <dd class="col-sm-9">@Model.CheckInDate.ToString("MMM dd, yyyy")</dd>
+
+                <dt class="col-sm-3">Check Out</dt>
+                <dd class="col-sm-9">@Model.CheckOutDate.ToString("MMM dd, yyyy")</dd>
+
+                <dt class="col-sm-3">Number of Guests</dt>
+                <dd class="col-sm-9">@Model.NumberOfGuests</dd>
+
+                <dt class="col-sm-3">Total Price</dt>
+                <dd class="col-sm-9">₱@Model.TotalPrice.ToString("N2")</dd>
+
+                <dt class="col-sm-3">Status</dt>
+                <dd class="col-sm-9">
+                    @{
+                        var statusClass = Model.Status switch
+                        {
+                            BookingStatus.Pending => "bg-warning text-dark",
+                            BookingStatus.Confirmed => "bg-success",
+                            BookingStatus.CheckedIn => "bg-info",
+                            BookingStatus.CheckedOut => "bg-secondary",
+                            BookingStatus.Cancelled => "bg-danger",
+                            BookingStatus.Completed => "bg-success",
+                            _ => "bg-secondary"
+                        };
+                    }
+                    <span class="badge @statusClass">@Model.Status</span>
+                </dd>
+
+                @if (Model.BookedServices != null && Model.BookedServices.Any())
+                {
+                    <dt class="col-sm-3">Booked Services</dt>
+                    <dd class="col-sm-9">
+                        <ul class="list-unstyled mb-0">
+                            @foreach (var service in Model.BookedServices)
+                            {
+                                <li>
+                                    <i class="fas fa-check-circle text-success me-1"></i>
+                                    @service.Service?.Name - ₱@service.TotalPrice.ToString("N2")
+                                </li>
+                            }
+                        </ul>
+                    </dd>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.SpecialRequests))
+                {
+                    <dt class="col-sm-3">Special Requests</dt>
+                    <dd class="col-sm-9">@Model.SpecialRequests</dd>
+                }
+            </dl>
+
+            <div class="alert alert-warning" role="alert">
+                <i class="fas fa-exclamation-triangle me-1"></i>
+                <strong>Warning:</strong> This action cannot be undone. Cancelling your booking may be subject to cancellation fees according to our policy.
+            </div>
+
+            <form asp-action="Delete" method="post" class="mt-4">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.BookingId" />
+                
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="Details" asp-route-id="@Model.BookingId" class="btn btn-outline-secondary">
+                        <i class="fas fa-times me-1"></i> No, Keep My Booking
+                    </a>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-check me-1"></i> Yes, Cancel My Booking
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-hide alerts after 5 seconds
+        setTimeout(function () {
+            $('.alert-dismissible').alert('close');
+        }, 5000);
+    </script>
+} 

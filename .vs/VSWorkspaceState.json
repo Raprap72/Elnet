@@ -5,11 +5,10 @@
     "\\RoyalStayHotel\\Areas",
     "\\RoyalStayHotel\\Areas\\Admin",
     "\\RoyalStayHotel\\Areas\\Admin\\Views",
-    "\\RoyalStayHotel\\Areas\\Admin\\Views\\Bookings",
-    "\\RoyalStayHotel\\Data",
-    "\\RoyalStayHotel\\Views",
-    "\\RoyalStayHotel\\wwwroot\\js"
+    "\\RoyalStayHotel\\wwwroot",
+    "\\RoyalStayHotel\\wwwroot\\images",
+    "\\RoyalStayHotel\\wwwroot\\lib",
+    "\\RoyalStayHotel\\wwwroot\\lib\\bootstrap"
   ],
-  "SelectedNode": "\\RoyalStayHotel\\Data\\ApplicationDbContext.cs",
   "PreviewInSolutionExplorer": false
 }

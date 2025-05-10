@@ -1,0 +1,230 @@
+@model IEnumerable<RoyalStayHotel.Models.MaintenanceRequest>
+@using RoyalStayHotel.Models
+@{
+    ViewData["Title"] = "Maintenance Requests";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0">
+                    <h6>Maintenance Requests</h6>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Room</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Title</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Type</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Priority</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Reported</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var request in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex px-2 py-1">
+                                                <div class="d-flex flex-column justify-content-center">
+                                                    <h6 class="mb-0 text-sm">@request.Room?.RoomNumber</h6>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <p class="text-xs font-weight-bold mb-0">@request.Title</p>
+                                            <p class="text-xs text-secondary mb-0">@request.Description</p>
+                                        </td>
+                                        <td>
+                                            <span class="text-secondary text-xs font-weight-bold">@request.IssueType</span>
+                                        </td>
+                                        <td>
+                                            <span class="text-secondary text-xs font-weight-bold">
+                                                @switch (request.Priority)
+                                                {
+                                                    case 1:
+                                                        <span class="badge bg-danger">Critical</span>
+                                                        break;
+                                                    case 2:
+                                                        <span class="badge bg-warning">High</span>
+                                                        break;
+                                                    case 3:
+                                                        <span class="badge bg-info">Medium</span>
+                                                        break;
+                                                    case 4:
+                                                        <span class="badge bg-success">Low</span>
+                                                        break;
+                                                }
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <select class="form-select form-select-sm request-status" data-request-id="@request.Id">
+                                                @foreach (MaintenanceRequestStatus status in Enum.GetValues(typeof(MaintenanceRequestStatus)))
+                                                {
+                                                    <option value="@((int)status)" @(request.Status == status ? "selected" : "")>@status</option>
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <span class="text-secondary text-xs font-weight-bold">@request.RequestDate.ToString("MM/dd/yyyy HH:mm")</span>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-info view-room-details" data-room-id="@request.RoomId">
+                                                <i class="fas fa-info-circle"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-primary update-resolution" data-request-id="@request.Id">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Room Details Modal -->
+<div class="modal fade" id="roomDetailsModal" tabindex="-1" role="dialog" aria-labelledby="roomDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="roomDetailsModalLabel">Room Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Room Number:</label>
+                    <p id="roomNumber"></p>
+                </div>
+                <div class="form-group">
+                    <label>Room Type:</label>
+                    <p id="roomType"></p>
+                </div>
+                <div class="form-group">
+                    <label>Status:</label>
+                    <p id="roomStatus"></p>
+                </div>
+                <div class="form-group">
+                    <label>Last Maintenance:</label>
+                    <p id="lastMaintenance"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Update Resolution Modal -->
+<div class="modal fade" id="updateResolutionModal" tabindex="-1" role="dialog" aria-labelledby="updateResolutionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateResolutionModalLabel">Update Resolution</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="resolutionForm">
+                    <input type="hidden" id="resolutionRequestId" name="requestId" />
+                    <div class="form-group">
+                        <label for="resolution">Resolution</label>
+                        <textarea class="form-control" id="resolution" name="resolution" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="cost">Cost of Repair</label>
+                        <input type="number" class="form-control" id="cost" name="cost" step="0.01" min="0" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="submitResolution">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Update request status
+            $('.request-status').change(function() {
+                var requestId = $(this).data('request-id');
+                var status = $(this).val();
+                
+                $.post('/Staff/Maintenance/UpdateStatus', { requestId: requestId, status: status })
+                    .done(function(response) {
+                        if (response.success) {
+                            toastr.success('Request status updated successfully');
+                        } else {
+                            toastr.error('Failed to update request status');
+                        }
+                    })
+                    .fail(function() {
+                        toastr.error('Failed to update request status');
+                    });
+            });
+
+            // View room details
+            $('.view-room-details').click(function() {
+                var roomId = $(this).data('room-id');
+                
+                $.get('/Staff/Maintenance/GetRoomDetails', { roomId: roomId })
+                    .done(function(room) {
+                        $('#roomNumber').text(room.roomNumber);
+                        $('#roomType').text(room.roomType);
+                        $('#roomStatus').text(room.availabilityStatus);
+                        $('#lastMaintenance').text(room.lastMaintenance ? new Date(room.lastMaintenance).toLocaleString() : 'Never');
+                        $('#roomDetailsModal').modal('show');
+                    })
+                    .fail(function() {
+                        toastr.error('Failed to load room details');
+                    });
+            });
+
+            // Update resolution
+            $('.update-resolution').click(function() {
+                var requestId = $(this).data('request-id');
+                $('#resolutionRequestId').val(requestId);
+                $('#updateResolutionModal').modal('show');
+            });
+
+            // Submit resolution
+            $('#submitResolution').click(function() {
+                var requestId = $('#resolutionRequestId').val();
+                var resolution = $('#resolution').val();
+                var cost = $('#cost').val();
+                
+                $.post('/Staff/Maintenance/UpdateResolution', { 
+                    requestId: requestId, 
+                    resolution: resolution,
+                    cost: cost
+                })
+                .done(function(response) {
+                    if (response.success) {
+                        toastr.success('Resolution updated successfully');
+                        $('#updateResolutionModal').modal('hide');
+                        $('#resolution').val('');
+                        $('#cost').val('');
+                    } else {
+                        toastr.error('Failed to update resolution');
+                    }
+                })
+                .fail(function() {
+                    toastr.error('Failed to update resolution');
+                });
+            });
+        });
+    </script>
+} 

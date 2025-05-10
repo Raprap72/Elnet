@@ -1,0 +1,229 @@
+@model IEnumerable<RoyalStayHotel.Models.Booking>
+@{
+    ViewData["Title"] = "Booking Report";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light rounded p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="mb-0">Booking Report</h3>
+            <a href="@Url.Action("Index", "Reports")" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left me-1"></i> Back to Reports
+            </a>
+        </div>
+
+        <!-- Date Filter -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Filter Options</h5>
+            </div>
+            <div class="card-body">
+                <form method="get" id="reportFilterForm" class="row g-3">
+                    <div class="col-md-4">
+                        <label for="startDate" class="form-label">Start Date</label>
+                        <input type="date" class="form-control" id="startDate" name="startDate" value="@ViewBag.StartDate">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="endDate" class="form-label">End Date</label>
+                        <input type="date" class="form-control" id="endDate" name="endDate" value="@ViewBag.EndDate">
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-filter me-1"></i> Apply Filter
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Summary Statistics -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-4 mb-md-0">
+                <div class="card border-left-primary h-100 py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Total Bookings
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold">@ViewBag.TotalBookings</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-calendar-alt fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4 mb-md-0">
+                <div class="card border-left-success h-100 py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Confirmed Bookings
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold">@ViewBag.ConfirmedBookings</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4 mb-md-0">
+                <div class="card border-left-warning h-100 py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Pending Bookings
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold">@ViewBag.PendingBookings</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-clock fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card border-left-danger h-100 py-2">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                    Cancelled Bookings
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold">@ViewBag.CancelledBookings</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-times-circle fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking Status Chart -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">Booking Status Distribution</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="bookingStatusChart" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookings Table -->
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Booking Details</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="bookingTable" class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Guest</th>
+                                <th>Room</th>
+                                <th>Created At</th>
+                                <th>Check In</th>
+                                <th>Check Out</th>
+                                <th>Number of Guests</th>
+                                <th>Total Price</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var booking in Model)
+                            {
+                                <tr>
+                                    <td>@booking.BookingReference</td>
+                                    <td>@booking.User?.FullName</td>
+                                    <td>@booking.Room?.RoomNumber</td>
+                                    <td>@booking.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                    <td>@booking.CheckInDate.ToString("MMM dd, yyyy")</td>
+                                    <td>@booking.CheckOutDate.ToString("MMM dd, yyyy")</td>
+                                    <td>@booking.NumberOfGuests</td>
+                                    <td>₱@booking.TotalPrice.ToString("N2")</td>
+                                    <td>
+                                        <span class="badge @(booking.Status == BookingStatus.Confirmed ? "bg-success" : 
+                                                           booking.Status == BookingStatus.Pending ? "bg-warning text-dark" : 
+                                                           booking.Status == BookingStatus.Cancelled ? "bg-danger" : 
+                                                           "bg-secondary")">
+                                            @booking.Status
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Details", "Booking", new { id = booking.BookingId, area = "Admin" })" class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            $('#bookingTable').DataTable({
+                responsive: true,
+                order: [[7, 'desc']] // Sort by created date
+            });
+
+            // Initialize Chart
+            var ctx = document.getElementById('bookingStatusChart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Confirmed', 'Pending', 'Cancelled', 'Checked In', 'Checked Out'],
+                    datasets: [{
+                        data: [
+                            @ViewBag.ConfirmedBookings,
+                            @ViewBag.PendingBookings,
+                            @ViewBag.CancelledBookings,
+                            @(ViewBag.TotalBookings - ViewBag.ConfirmedBookings - ViewBag.PendingBookings - ViewBag.CancelledBookings - ViewBag.CompletedBookings),
+                            @ViewBag.CompletedBookings
+                        ],
+                        backgroundColor: [
+                            '#28a745', // Confirmed - success
+                            '#ffc107', // Pending - warning
+                            '#dc3545', // Cancelled - danger
+                            '#007bff', // Checked In - primary
+                            '#6c757d'  // Checked Out - secondary
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+} 

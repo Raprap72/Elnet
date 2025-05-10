@@ -1,0 +1,514 @@
+@model IEnumerable<RoyalStayHotel.Models.MaintenanceRequest>
+@using RoyalStayHotel.Models
+@{
+    ViewData["Title"] = "Maintenance";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="bg-light rounded h-100 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="mb-0">Maintenance Management</h3>
+                    <a href="@Url.Action("Create", "Maintenance", new { area = "Admin" })" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Create Maintenance Task
+                    </a>
+                </div>
+
+                <!-- Filters and Stats -->
+                <div class="row mb-4">
+                    <div class="col-md-9">
+                        <form asp-action="Index" method="get" class="row g-2">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" name="searchString" class="form-control" placeholder="Search..." 
+                                           value="@Context.Request.Query["searchString"]"/>
+                                    <button class="btn btn-outline-secondary" type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="filterStatus" class="form-select" onchange="this.form.submit()">
+                                    <option value="">All Statuses</option>
+                                    @foreach (var item in ViewBag.Statuses)
+                                    {
+                                        <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="filterType" class="form-select" onchange="this.form.submit()">
+                                    <option value="">All Types</option>
+                                    @foreach (var item in ViewBag.Types)
+                                    {
+                                        <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <select name="priorityFilter" class="form-select" onchange="this.form.submit()">
+                                    <option value="">All Priorities</option>
+                                    @foreach (var item in ViewBag.Priorities)
+                                    {
+                                        <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-3 text-end">
+                        <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#statsCollapse">
+                            <i class="fas fa-chart-bar me-1"></i> Show Stats
+                        </button>
+                    </div>
+                </div>
+
+                <div class="collapse mb-3" id="statsCollapse">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Reported
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.ReportedRequests</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                In Progress
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.InProgressRequests</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-spinner fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Completed
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.CompletedRequests</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Total Requests
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalRequests</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-tools fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Success Message -->
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        @TempData["SuccessMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <!-- Error Message -->
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        @TempData["ErrorMessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <ul class="nav nav-tabs" id="maintenanceTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">All Tasks</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab" aria-controls="pending" aria-selected="false">Pending</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="inprogress-tab" data-bs-toggle="tab" data-bs-target="#inprogress" type="button" role="tab" aria-controls="inprogress" aria-selected="false">In Progress</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="completed-tab" data-bs-toggle="tab" data-bs-target="#completed" type="button" role="tab" aria-controls="completed" aria-selected="false">Completed</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content pt-3" id="maintenanceTabContent">
+                    <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Location</th>
+                                        <th>Description</th>
+                                        <th>Priority</th>
+                                        <th>Reported On</th>
+                                        <th>Assigned To</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>MT-@item.Id.ToString("D4")</td>
+                                            <td>@(item.Room?.RoomNumber ?? "Unknown Room")</td>
+                                            <td>@item.Title</td>
+                                            <td>
+                                                @{
+                                                    var priorityClass = item.Priority switch
+                                                    {
+                                                        1 => "bg-danger",
+                                                        2 => "bg-warning",
+                                                        3 => "bg-info",
+                                                        _ => "bg-secondary"
+                                                    };
+                                                    var priorityText = item.Priority switch
+                                                    {
+                                                        1 => "Critical",
+                                                        2 => "High",
+                                                        3 => "Medium",
+                                                        _ => "Low"
+                                                    };
+                                                }
+                                                <span class="badge @priorityClass">@priorityText</span>
+                                            </td>
+                                            <td>@item.RequestDate.ToString("MMM dd, yyyy")</td>
+                                            <td>@(item.AssignedTechnician?.FullName ?? "Unassigned")</td>
+                                            <td>
+                                                @{
+                                                    var statusClass = item.Status switch
+                                                    {
+                                                        MaintenanceRequestStatus.Reported => "bg-secondary",
+                                                        MaintenanceRequestStatus.Scheduled => "bg-primary",
+                                                        MaintenanceRequestStatus.InProgress => "bg-warning",
+                                                        MaintenanceRequestStatus.Completed => "bg-success",
+                                                        MaintenanceRequestStatus.OnHold => "bg-info",
+                                                        _ => "bg-danger"
+                                                    };
+                                                }
+                                                <span class="badge @statusClass">@item.Status</span>
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="btn-group">
+                                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    @if (item.Status != MaintenanceRequestStatus.Completed && item.Status != MaintenanceRequestStatus.Cancelled)
+                                                    {
+                                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                    }
+                                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        @if (!Model.Any())
+                        {
+                            <div class="text-center p-3">
+                                <p class="text-muted">No maintenance requests found.</p>
+                            </div>
+                        }
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                <a href="@Url.Action("ExportToExcel", "Maintenance", new { area = "Admin" })" class="btn btn-outline-success btn-sm">
+                                    <i class="fas fa-file-excel me-1"></i> Export to Excel
+                                </a>
+                                <button onclick="window.print()" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-print me-1"></i> Print Report
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="pending" role="tabpanel" aria-labelledby="pending-tab">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Location</th>
+                                        <th>Description</th>
+                                        <th>Priority</th>
+                                        <th>Reported On</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Where(m => m.Status == MaintenanceRequestStatus.Reported))
+                                    {
+                                        <tr>
+                                            <td>MT-@item.Id.ToString("D4")</td>
+                                            <td>@(item.Room?.RoomNumber ?? "Unknown Room")</td>
+                                            <td>@item.Title</td>
+                                            <td>
+                                                @{
+                                                    var priorityClass = item.Priority switch
+                                                    {
+                                                        1 => "bg-danger",
+                                                        2 => "bg-warning",
+                                                        3 => "bg-info",
+                                                        _ => "bg-secondary"
+                                                    };
+                                                    var priorityText = item.Priority switch
+                                                    {
+                                                        1 => "Critical",
+                                                        2 => "High",
+                                                        3 => "Medium",
+                                                        _ => "Low"
+                                                    };
+                                                }
+                                                <span class="badge @priorityClass">@priorityText</span>
+                                            </td>
+                                            <td>@item.RequestDate.ToString("MMM dd, yyyy")</td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        @if (!Model.Any(m => m.Status == MaintenanceRequestStatus.Reported))
+                        {
+                            <div class="text-center p-3">
+                                <p class="text-muted">No pending maintenance requests found.</p>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="tab-pane fade" id="inprogress" role="tabpanel" aria-labelledby="inprogress-tab">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Location</th>
+                                        <th>Description</th>
+                                        <th>Priority</th>
+                                        <th>Assigned To</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Where(m => m.Status == MaintenanceRequestStatus.InProgress || m.Status == MaintenanceRequestStatus.Scheduled))
+                                    {
+                                        <tr>
+                                            <td>MT-@item.Id.ToString("D4")</td>
+                                            <td>@(item.Room?.RoomNumber ?? "Unknown Room")</td>
+                                            <td>@item.Title</td>
+                                            <td>
+                                                @{
+                                                    var priorityClass = item.Priority switch
+                                                    {
+                                                        1 => "bg-danger",
+                                                        2 => "bg-warning",
+                                                        3 => "bg-info",
+                                                        _ => "bg-secondary"
+                                                    };
+                                                    var priorityText = item.Priority switch
+                                                    {
+                                                        1 => "Critical",
+                                                        2 => "High",
+                                                        3 => "Medium",
+                                                        _ => "Low"
+                                                    };
+                                                }
+                                                <span class="badge @priorityClass">@priorityText</span>
+                                            </td>
+                                            <td>@(item.AssignedTechnician?.FullName ?? "Unassigned")</td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#completeModal@(item.Id)">
+                                                        <i class="fas fa-check"></i>
+                                                    </button>
+                                                </div>
+                                                
+                                                <!-- Complete Modal -->
+                                                <div class="modal fade" id="completeModal@(item.Id)" tabindex="-1" aria-labelledby="completeModalLabel@(item.Id)" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="completeModalLabel@(item.Id)">Complete Maintenance Task</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <form asp-action="MarkComplete" asp-route-id="@item.Id" method="post">
+                                                                <div class="modal-body">
+                                                                    <div class="mb-3">
+                                                                        <label for="resolution@(item.Id)" class="form-label">Resolution Details</label>
+                                                                        <textarea id="resolution@(item.Id)" name="resolution" class="form-control" rows="3" required></textarea>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="costOfRepair@(item.Id)" class="form-label">Cost of Repair (₱)</label>
+                                                                        <input type="number" id="costOfRepair@(item.Id)" name="costOfRepair" class="form-control" step="0.01" min="0" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                    <button type="submit" class="btn btn-success">Mark as Completed</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        @if (!Model.Any(m => m.Status == MaintenanceRequestStatus.InProgress || m.Status == MaintenanceRequestStatus.Scheduled))
+                        {
+                            <div class="text-center p-3">
+                                <p class="text-muted">No in-progress maintenance requests found.</p>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Location</th>
+                                        <th>Description</th>
+                                        <th>Assigned To</th>
+                                        <th>Completed On</th>
+                                        <th>Cost</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Where(m => m.Status == MaintenanceRequestStatus.Completed))
+                                    {
+                                        <tr>
+                                            <td>MT-@item.Id.ToString("D4")</td>
+                                            <td>@(item.Room?.RoomNumber ?? "Unknown Room")</td>
+                                            <td>@item.Title</td>
+                                            <td>@(item.AssignedTechnician?.FullName ?? "Unassigned")</td>
+                                            <td>@(item.CompletedAt?.ToString("MMM dd, yyyy") ?? "N/A")</td>
+                                            <td>₱@(item.CostOfRepair?.ToString("N2") ?? "0.00")</td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        @if (!Model.Any(m => m.Status == MaintenanceRequestStatus.Completed))
+                        {
+                            <div class="text-center p-3">
+                                <p class="text-muted">No completed maintenance requests found.</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+        
+        // Handle tab state persistence
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if there's a stored tab
+            var activeTab = localStorage.getItem('maintenanceActiveTab');
+            if (activeTab) {
+                // Activate the stored tab
+                var tab = new bootstrap.Tab(document.querySelector('#maintenanceTabs ' + activeTab));
+                tab.show();
+            }
+            
+            // Store the currently active tab
+            var tabEls = document.querySelectorAll('#maintenanceTabs button[data-bs-toggle="tab"]')
+            tabEls.forEach(function(tabEl) {
+                tabEl.addEventListener('shown.bs.tab', function (e) {
+                    localStorage.setItem('maintenanceActiveTab', '#' + e.target.id);
+                });
+            });
+        });
+    </script>
+} 

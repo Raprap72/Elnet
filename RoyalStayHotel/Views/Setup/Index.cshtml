@@ -1,0 +1,42 @@
+@{
+    ViewData["Title"] = "Test Setup";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2>Test Account Setup</h2>
+        </div>
+        <div class="card-body">
+            <p>Use this page to create test accounts for the Royal Stay Hotel admin system.</p>
+            
+            <div class="alert alert-warning">
+                <strong>Warning:</strong> This will delete all existing user accounts and create new test accounts.
+            </div>
+            
+            <a href="@Url.Action("CreateTestUsers", "Setup")" class="btn btn-primary">Create Test Users</a>
+            
+            <hr />
+            
+            <h4>After creating the accounts, you will be able to log in with:</h4>
+            
+            <h5>Admin Account:</h5>
+            <ul>
+                <li><strong>Username:</strong> admin</li>
+                <li><strong>Password:</strong> Admin123!</li>
+            </ul>
+            
+            <h5>Test Account:</h5>
+            <ul>
+                <li><strong>Username:</strong> test</li>
+                <li><strong>Password:</strong> test123</li>
+            </ul>
+            
+            <p class="mt-4">
+                <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Return to Home</a>
+                <a href="/Admin/Account/Login" class="btn btn-outline-primary">Go to Login Page</a>
+            </p>
+        </div>
+    </div>
+</div> 

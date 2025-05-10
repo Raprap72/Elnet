@@ -1,0 +1,400 @@
+@model IEnumerable<RoyalStayHotel.Models.Payment>
+@using RoyalStayHotel.Models
+
+@{
+    ViewData["Title"] = "Payment Reports";
+    Layout = "_AdminLayout";
+    
+    var periodTitle = "";
+    switch (ViewBag.Period)
+    {
+        case "week":
+            periodTitle = "Last 7 Days";
+            break;
+        case "month":
+            periodTitle = "Last 30 Days";
+            break;
+        case "quarter":
+            periodTitle = "Last 3 Months";
+            break;
+        case "year":
+            periodTitle = "Last 12 Months";
+            break;
+        default:
+            periodTitle = "All Time";
+            break;
+    }
+    
+    // Calculate stats by payment method
+    var cashTotal = Model.Where(p => p.PaymentMethod == PaymentMethod.Cash && p.Status == PaymentStatus.Completed)
+                        .Sum(p => p.Amount);
+    var creditCardTotal = Model.Where(p => p.PaymentMethod == PaymentMethod.CreditCard && p.Status == PaymentStatus.Completed)
+                              .Sum(p => p.Amount);
+    var gcashTotal = Model.Where(p => p.PaymentMethod == PaymentMethod.GCash && p.Status == PaymentStatus.Completed)
+                          .Sum(p => p.Amount);
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Payment Reports - @periodTitle</h1>
+        <div>
+            <div class="btn-group mb-2">
+                <a asp-action="Report" asp-route-period="week" class="btn @(ViewBag.Period == "week" ? "btn-primary" : "btn-outline-primary") btn-sm">Last Week</a>
+                <a asp-action="Report" asp-route-period="month" class="btn @(ViewBag.Period == "month" ? "btn-primary" : "btn-outline-primary") btn-sm">Last Month</a>
+                <a asp-action="Report" asp-route-period="quarter" class="btn @(ViewBag.Period == "quarter" ? "btn-primary" : "btn-outline-primary") btn-sm">Last Quarter</a>
+                <a asp-action="Report" asp-route-period="year" class="btn @(ViewBag.Period == "year" ? "btn-primary" : "btn-outline-primary") btn-sm">Last Year</a>
+                <a asp-action="Report" asp-route-period="all" class="btn @(ViewBag.Period == "all" ? "btn-primary" : "btn-outline-primary") btn-sm">All Time</a>
+            </div>
+            <a href="javascript:window.print();" class="btn btn-info btn-sm ml-2">
+                <i class="fas fa-print fa-sm text-white-50 mr-1"></i> Print Report
+            </a>
+        </div>
+    </div>
+
+    <!-- Revenue Summary -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Revenue
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">₱@ViewBag.TotalAmount.ToString("N2")</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Successful Payments
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.SuccessfulPayments</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Pending Payments
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.PendingPayments</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clock fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                Failed/Refunded
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@(ViewBag.FailedPayments + ViewBag.RefundedPayments)</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Revenue by Payment Method -->
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Revenue by Payment Method</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-pie pt-4">
+                        <canvas id="paymentMethodChart"></canvas>
+                    </div>
+                    <div class="mt-4 text-center small">
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-primary"></i> Cash
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-success"></i> Credit Card
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-info"></i> GCash
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Status -->
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Payment Status Distribution</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-pie pt-4">
+                        <canvas id="paymentStatusChart"></canvas>
+                    </div>
+                    <div class="mt-4 text-center small">
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-success"></i> Completed
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-warning"></i> Pending
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-danger"></i> Failed
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-info"></i> Refunded
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Summary -->
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Payment Summary</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Payment Method</th>
+                                    <th>Amount</th>
+                                    <th>%</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><i class="fas fa-money-bill-wave text-primary mr-2"></i> Cash</td>
+                                    <td>₱@cashTotal.ToString("N2")</td>
+                                    <td>@(ViewBag.TotalAmount > 0 ? Math.Round((cashTotal / ViewBag.TotalAmount) * 100, 1) : 0)%</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-credit-card text-success mr-2"></i> Credit Card</td>
+                                    <td>₱@creditCardTotal.ToString("N2")</td>
+                                    <td>@(ViewBag.TotalAmount > 0 ? Math.Round((creditCardTotal / ViewBag.TotalAmount) * 100, 1) : 0)%</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-mobile-alt text-info mr-2"></i> GCash</td>
+                                    <td>₱@gcashTotal.ToString("N2")</td>
+                                    <td>@(ViewBag.TotalAmount > 0 ? Math.Round((gcashTotal / ViewBag.TotalAmount) * 100, 1) : 0)%</td>
+                                </tr>
+                                <tr class="bg-light font-weight-bold">
+                                    <td>Total</td>
+                                    <td>₱@ViewBag.TotalAmount.ToString("N2")</td>
+                                    <td>100%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction List -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Transaction List</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="paymentsTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Booking</th>
+                            <th>Customer</th>
+                            <th>Method</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var payment in Model)
+                        {
+                            <tr>
+                                <td>@payment.PaymentId</td>
+                                <td>@payment.PaymentDate.ToString("MM/dd/yyyy HH:mm")</td>
+                                <td>
+                                    @if (payment.Booking != null)
+                                    {
+                                        <a asp-controller="Bookings" asp-action="Details" asp-route-id="@payment.BookingId">
+                                            #@payment.BookingId
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span>N/A</span>
+                                    }
+                                </td>
+                                <td>@(payment.User?.FullName ?? "N/A")</td>
+                                <td>
+                                    @if (payment.PaymentMethod == PaymentMethod.Cash)
+                                    {
+                                        <span class="badge bg-secondary">Cash</span>
+                                    }
+                                    else if (payment.PaymentMethod == PaymentMethod.CreditCard)
+                                    {
+                                        <span class="badge bg-primary">Credit Card</span>
+                                    }
+                                    else if (payment.PaymentMethod == PaymentMethod.GCash)
+                                    {
+                                        <span class="badge bg-info">GCash</span>
+                                    }
+                                </td>
+                                <td>₱@payment.Amount.ToString("N2")</td>
+                                <td>
+                                    @switch (payment.Status)
+                                    {
+                                        case PaymentStatus.Completed:
+                                            <span class="badge bg-success">Completed</span>
+                                            break;
+                                        case PaymentStatus.Pending:
+                                            <span class="badge bg-warning">Pending</span>
+                                            break;
+                                        case PaymentStatus.Failed:
+                                            <span class="badge bg-danger">Failed</span>
+                                            break;
+                                        case PaymentStatus.Refunded:
+                                            <span class="badge bg-info">Refunded</span>
+                                            break;
+                                        default:
+                                            <span class="badge bg-secondary">Unknown</span>
+                                            break;
+                                    }
+                                </td>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@payment.PaymentId" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Payment Method Chart
+            var pmctx = document.getElementById('paymentMethodChart').getContext('2d');
+            var paymentMethodChart = new Chart(pmctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Cash', 'Credit Card', 'GCash'],
+                    datasets: [{
+                        data: [@cashTotal, @creditCardTotal, @gcashTotal],
+                        backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
+                        hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+                        hoverBorderColor: "rgba(234, 236, 244, 1)",
+                    }],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem, data) {
+                                var dataset = data.datasets[tooltipItem.datasetIndex];
+                                var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+                                    return previousValue + currentValue;
+                                });
+                                var currentValue = dataset.data[tooltipItem.index];
+                                var percentage = Math.floor(((currentValue/total) * 100)+0.5);
+                                return data.labels[tooltipItem.index] + ': ₱' + currentValue.toFixed(2) + ' (' + percentage + "%)";
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+
+            // Payment Status Chart
+            var psctx = document.getElementById('paymentStatusChart').getContext('2d');
+            var paymentStatusChart = new Chart(psctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Completed', 'Pending', 'Failed', 'Refunded'],
+                    datasets: [{
+                        data: [@ViewBag.SuccessfulPayments, @ViewBag.PendingPayments, @ViewBag.FailedPayments, @ViewBag.RefundedPayments],
+                        backgroundColor: ['#1cc88a', '#f6c23e', '#e74a3b', '#36b9cc'],
+                        hoverBackgroundColor: ['#17a673', '#f4b619', '#e02d1b', '#2c9faf'],
+                        hoverBorderColor: "rgba(234, 236, 244, 1)",
+                    }],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem, data) {
+                                var dataset = data.datasets[tooltipItem.datasetIndex];
+                                var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+                                    return previousValue + currentValue;
+                                });
+                                var currentValue = dataset.data[tooltipItem.index];
+                                var percentage = Math.floor(((currentValue/total) * 100)+0.5);
+                                return data.labels[tooltipItem.index] + ': ' + currentValue + ' (' + percentage + "%)";
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+
+            // DataTable initialization
+            $('#paymentsTable').DataTable({
+                order: [[1, 'desc']]
+            });
+        });
+    </script>
+} 

@@ -456,7 +456,8 @@
                     data: {
                         id: id,
                         totalRooms: totalRooms,
-                        description: description
+                        description: description,
+                        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
                     },
                     success: function(result) {
                         if (result.success) {

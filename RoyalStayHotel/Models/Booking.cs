@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,10 +9,11 @@ namespace RoyalStayHotel.Models
     {
         [Key]
         public int BookingId { get; set; }
-        
-        // Add Id property for backward compatibility
-        public int Id { get => BookingId; set => BookingId = value; }
-        
+
+        [Required]
+        [StringLength(20)]
+        public string BookingReference { get; set; } = "";
+
         [Required]
         [ForeignKey("User")]
         public int UserId { get; set; }
@@ -45,14 +47,38 @@ namespace RoyalStayHotel.Models
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         
-        // Add BookingDate property for backward compatibility
-        public DateTime BookingDate { get => CreatedAt; set => CreatedAt = value; }
+        // Discount relationship
+        [ForeignKey("AppliedDiscount")]
+        public int? AppliedDiscountId { get; set; }
+        
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal? DiscountAmount { get; set; }
+        
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal? OriginalPrice { get; set; }
+        
+        [StringLength(500)]
+        public string? SpecialRequests { get; set; }
         
         // Navigation properties
         public virtual User? User { get; set; }
         public virtual Room? Room { get; set; }
+        public virtual Discount? AppliedDiscount { get; set; }
         public virtual ICollection<BookedService>? BookedServices { get; set; }
         public virtual ICollection<Payment>? Payments { get; set; }
+
+        private static string GenerateBookingReference()
+        {
+            // Format: RS-YYYYMMDD-XXXX where XXXX is a random number
+            return $"RS-{DateTime.Now:yyyyMMdd}-{new Random().Next(1000, 9999)}";
+        }
+
+        public Booking()
+        {
+            BookingReference = GenerateBookingReference();
+        }
     }
     
     public enum BookingStatus
@@ -63,6 +89,7 @@ namespace RoyalStayHotel.Models
         CheckedIn,
         CheckedOut,
         Cancelled,
-        NoShow
+        NoShow,
+        Completed
     }
 } 

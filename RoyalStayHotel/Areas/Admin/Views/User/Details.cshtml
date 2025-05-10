@@ -1,0 +1,121 @@
+@model RoyalStayHotel.Models.User
+@{
+    ViewData["Title"] = "User Details";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="bg-light rounded p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="mb-0">User Details</h3>
+                    <div>
+                        <a asp-action="Edit" asp-route-id="@Model.UserId" class="btn btn-primary btn-sm">
+                            <i class="fas fa-edit me-1"></i> Edit
+                        </a>
+                        <a asp-action="Index" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-arrow-left me-1"></i> Back to List
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Personal Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Full Name</label>
+                                    <p>@Model.FullName</p>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Username</label>
+                                    <p>@Model.Username</p>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Email</label>
+                                    <p>@Model.Email</p>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Phone Number</label>
+                                    <p>@Model.PhoneNumber</p>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">User Type</label>
+                                    <p><span class="badge @(Model.UserType == UserType.Admin ? "bg-danger" : Model.UserType == UserType.Staff ? "bg-warning" : "bg-info")">@Model.UserType</span></p>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Created On</label>
+                                    <p>@Model.CreatedAt.ToString("MMMM dd, yyyy")</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Booking History</h5>
+                            </div>
+                            <div class="card-body">
+                                @if (ViewBag.BookingHistory != null && ViewBag.BookingHistory.Count > 0)
+                                {
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Room</th>
+                                                    <th>Check In</th>
+                                                    <th>Check Out</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var booking in ViewBag.BookingHistory)
+                                                {
+                                                    <tr>
+                                                        <td>@booking.Room.RoomNumber</td>
+                                                        <td>@booking.CheckInDate.ToString("MM/dd/yyyy")</td>
+                                                        <td>@booking.CheckOutDate.ToString("MM/dd/yyyy")</td>
+                                                        <td>
+                                                            <span class="badge @(booking.Status == BookingStatus.Confirmed ? "bg-success" : 
+                                                                              booking.Status == BookingStatus.Pending ? "bg-warning" : 
+                                                                              booking.Status == BookingStatus.Cancelled ? "bg-danger" :
+                                                                              booking.Status == BookingStatus.CheckedIn ? "bg-primary" :
+                                                                              booking.Status == BookingStatus.CheckedOut ? "bg-secondary" : "bg-info")">
+                                                                @booking.Status
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="text-center py-4">
+                                        <i class="fas fa-calendar-times fa-3x text-secondary mb-3"></i>
+                                        <p class="mb-0 text-muted">No booking history found for this user.</p>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Activate the side menu item
+            $("#user-menu").addClass("active");
+        });
+    </script>
+} 

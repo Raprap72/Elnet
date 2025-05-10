@@ -1,0 +1,208 @@
+@model IEnumerable<RoyalStayHotel.Models.Payment>
+@using RoyalStayHotel.Models
+
+@{
+    ViewData["Title"] = "Payment Transactions";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Payment Transactions</h1>
+        <div>
+            <a href="@Url.Action("Report", "Payments", new { area = "Admin" })" class="btn btn-info btn-sm">
+                <i class="fas fa-chart-bar fa-sm text-white-50 mr-1"></i> View Reports
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Transactions
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count()</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Total Revenue
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">₱@Model.Where(p => p.Status == PaymentStatus.Completed).Sum(p => p.Amount).ToString("N2")</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Pending Payments
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(p => p.Status == PaymentStatus.Pending)</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clock fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                Failed/Refunded
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(p => p.Status == PaymentStatus.Failed || p.Status == PaymentStatus.Refunded)</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Payment Transactions</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="paymentsTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>User</th>
+                            <th>Booking</th>
+                            <th>Method</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var payment in Model)
+                        {
+                            <tr>
+                                <td>@payment.PaymentId</td>
+                                <td>@payment.PaymentDate.ToString("MM/dd/yyyy HH:mm")</td>
+                                <td>
+                                    @if (payment.User != null)
+                                    {
+                                        <a asp-controller="Users" asp-action="Details" asp-route-id="@payment.UserId">
+                                            @payment.User.FullName
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span>Unknown</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (payment.Booking != null)
+                                    {
+                                        <a asp-controller="Bookings" asp-action="Details" asp-route-id="@payment.BookingId">
+                                            #@payment.BookingId
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span>N/A</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (payment.PaymentMethod == PaymentMethod.Cash)
+                                    {
+                                        <span class="badge bg-secondary">Cash</span>
+                                    }
+                                    else if (payment.PaymentMethod == PaymentMethod.CreditCard)
+                                    {
+                                        <span class="badge bg-primary">Credit Card</span>
+                                    }
+                                    else if (payment.PaymentMethod == PaymentMethod.GCash)
+                                    {
+                                        <span class="badge bg-info">GCash</span>
+                                    }
+                                </td>
+                                <td>₱@payment.Amount.ToString("N2")</td>
+                                <td>
+                                    @switch (payment.Status)
+                                    {
+                                        case PaymentStatus.Completed:
+                                            <span class="badge bg-success">Completed</span>
+                                            break;
+                                        case PaymentStatus.Pending:
+                                            <span class="badge bg-warning">Pending</span>
+                                            break;
+                                        case PaymentStatus.Failed:
+                                            <span class="badge bg-danger">Failed</span>
+                                            break;
+                                        case PaymentStatus.Refunded:
+                                            <span class="badge bg-info">Refunded</span>
+                                            break;
+                                        default:
+                                            <span class="badge bg-secondary">Unknown</span>
+                                            break;
+                                    }
+                                </td>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@payment.PaymentId" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    @if (payment.Status == PaymentStatus.Completed)
+                                    {
+                                        <a asp-action="MarkAsRefunded" asp-route-id="@payment.PaymentId" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-undo"></i>
+                                        </a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#paymentsTable').DataTable({
+                order: [[1, 'desc']]
+            });
+        });
+    </script>
+} 

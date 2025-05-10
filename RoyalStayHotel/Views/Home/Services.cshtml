@@ -1,8 +1,26 @@
+@model RoyalStayHotel.Models.ServicesViewModel
 @{
     ViewData["Title"] = "Services";
 }
 
 <div class="container my-5">
+    <!-- Alert Messages -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
     <div class="row">
         <div class="col-md-8 offset-md-2 text-center mb-5">
             <h1 class="mb-4">Our Services</h1>
@@ -10,69 +28,59 @@
         </div>
     </div>
     
+    <!-- Main Services -->
     <div class="row mb-5">
-        <div class="col-lg-4 mb-4">
-            <div class="service-card text-center p-4">
-                <i class="bi bi-cup-hot fs-1 mb-3"></i>
-                <h3>24/7 Room Service</h3>
-                <p>Enjoy gourmet meals delivered directly to your room at any hour of the day or night.</p>
-            </div>
-        </div>
-        <div class="col-lg-4 mb-4">
-            <div class="service-card text-center p-4">
-                <i class="bi bi-water fs-1 mb-3"></i>
-                <h3>Infinity Pool</h3>
-                <p>Relax in our stunning infinity pool with panoramic views of the city skyline.</p>
-            </div>
-        </div>
-        <div class="col-lg-4 mb-4">
-            <div class="service-card text-center p-4">
-                <i class="bi bi-house-heart fs-1 mb-3"></i>
-                <h3>Spa & Wellness</h3>
-                <p>Indulge in a range of spa treatments designed to rejuvenate your body and mind.</p>
-            </div>
-        </div>
-    </div>
-    
-    <div class="row mb-5">
-        <div class="col-lg-6 mb-4">
-            <div class="service-feature p-4">
-                <div class="row align-items-center">
-                    <div class="col-md-4 text-center">
-                        <i class="bi bi-building fs-1"></i>
-                    </div>
-                    <div class="col-md-8">
-                        <h3>Conference Facilities</h3>
-                        <p>Our state-of-the-art conference rooms are perfect for business meetings, seminars, and corporate events.</p>
-                        <ul>
-                            <li>High-speed internet</li>
-                            <li>Video conferencing equipment</li>
-                            <li>Catering services</li>
-                            <li>Professional event planning</li>
-                        </ul>
+        @foreach (var service in Model.MainServices.Where(s => s.Name != "Concierge Services" && s.Name != "Translation Services"))
+        {
+            <div class="col-lg-3 mb-4">
+                <div class="service-card text-center p-4 h-100">
+                    @if (service.Name == "Airport Transfers")
+                    {
+                        <i class="bi bi-car-front fs-1 mb-3 text-primary"></i>
+                    }
+                    else if (service.Name == "Bike Rentals") 
+                    {
+                        <i class="bi bi-bicycle fs-1 mb-3 text-success"></i>
+                    }
+                    else if (service.Name == "Spa Treatment")
+                    {
+                        <i class="bi bi-water fs-1 mb-3 text-info"></i>
+                    }
+                    else if (service.Name == "Limousine Service")
+                    {
+                        <i class="bi bi-taxi-front fs-1 mb-3 text-warning"></i>
+                    }
+                    else
+                    {
+                        <i class="bi bi-gem fs-1 mb-3"></i>
+                    }
+                    <h3>@service.Name</h3>
+                    <p>@service.Description</p>
+                    <div class="mt-auto pt-3">
+                        <span class="badge bg-@(service.Price == 0 ? "success" : "primary") p-2 mb-3">
+                            @(service.Price == 0 ? "Complimentary" : $"₱{service.Price:N2}")
+                        </span>
+                        <div>
+                            <button type="button" class="btn btn-outline-primary btn-sm" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#serviceModal" 
+                                    data-service-id="@service.Id" 
+                                    data-service-name="@service.Name"
+                                    data-service-price="@service.Price">
+                                Book Service
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-6 mb-4">
-            <div class="service-feature p-4">
-                <div class="row align-items-center">
-                    <div class="col-md-4 text-center">
-                        <i class="bi bi-cart3 fs-1"></i>
-                    </div>
-                    <div class="col-md-8">
-                        <h3>Shopping Experience</h3>
-                        <p>Explore our curated selection of boutiques offering designer clothes, jewelry, and unique souvenirs.</p>
-                        <ul>
-                            <li>Luxury brands</li>
-                            <li>Local artisanal crafts</li>
-                            <li>Personalized shopping assistance</li>
-                            <li>Exclusive hotel guest discounts</li>
-                        </ul>
-                    </div>
-                </div>
+        }
+        
+        @if (!Model.MainServices.Any())
+        {
+            <div class="col-12 text-center">
+                <p class="text-muted">No main services available at the moment. Please check back later.</p>
             </div>
-        </div>
+        }
     </div>
     
     <div class="row">
@@ -94,35 +102,153 @@
     
     <div class="row mt-5">
         <div class="col-12 text-center">
-            <h2 class="mb-4">Additional Services</h2>
-        </div>
-        <div class="col-md-3 mb-4">
-            <div class="text-center">
-                <i class="bi bi-car-front fs-1 mb-3"></i>
-                <h4>Airport Transfers</h4>
-                <p>Private luxury transportation to and from the airport.</p>
+            <h2 class="mb-4">Contact Us</h2>
+            <p>For more information about our services or to make special arrangements, please contact our concierge desk:</p>
+            <div class="contact-info mt-4">
+                <p><i class="bi bi-telephone me-2"></i> +1 (123) 456-7890</p>
+                <p><i class="bi bi-envelope me-2"></i> services@royalstayhotel.com</p>
             </div>
-        </div>
-        <div class="col-md-3 mb-4">
-            <div class="text-center">
-                <i class="bi bi-bicycle fs-1 mb-3"></i>
-                <h4>Bike Rentals</h4>
-                <p>Explore the city at your own pace with our premium bikes.</p>
-            </div>
-        </div>
-        <div class="col-md-3 mb-4">
-            <div class="text-center">
-                <i class="bi bi-calendar-check fs-1 mb-3"></i>
-                <h4>Concierge Services</h4>
-                <p>Assistance with reservations, tickets, and local recommendations.</p>
-            </div>
-        </div>
-        <div class="col-md-3 mb-4">
-            <div class="text-center">
-                <i class="bi bi-translate fs-1 mb-3"></i>
-                <h4>Translation Services</h4>
-                <p>Professional translators available upon request.</p>
-            </div>
+            <a href="/Home/Contact" class="btn btn-primary mt-3">Contact Us</a>
         </div>
     </div>
-</div> 
+</div>
+
+<!-- Service Booking Modal -->
+<div class="modal fade" id="serviceModal" tabindex="-1" aria-labelledby="serviceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="serviceModalLabel">Book Service</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-controller="Home" asp-action="BookService" method="post">
+                <div class="modal-body">
+                    <input type="hidden" id="serviceId" name="ServiceId">
+                    <input type="hidden" id="serviceType" name="ServiceType" value="standard">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Service</label>
+                        <input type="text" class="form-control" id="serviceName" readonly>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="servicePriceDisplay" class="form-label">Price</label>
+                        <input type="text" class="form-control" id="servicePriceDisplay" readonly>
+                        <input type="hidden" id="servicePrice" name="ServicePrice">
+                    </div>
+                    
+                    <!-- Standard service fields -->
+                    <div id="standardServiceFields">
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="quantity" name="Quantity" min="1" max="100" value="1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="totalPrice" class="form-label">Total Price</label>
+                            <input type="text" class="form-control" id="totalPrice" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="requestDate" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="requestDate" name="RequestDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="requestTime" class="form-label">Time</label>
+                        <input type="time" class="form-control" id="requestTime" name="RequestTime" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Special Requests</label>
+                        <textarea class="form-control" id="notes" name="Notes" rows="3"></textarea>
+                    </div>
+                    
+                    <!-- Room Information (Optional) -->
+                    <div class="mb-3">
+                        <label for="roomNumber" class="form-label">Room Number (if applicable)</label>
+                        <input type="text" class="form-control" id="roomNumber" name="RoomNumber" placeholder="Enter your room number if you're a guest">
+                        <small class="form-text text-muted">This will help us provide better service</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Book Now</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var serviceModal = document.getElementById('serviceModal');
+            
+            // Set default date to today
+            var today = new Date();
+            var formattedDate = today.toISOString().split('T')[0];
+            document.getElementById('requestDate').value = formattedDate;
+            document.getElementById('requestDate').min = formattedDate;
+            
+            // Set default time (current time + 1 hour, rounded to nearest hour)
+            var defaultHour = (today.getHours() + 1) % 24;
+            var formattedTime = defaultHour.toString().padStart(2, '0') + ':00';
+            document.getElementById('requestTime').value = formattedTime;
+            
+            serviceModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget;
+                var serviceId = button.getAttribute('data-service-id');
+                var serviceName = button.getAttribute('data-service-name');
+                var servicePrice = parseFloat(button.getAttribute('data-service-price'));
+                
+                var modalTitle = serviceModal.querySelector('.modal-title');
+                var serviceIdInput = document.getElementById('serviceId');
+                var serviceNameInput = document.getElementById('serviceName');
+                var servicePriceDisplay = document.getElementById('servicePriceDisplay');
+                var servicePriceInput = document.getElementById('servicePrice');
+                var quantityInput = document.getElementById('quantity');
+                var totalPriceInput = document.getElementById('totalPrice');
+                
+                modalTitle.textContent = 'Book ' + serviceName;
+                serviceIdInput.value = serviceId;
+                serviceNameInput.value = serviceName;
+                servicePriceDisplay.value = servicePrice === 0 ? 'Complimentary' : '₱' + servicePrice.toFixed(2);
+                servicePriceInput.value = servicePrice;
+                
+                // Reset quantity to 1
+                quantityInput.value = 1;
+                
+                // Calculate initial total price
+                totalPriceInput.value = '₱' + (servicePrice * 1).toFixed(2);
+                
+                // Remove any previous event listener before adding a new one
+                // This prevents multiple events firing if the modal is opened multiple times
+                var newQuantityInput = quantityInput.cloneNode(true);
+                quantityInput.parentNode.replaceChild(newQuantityInput, quantityInput);
+                quantityInput = newQuantityInput;
+                
+                // Update total price when quantity changes
+                quantityInput.addEventListener('input', function() {
+                    var newQuantity = parseInt(this.value) || 0;
+                    
+                    // Validate the input
+                    if (newQuantity < 1) {
+                        this.value = 1;
+                        newQuantity = 1;
+                    }
+                    if (newQuantity > 100) {
+                        this.value = 100;
+                        newQuantity = 100;
+                    }
+                    
+                    totalPriceInput.value = '₱' + (servicePrice * newQuantity).toFixed(2);
+                });
+            });
+            
+            // Clear form when modal is hidden
+            serviceModal.addEventListener('hidden.bs.modal', function() {
+                document.getElementById('notes').value = '';
+                document.getElementById('roomNumber').value = '';
+            });
+        });
+    </script>
+} 

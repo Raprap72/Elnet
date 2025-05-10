@@ -4,6 +4,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RoyalStayHotel.Models
 {
+    public enum PaymentMethod
+    {
+        Cash,
+        CreditCard,
+        GCash
+    }
+
+    public enum PaymentStatus
+    {
+        Pending,
+        Completed,
+        Failed,
+        Refunded
+    }
+
     public class Payment
     {
         [Key]
@@ -18,32 +33,31 @@ namespace RoyalStayHotel.Models
         public int BookingId { get; set; }
         
         [Required]
-        [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(18,2)")]
         public decimal Amount { get; set; }
         
         [Required]
-        public string PaymentMethod { get; set; } = string.Empty;
+        public PaymentStatus Status { get; set; } = PaymentStatus.Pending;
+        
+        // Compatibility property
+        public PaymentStatus PaymentStatus { get => Status; set => Status = value; }
         
         [Required]
-        public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Pending;
+        public PaymentMethod PaymentMethod { get; set; }
         
-        public string? PaymentDetails { get; set; }
+        public string? TransactionId { get; set; }
+        
+        [StringLength(500)]
+        public string? Notes { get; set; }
         
         [Required]
         public DateTime PaymentDate { get; set; } = DateTime.Now;
+
+        // Payment details for various payment methods
+        public string? PaymentDetails { get; set; }
         
         // Navigation properties
         public virtual User? User { get; set; }
         public virtual Booking? Booking { get; set; }
-    }
-    
-    public enum PaymentStatus
-    {
-        Pending,
-        Completed,
-        Failed,
-        Refunded,
-        Cancelled
     }
 } 

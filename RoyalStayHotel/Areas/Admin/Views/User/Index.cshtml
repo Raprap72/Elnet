@@ -1,0 +1,253 @@
+@using RoyalStayHotel.Models
+@model IEnumerable<RoyalStayHotel.Models.User>
+@{
+    ViewData["Title"] = "User Management";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">User Management</h1>
+        <a href="@Url.Action("Create")" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fas fa-user-plus fa-sm text-white-50"></i> Add New User
+        </a>
+    </div>
+
+    <!-- Alerts Section -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+            <i class="fas fa-check-circle mr-2"></i> @TempData["SuccessMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+            <i class="fas fa-exclamation-circle mr-2"></i> @TempData["ErrorMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    <!-- Filters Card -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">
+                <i class="fas fa-filter mr-2"></i>Filters
+            </h6>
+            <button class="btn btn-link btn-sm" type="button" data-toggle="collapse" data-target="#filterCollapse">
+                <i class="fas fa-chevron-down"></i>
+            </button>
+        </div>
+        <div class="collapse show" id="filterCollapse">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <div class="btn-group" role="group">
+                            <a href="@Url.Action("Index")" class="btn @(string.IsNullOrEmpty(Context.Request.Query["userType"]) ? "btn-primary" : "btn-outline-primary")">
+                                <i class="fas fa-users mr-1"></i> All
+                            </a>
+                            <a href="@Url.Action("Index", new { userType = "Guest" })" class="btn @(Context.Request.Query["userType"] == "Guest" ? "btn-primary" : "btn-outline-primary")">
+                                <i class="fas fa-user mr-1"></i> Guests
+                            </a>
+                            <a href="@Url.Action("Index", new { userType = "Staff" })" class="btn @(Context.Request.Query["userType"] == "Staff" ? "btn-primary" : "btn-outline-primary")">
+                                <i class="fas fa-user-tie mr-1"></i> Staff
+                            </a>
+                            <a href="@Url.Action("Index", new { userType = "Admin" })" class="btn @(Context.Request.Query["userType"] == "Admin" ? "btn-primary" : "btn-outline-primary")">
+                                <i class="fas fa-user-shield mr-1"></i> Admins
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Users Table Card -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">
+                <i class="fas fa-users mr-2"></i>Users
+            </h6>
+            <div class="dropdown no-arrow">
+                <button class="btn btn-link btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" 
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in">
+                    <div class="dropdown-header">Export Options:</div>
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-file-csv mr-2 text-success"></i>Export to CSV
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-file-excel mr-2 text-success"></i>Export to Excel
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-print mr-2 text-primary"></i>Print List
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="usersTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Username</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Created</th>
+                            <th style="width: 100px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle @(user.UserType == UserType.Admin ? "bg-danger" : user.UserType == UserType.Staff ? "bg-info" : "bg-success") mr-2">
+                                            @user.FullName.Substring(0, 1).ToUpper()
+                                        </div>
+                                        @user.FullName
+                                    </div>
+                                </td>
+                                <td>@user.Email</td>
+                                <td>@user.Username</td>
+                                <td>@user.PhoneNumber</td>
+                                <td>
+                                    <span class="badge badge-@(
+                                        user.UserType == UserType.Admin ? "danger" :
+                                        user.UserType == UserType.Staff ? "info" :
+                                        user.UserType == UserType.Receptionist ? "primary" :
+                                        user.UserType == UserType.Housekeeping ? "warning" :
+                                        user.UserType == UserType.Maintenance ? "secondary" :
+                                        user.UserType == UserType.Guest ? "success" : "light")">
+                                        <i class="fas fa-@(
+                                            user.UserType == UserType.Admin ? "user-shield" :
+                                            user.UserType == UserType.Staff ? "user-tie" :
+                                            user.UserType == UserType.Receptionist ? "concierge-bell" :
+                                            user.UserType == UserType.Housekeeping ? "broom" :
+                                            user.UserType == UserType.Maintenance ? "tools" :
+                                            user.UserType == UserType.Guest ? "user" : "user") mr-1"></i>
+                                        @user.UserType
+                                    </span>
+                                </td>
+                                <td data-order="@user.CreatedAt.Ticks">
+                                    <i class="far fa-calendar-alt mr-1"></i>
+                                    @user.CreatedAt.ToShortDateString()
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="@Url.Action("Details", new { id = user.Id })" class="btn btn-info btn-sm" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="@Url.Action("Edit", new { id = user.Id })" class="btn btn-primary btn-sm" title="Edit User">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-danger btn-sm" title="Delete User"
+                                                onclick="confirmDelete(@user.Id, '@user.FullName')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete the user "<span id="deleteUserName"></span>"?</p>
+                    <p class="text-danger">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        This action cannot be undone.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <form id="deleteForm" asp-action="Delete" method="post">
+                        <input type="hidden" id="deleteUserId" name="id" />
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash mr-2"></i>Delete User
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .avatar-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            color: white;
+            text-align: center;
+            line-height: 32px;
+            font-weight: bold;
+        }
+        
+        .btn-group .btn {
+            padding: .25rem .5rem;
+        }
+        
+        .badge {
+            padding: 0.5em 0.75em;
+        }
+        
+        #usersTable td {
+            vertical-align: middle;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#usersTable').DataTable({
+                "pageLength": 10,
+                "order": [[5, "desc"]],
+                "columnDefs": [
+                    { "orderable": false, "targets": 6 }
+                ],
+                "language": {
+                    "search": "Search users:",
+                    "zeroRecords": "No users found",
+                    "info": "Showing _START_ to _END_ of _TOTAL_ users",
+                    "infoEmpty": "No users available",
+                    "infoFiltered": "(filtered from _MAX_ total users)"
+                }
+            });
+        });
+
+        function confirmDelete(userId, userName) {
+            $('#deleteUserId').val(userId);
+            $('#deleteUserName').text(userName);
+            $('#deleteModal').modal('show');
+        }
+    </script>
+} 

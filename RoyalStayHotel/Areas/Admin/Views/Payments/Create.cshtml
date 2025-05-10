@@ -1,0 +1,212 @@
+@model RoyalStayHotel.Models.Payment
+@using RoyalStayHotel.Models
+
+@{
+    ViewData["Title"] = "Process Payment";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-credit-card mr-2"></i>Process Payment</h6>
+                </div>
+                <div class="card-body">
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-circle mr-2"></i> @TempData["ErrorMessage"]
+                        </div>
+                    }
+
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        @if (ViewBag.BookingDetails != null)
+                        {
+                            var booking = ViewBag.BookingDetails;
+                            <div class="alert alert-info mb-4">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5 class="mb-1">Booking #@booking.BookingId</h5>
+                                        <p class="mb-1">Guest: @booking.User?.FullName</p>
+                                        <p class="mb-1">Room: @booking.Room?.RoomType Room #@booking.Room?.RoomNumber</p>
+                                        <p class="mb-0">Check-in: @booking.CheckInDate.ToString("MMM dd, yyyy") - Check-out: @booking.CheckOutDate.ToString("MMM dd, yyyy")</p>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-1">Total Due: ₱@booking.TotalPrice.ToString("N2")</h5>
+                                        @if (ViewBag.AmountPaid > 0)
+                                        {
+                                            <p class="mb-1">Amount Paid: ₱@ViewBag.AmountPaid.ToString("N2")</p>
+                                            <p class="mb-0 text-danger">Balance: ₱@ViewBag.Balance.ToString("N2")</p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        
+                        <input type="hidden" name="BookingId" value="@ViewBag.BookingId" />
+                        <input type="hidden" name="UserId" value="@ViewBag.UserId" />
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Amount</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₱</span>
+                                        <input type="number" name="Amount" class="form-control" step="0.01" value="@ViewBag.Balance" required />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Payment Method</label>
+                                    <select name="PaymentMethod" class="form-control" required>
+                                        <option value="">-- Select Payment Method --</option>
+                                        <option value="@PaymentMethod.Cash">Cash</option>
+                                        <option value="@PaymentMethod.CreditCard">Credit Card</option>
+                                        <option value="@PaymentMethod.GCash">GCash</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 credit-card-details" style="display: none;">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="mb-3">Credit Card Details</h6>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label">Card Number</label>
+                                                <input type="text" id="cardNumber" class="form-control" placeholder="XXXX-XXXX-XXXX-XXXX" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label">Card Holder</label>
+                                                <input type="text" id="cardHolder" class="form-control" placeholder="Name on card" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Expiry (MM/YY)</label>
+                                                <input type="text" id="expiry" class="form-control" placeholder="MM/YY" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label">CVV</label>
+                                                <input type="text" id="cvv" class="form-control" placeholder="XXX" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 gcash-details" style="display: none;">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="mb-3">GCash Details</h6>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label">GCash Number</label>
+                                                <input type="text" id="gcashNumber" class="form-control" placeholder="09XXXXXXXXX" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label">Reference Number</label>
+                                                <input type="text" id="referenceNumber" class="form-control" placeholder="Transaction reference" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="form-label">Notes</label>
+                            <textarea name="Notes" class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <input type="hidden" name="PaymentDetails" id="paymentDetails" value="" />
+                        <input type="hidden" name="TransactionId" id="transactionId" value="" />
+                        <input type="hidden" name="PaymentStatus" value="@PaymentStatus.Completed" />
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-check-circle mr-2"></i> Process Payment
+                            </button>
+                            <a asp-action="Details" asp-controller="Bookings" asp-route-id="@ViewBag.BookingId" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left mr-2"></i> Back to Booking
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Handle payment method change
+            $('select[name="PaymentMethod"]').change(function() {
+                var selectedMethod = $(this).val();
+                
+                // Hide all payment detail sections
+                $('.credit-card-details, .gcash-details').hide();
+                
+                // Show relevant section based on selection
+                if (selectedMethod === '@PaymentMethod.CreditCard') {
+                    $('.credit-card-details').show();
+                } else if (selectedMethod === '@PaymentMethod.GCash') {
+                    $('.gcash-details').show();
+                }
+            });
+            
+            // Handle form submission to collect payment details
+            $('form').submit(function() {
+                var paymentMethod = $('select[name="PaymentMethod"]').val();
+                var paymentDetails = '';
+                var transactionId = '';
+                
+                if (paymentMethod === '@PaymentMethod.CreditCard') {
+                    var cardNumber = $('#cardNumber').val();
+                    var cardHolder = $('#cardHolder').val();
+                    var expiry = $('#expiry').val();
+                    
+                    // Mask card number for security
+                    var maskedCardNumber = 'XXXX-XXXX-XXXX-' + cardNumber.slice(-4);
+                    
+                    paymentDetails = 'Card: ' + maskedCardNumber + ', Holder: ' + cardHolder + ', Expiry: ' + expiry;
+                    transactionId = 'CC-' + new Date().getTime();
+                }
+                else if (paymentMethod === '@PaymentMethod.GCash') {
+                    var gcashNumber = $('#gcashNumber').val();
+                    var referenceNumber = $('#referenceNumber').val();
+                    
+                    paymentDetails = 'GCash Number: ' + gcashNumber;
+                    transactionId = referenceNumber || ('GC-' + new Date().getTime());
+                }
+                else if (paymentMethod === '@PaymentMethod.Cash') {
+                    paymentDetails = 'Cash payment';
+                    transactionId = 'CASH-' + new Date().getTime();
+                }
+                
+                $('#paymentDetails').val(paymentDetails);
+                $('#transactionId').val(transactionId);
+                
+                return true;
+            });
+        });
+    </script>
+} 

@@ -1,0 +1,75 @@
+@model RoyalStayHotel.Models.ContactFormSubmission
+
+@{
+    ViewData["Title"] = "Delete Message";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Delete Message</h1>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-danger text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="fas fa-trash mr-1"></i>
+                    Confirm Deletion
+                </div>
+                <div>
+                    <a asp-action="Index" class="btn btn-light">Back to List</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                Are you sure you want to delete this message? This action cannot be undone.
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-2 fw-bold">Name:</div>
+                <div class="col-md-10">@Model.Name</div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-2 fw-bold">Email:</div>
+                <div class="col-md-10">@Model.Email</div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-2 fw-bold">Subject:</div>
+                <div class="col-md-10">@Model.Subject</div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-2 fw-bold">Date:</div>
+                <div class="col-md-10">@Model.SubmissionDate.ToString("MM/dd/yyyy HH:mm")</div>
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-2 fw-bold">Message:</div>
+                <div class="col-md-10">
+                    <div class="card">
+                        <div class="card-body">
+                            @Model.Message
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <hr />
+                    <form action="@Url.Action("Delete", "AdminContact", new { area = "Admin", id = Model.Id })" method="post" class="d-inline-block">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash mr-1"></i> Delete
+                        </button>
+                    </form>
+                    <a href="@Url.Action("Index", "AdminContact", new { area = "Admin" })" class="btn btn-secondary ml-2">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

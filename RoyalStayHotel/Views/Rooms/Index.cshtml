@@ -168,7 +168,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="booking-form" method="post">
+                <form id="booking-form" method="post" action="@Url.Action("Book", "Booking")">
                     <input type="hidden" id="modal-room-id" name="roomId">
                     
                     <h6 class="mb-3">Guest Information</h6>
@@ -232,12 +232,80 @@
                             </div>
                         </div>
                         <div class="col-md-6">
+                            <!-- Discount Code Section -->
+                            <label for="discountCode" class="form-label">Discount Code (Optional)</label>
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="discountCode" name="discountCode" placeholder="Enter promo code">
+                                <button type="button" id="applyDiscount" class="btn btn-secondary">Apply</button>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <button type="button" id="bestDiscountBtn" class="btn btn-sm btn-outline-primary">Find Best Discount</button>
+                                <button type="button" id="clearDiscountBtn" class="btn btn-sm btn-outline-secondary">Clear</button>
+                            </div>
+                            <div id="discountMessage" class="form-text mb-2"></div>
+                            <div id="discountSummary" style="display:none;" class="alert alert-success py-2">
+                                <p class="mb-1" id="discountText"></p>
+                                <p class="mb-1">Discounted Price: <span id="discountedPrice" class="fw-bold"></span></p>
+                            </div>
+                            <input type="hidden" id="appliedDiscountId" name="appliedDiscountId" value="">
+                            <input type="hidden" id="discountAmount" name="discountAmount" value="0">
+                            <input type="hidden" id="originalPrice" name="originalPrice" value="0">
+                            <!-- End Discount Code Section -->
                             <label for="modal-total" class="form-label">Total Price</label>
                             <div class="input-group">
                                 <span class="input-group-text">₱</span>
                                 <input type="text" class="form-control" id="modal-total" readonly>
                             </div>
                             <div class="form-text" id="nights-info"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Additional Services Section -->
+                    <h6 class="mb-3 mt-4">Additional Services</h6>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="chk-pool-access" name="SelectedServices" value="PoolAccess">
+                                <label class="form-check-label" for="chk-pool-access">
+                                    <i class="bi bi-water text-primary me-1"></i> Swimming Pool Access
+                                </label>
+                                <div id="pool-guests-container" class="ms-4 mt-2" style="display: none;">
+                                    <label for="pool-guest-count" class="form-label">Number of Guests</label>
+                                    <input type="number" class="form-control form-control-sm" id="pool-guest-count" name="PoolGuestCount" min="1" value="1">
+                                    <small class="text-muted">First 2 guests are free. ₱250 fee for each additional guest.</small>
+                                    <input type="hidden" id="pool-price" name="PoolPrice" value="0">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="chk-breakfast" name="SelectedServices" value="BreakfastBuffet">
+                                <label class="form-check-label" for="chk-breakfast">
+                                    <i class="bi bi-cup-hot text-warning me-1"></i> Breakfast Buffet
+                                </label>
+                                <div id="breakfast-guests-container" class="ms-4 mt-2" style="display: none;">
+                                    <label for="breakfast-guest-count" class="form-label">Number of Guests</label>
+                                    <input type="number" class="form-control form-control-sm" id="breakfast-guest-count" name="BreakfastGuestCount" min="1" value="1">
+                                    <small class="text-muted">First 2 guests are free. ₱650 fee for each additional guest.</small>
+                                    <input type="hidden" id="breakfast-price" name="BreakfastPrice" value="0">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="chk-gym" name="SelectedServices" value="GymAccess">
+                                <label class="form-check-label" for="chk-gym">
+                                    <i class="bi bi-bicycle text-danger me-1"></i> Gym Access
+                                </label>
+                                <div id="gym-guests-container" class="ms-4 mt-2" style="display: none;">
+                                    <label for="gym-guest-count" class="form-label">Number of Guests</label>
+                                    <input type="number" class="form-control form-control-sm" id="gym-guest-count" name="GymGuestCount" min="1" value="1">
+                                    <small class="text-muted">First 2 guests are free. ₱400 fee for each additional guest.</small>
+                                    <input type="hidden" id="gym-price" name="GymPrice" value="0">
+                                </div>
+                            </div>
+                            
+                            <div class="form-text mt-3">
+                                <i class="bi bi-info-circle"></i> Select additional services to enhance your stay. Prices will be automatically calculated.
+                            </div>
                         </div>
                     </div>
                     
@@ -305,7 +373,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="confirm-booking">Complete Reservation</button>
+                <button type="button" class="btn btn-success" id="confirm-booking">Complete Reservation</button>
             </div>
         </div>
     </div>
@@ -497,176 +565,105 @@
                 }
             });
             
-            // Confirm booking
-            $('#confirm-booking').click(function() {
-                // Form validation
-                if (!validateBookingForm()) {
-                    return;
+            // Additional services handling
+            $('#chk-pool-access').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#pool-guests-container').show();
+                } else {
+                    $('#pool-guests-container').hide();
                 }
-                
-                const roomId = $('#modal-room-id').val();
-                const checkIn = $('#modal-check-in').val();
-                const checkOut = $('#modal-check-out').val();
-                const guests = $('#modal-guests').val();
-                const guestName = $('#guest-name').val();
-                const guestEmail = $('#guest-email').val();
-                const guestPhone = $('#guest-phone').val();
-                const guestAddress = $('#guest-address').val();
-                const specialRequests = $('#special-requests').val();
-                const paymentMethod = $('input[name="paymentMethod"]:checked').val();
-                
-                // Get payment details based on method
-                let paymentDetails = {};
-                
-                if (paymentMethod === 'CreditCard') {
-                    paymentDetails = {
-                        cardName: $('#card-name').val(),
-                        cardNumber: $('#card-number').val(),
-                        cardExpiry: $('#card-expiry').val(),
-                        cardCvc: $('#card-cvc').val()
-                    };
-                    
-                    if (!validateCardDetails(paymentDetails)) {
-                        return;
-                    }
-                } else if (paymentMethod === 'GCash') {
-                    paymentDetails = {
-                        gcashName: $('#gcash-name').val(),
-                        gcashNumber: $('#gcash-number').val()
-                    };
-                    
-                    if (!validateGCashDetails(paymentDetails)) {
-                        return;
-                    }
-                }
-                
-                // Post to the CompleteBooking endpoint
-                $.ajax({
-                    url: '@Url.Action("CompleteBooking", "Rooms")',
-                    type: 'POST',
-                    data: {
-                        roomId: roomId,
-                        checkIn: checkIn,
-                        checkOut: checkOut,
-                        numberOfGuests: guests,
-                        guestName: guestName,
-                        guestEmail: guestEmail,
-                        guestPhone: guestPhone,
-                        guestAddress: guestAddress,
-                        specialRequests: specialRequests,
-                        paymentMethod: paymentMethod,
-                        cardName: paymentDetails.cardName || '',
-                        cardNumber: paymentDetails.cardNumber || '',
-                        cardExpiry: paymentDetails.cardExpiry || '',
-                        cardCvc: paymentDetails.cardCvc || '',
-                        gcashName: paymentDetails.gcashName || '',
-                        gcashNumber: paymentDetails.gcashNumber || ''
-                    },
-                    success: function(result) {
-                        // Hide the modal
-                        bootstrap.Modal.getInstance(document.getElementById('bookingModal')).hide();
-                        
-                        // Show confirmation message
-                        let confirmationMessage = `Booking confirmed!\n\n`;
-                        confirmationMessage += `Booking ID: ${result.bookingId}\n`;
-                        confirmationMessage += `Guest: ${result.guestName}\n`;
-                        confirmationMessage += `Room: ${result.roomName}\n`;
-                        confirmationMessage += `Check-in: ${result.checkInDate}\n`;
-                        confirmationMessage += `Check-out: ${result.checkOutDate}\n`;
-                        confirmationMessage += `Guests: ${result.guests}\n`;
-                        confirmationMessage += `Total: ₱${result.totalPrice.toLocaleString()}\n`;
-                        confirmationMessage += `Payment Method: ${result.paymentMethod}\n`;
-                        
-                        alert(confirmationMessage);
-                        
-                        // Clear the URL parameters if any
-                        if (window.history.replaceState) {
-                            window.history.replaceState({}, document.title, window.location.pathname);
-                        }
-                    },
-                    error: function() {
-                        alert('There was an error processing your booking. Please make sure all required fields are filled correctly.');
-                    }
-                });
+                updateTotalWithServices();
             });
             
-            // Validate booking form
-            function validateBookingForm() {
-                const requiredFields = [
-                    { id: 'guest-name', name: 'Full Name' },
-                    { id: 'guest-email', name: 'Email Address' },
-                    { id: 'guest-phone', name: 'Phone Number' },
-                    { id: 'modal-check-in', name: 'Check-in Date' },
-                    { id: 'modal-check-out', name: 'Check-out Date' }
-                ];
+            $('#chk-breakfast').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#breakfast-guests-container').show();
+                } else {
+                    $('#breakfast-guests-container').hide();
+                }
+                updateTotalWithServices();
+            });
+            
+            $('#chk-gym').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#gym-guests-container').show();
+                } else {
+                    $('#gym-guests-container').hide();
+                }
+                updateTotalWithServices();
+            });
+            
+            $('#pool-guest-count, #breakfast-guest-count, #gym-guest-count').change(function() {
+                updateTotalWithServices();
+            });
+            
+            function updateTotalWithServices() {
+                // Get base room rate total
+                const roomTotal = parseFloat($('#modal-total').val().replace(/,/g, ''));
+                let servicesTotal = 0;
                 
-                let isValid = true;
-                let errorMessage = 'Please fill in the following required fields:\n';
+                // Calculate pool access price
+                if ($('#chk-pool-access').is(':checked')) {
+                    const poolGuests = parseInt($('#pool-guest-count').val());
+                    const extraPoolGuests = Math.max(0, poolGuests - 2);
+                    const poolPrice = extraPoolGuests * 250;
+                    $('#pool-price').val(poolPrice);
+                    servicesTotal += poolPrice;
+                }
                 
-                requiredFields.forEach(field => {
-                    const $field = $(`#${field.id}`);
-                    if (!$field.val().trim()) {
-                        errorMessage += `- ${field.name}\n`;
-                        $field.addClass('is-invalid');
-                        isValid = false;
+                // Calculate breakfast price
+                if ($('#chk-breakfast').is(':checked')) {
+                    const breakfastGuests = parseInt($('#breakfast-guest-count').val());
+                    const extraBreakfastGuests = Math.max(0, breakfastGuests - 2);
+                    const breakfastPrice = extraBreakfastGuests * 650;
+                    $('#breakfast-price').val(breakfastPrice);
+                    servicesTotal += breakfastPrice;
+                }
+                
+                // Calculate gym price
+                if ($('#chk-gym').is(':checked')) {
+                    const gymGuests = parseInt($('#gym-guest-count').val());
+                    const extraGymGuests = Math.max(0, gymGuests - 2);
+                    const gymPrice = extraGymGuests * 400;
+                    $('#gym-price').val(gymPrice);
+                    servicesTotal += gymPrice;
+                }
+                
+                // Display total with services
+                const grandTotal = roomTotal + servicesTotal;
+                $('#modal-total').val(grandTotal.toLocaleString());
+                
+                // Update services total display
+                if (servicesTotal > 0) {
+                    if (!$('#services-total-display').length) {
+                        $('#nights-info').after('<div id="services-total-display" class="text-success small">+ ₱' + servicesTotal.toLocaleString() + ' for additional services</div>');
                     } else {
-                        $field.removeClass('is-invalid');
+                        $('#services-total-display').text('+ ₱' + servicesTotal.toLocaleString() + ' for additional services');
                     }
-                });
-                
-                if (!isValid) {
-                    alert(errorMessage);
+                } else {
+                    $('#services-total-display').remove();
                 }
-                
-                return isValid;
             }
             
-            // Validate card details
-            function validateCardDetails(cardDetails) {
-                // Simple validation for demonstration purposes
-                if (!cardDetails.cardName || cardDetails.cardName.length < 3) {
-                    alert('Please enter a valid cardholder name');
-                    $('#card-name').addClass('is-invalid').focus();
-                    return false;
-                }
-                
-                if (!cardDetails.cardNumber || cardDetails.cardNumber.length < 13) {
-                    alert('Please enter a valid card number');
-                    $('#card-number').addClass('is-invalid').focus();
-                    return false;
-                }
-                
-                if (!cardDetails.cardExpiry || !cardDetails.cardExpiry.match(/^\d{2}\/\d{2}$/)) {
-                    alert('Please enter a valid expiry date (MM/YY format)');
-                    $('#card-expiry').addClass('is-invalid').focus();
-                    return false;
-                }
-                
-                if (!cardDetails.cardCvc || cardDetails.cardCvc.length < 3) {
-                    alert('Please enter a valid CVC code');
-                    $('#card-cvc').addClass('is-invalid').focus();
-                    return false;
-                }
-                
-                return true;
+            // Add event listeners for input changes
+            $('#modal-guests').change(function() {
+                updateServiceForms();
+            });
+            
+            function updateServiceForms() {
+                const guestCount = parseInt($('#modal-guests').val());
+                $('#pool-guest-count').val(guestCount);
+                $('#breakfast-guest-count').val(guestCount);
+                $('#gym-guest-count').val(guestCount);
+                updateTotalWithServices();
             }
             
-            // Validate GCash details
-            function validateGCashDetails(gcashDetails) {
-                if (!gcashDetails.gcashName || gcashDetails.gcashName.length < 3) {
-                    alert('Please enter a valid GCash account name');
-                    $('#gcash-name').addClass('is-invalid').focus();
-                    return false;
-                }
-                
-                if (!gcashDetails.gcashNumber || gcashDetails.gcashNumber.length < 10) {
-                    alert('Please enter a valid GCash account number');
-                    $('#gcash-number').addClass('is-invalid').focus();
-                    return false;
-                }
-                
-                return true;
-            }
+            // Confirm booking button
+            $('#confirm-booking').click(function(e) {
+                e.preventDefault();
+                // Submit the form programmatically
+                $('#booking-form').submit();
+            });
             
             // Filter rooms
             $('.filter-checkbox').change(function() {
@@ -761,6 +758,160 @@
                     $('#details-book-now').data('room-id', roomId);
                 });
             }
+
+            // --- Discount Code Logic ---
+            $('#applyDiscount').on('click', function() {
+                validateDiscountCode();
+            });
+            
+            function validateDiscountCode() {
+                var code = $('#discountCode').val().trim();
+                if (!code) {
+                    $('#discountMessage').html('<span class="text-danger">Please enter a discount code</span>');
+                    resetDiscount();
+                    return;
+                }
+                
+                validateAndApplyDiscount(code);
+            }
+            
+            function validateAndApplyDiscount(code) {
+                var checkIn = $('#modal-check-in').val();
+                var checkOut = $('#modal-check-out').val();
+                var pricePerNight = parseFloat($('#modal-price').val().replace(/,/g, ''));
+                var roomId = $('#modal-room-id').val();
+                if (!checkIn || !checkOut || !roomId) {
+                    $('#discountMessage').html('<span class="text-danger">Please select valid dates and room first</span>');
+                    resetDiscount();
+                    return;
+                }
+                
+                var days = Math.floor((new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24));
+                if (days <= 0) days = 1;
+                var originalPrice = pricePerNight * days;
+                
+                $('#discountMessage').html('<span class="text-info">Validating discount code...</span>');
+                $('#applyDiscount').prop('disabled', true).text('Checking...');
+                
+                $.ajax({
+                    url: '/Booking/ValidateDiscountCode',
+                    type: 'POST',
+                    data: {
+                        code: code,
+                        roomId: roomId,
+                        checkIn: checkIn,
+                        checkOut: checkOut,
+                        numberOfDays: days,
+                        originalPrice: originalPrice
+                    },
+                    success: function(response) {
+                        $('#applyDiscount').prop('disabled', false).text('Apply');
+                        
+                        if (response.isValid) {
+                            $('#discountMessage').html('<span class="text-success"><i class="bi bi-check-circle"></i> ' + response.message + '</span>');
+                            $('#discountSummary').show();
+                            $('#discountText').text(response.discountDescription);
+                            $('#discountedPrice').text('₱' + response.discountedPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+                            $('#appliedDiscountId').val(response.discountId);
+                            $('#discountAmount').val(response.discountAmount);
+                            $('#originalPrice').val(originalPrice);
+                            $('#modal-total').val(response.discountedPrice.toLocaleString());
+                            
+                            // Update the discount code field if it was empty (when using Best Discount)
+                            if ($('#discountCode').val().trim() === '') {
+                                $('#discountCode').val(code);
+                            }
+                        } else {
+                            $('#discountMessage').html('<span class="text-danger"><i class="bi bi-exclamation-circle"></i> ' + response.message + '</span>');
+                            resetDiscount();
+                            $('#modal-total').val(originalPrice.toLocaleString());
+                        }
+                    },
+                    error: function() {
+                        $('#applyDiscount').prop('disabled', false).text('Apply');
+                        $('#discountMessage').html('<span class="text-danger"><i class="bi bi-exclamation-triangle"></i> Error validating discount code. Please try again.</span>');
+                        resetDiscount();
+                    }
+                });
+            }
+            
+            $('#bestDiscountBtn').on('click', function() {
+                findBestDiscount();
+            });
+            
+            function findBestDiscount() {
+                var checkIn = $('#modal-check-in').val();
+                var checkOut = $('#modal-check-out').val();
+                var pricePerNight = parseFloat($('#modal-price').val().replace(/,/g, ''));
+                var roomId = $('#modal-room-id').val();
+                
+                if (!checkIn || !checkOut || !roomId) {
+                    $('#discountMessage').html('<span class="text-danger">Please select valid dates and room first</span>');
+                    resetDiscount();
+                    return;
+                }
+                
+                var days = Math.floor((new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24));
+                if (days <= 0) days = 1;
+                var totalPrice = pricePerNight * days;
+                
+                $('#discountMessage').html('<span class="text-info">Finding best discount...</span>');
+                $('#bestDiscountBtn').prop('disabled', true);
+                
+                $.ajax({
+                    url: '/Booking/GetBestDiscount',
+                    type: 'GET',
+                    data: {
+                        roomId: roomId,
+                        checkIn: checkIn,
+                        checkOut: checkOut,
+                        totalPrice: totalPrice
+                    },
+                    success: function(response) {
+                        $('#bestDiscountBtn').prop('disabled', false);
+                        
+                        if (response.success) {
+                            if (response.hasDiscount) {
+                                // Apply the best discount
+                                $('#discountCode').val(response.code);
+                                validateAndApplyDiscount(response.code);
+                            } else {
+                                $('#discountMessage').html('<span class="text-warning"><i class="bi bi-info-circle"></i> No applicable discounts found for your booking</span>');
+                            }
+                        } else {
+                            $('#discountMessage').html('<span class="text-danger"><i class="bi bi-exclamation-circle"></i> ' + response.message + '</span>');
+                        }
+                    },
+                    error: function() {
+                        $('#bestDiscountBtn').prop('disabled', false);
+                        $('#discountMessage').html('<span class="text-danger"><i class="bi bi-exclamation-triangle"></i> Error finding best discount. Please try again.</span>');
+                    }
+                });
+            }
+            
+            $('#clearDiscountBtn').on('click', function() {
+                $('#discountCode').val('');
+                resetDiscount();
+                updateTotalPrice();
+                $('#discountMessage').html('');
+            });
+            
+            $('#discountCode').on('keypress', function(e) {
+                if (e.which === 13) {
+                    e.preventDefault();
+                    $('#applyDiscount').click();
+                }
+            });
+            
+            function resetDiscount() {
+                $('#discountSummary').hide();
+                $('#discountText').text('');
+                $('#discountedPrice').text('');
+                $('#appliedDiscountId').val('');
+                $('#discountAmount').val(0);
+                $('#originalPrice').val(0);
+            }
+            // --- End Discount Code Logic ---
         });
     </script>
 } 

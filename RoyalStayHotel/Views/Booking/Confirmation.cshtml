@@ -27,10 +27,39 @@
                         <div class="col-md-6">
                             <p><strong>Room Type:</strong> @(Model.Room?.RoomType.ToString() ?? "N/A")</p>
                             <p><strong>Room Number:</strong> @(Model.Room?.RoomNumber ?? "To be assigned")</p>
-                            <p><strong>Total Price:</strong> ₱@Model.TotalPrice.ToString("N0")</p>
+                            <p><strong>Total Price:</strong> ₱@String.Format("{0:N2}", Model.TotalPrice)</p>
                             <p><strong>Status:</strong> <span class="badge bg-success">@Model.Status</span></p>
                         </div>
                     </div>
+
+                    <!-- Discount Information (if applied) -->
+                    @if (Model.AppliedDiscountId.HasValue && Model.DiscountAmount > 0)
+                    {
+                        <div class="alert alert-info mb-4">
+                            <h5 class="alert-heading"><i class="fas fa-tag me-2"></i>Discount Applied!</h5>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-1"><strong>Original Price:</strong> ₱@(Model.OriginalPrice.HasValue ? String.Format("{0:N2}", Model.OriginalPrice.Value) : "0.00")</p>
+                                    <p class="mb-1"><strong>Discount Amount:</strong> ₱@String.Format("{0:N2}", Model.DiscountAmount)</p>
+                                    @if (Model.AppliedDiscount != null)
+                                    {
+                                        <p class="mb-1"><strong>Discount Code:</strong> <span class="badge bg-secondary">@Model.AppliedDiscount.Code</span></p>
+                                        <p class="mb-1"><strong>Discount Name:</strong> @Model.AppliedDiscount.Name</p>
+                                    }
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-1"><strong>Final Price:</strong> ₱@String.Format("{0:N2}", Model.TotalPrice)</p>
+                                    <p class="mb-1"><strong>You Saved:</strong> <span class="text-success fw-bold">₱@String.Format("{0:N2}", Model.DiscountAmount)</span></p>
+                                    @if (Model.OriginalPrice.HasValue && Model.DiscountAmount > 0)
+                                    {
+                                        var savingsPercentage = Math.Round((Model.DiscountAmount.Value / Model.OriginalPrice.Value) * 100, 1);
+                                        <p class="mb-1"><strong>Savings:</strong> <span class="text-success fw-bold">@savingsPercentage%</span></p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
 
                     @if (Model.Room != null)
                     {
@@ -46,6 +75,67 @@
                                     <li><i class="fas fa-bed me-2"></i> @Model.Room.BedType</li>
                                     <li><i class="fas fa-ruler-combined me-2"></i> @Model.Room.RoomSize</li>
                                 </ul>
+                            </div>
+                        </div>
+                    }
+                    
+                    @if (Model.BookedServices != null && Model.BookedServices.Any())
+                    {
+                        <h5 class="border-bottom pb-2 mb-3">Booked Services</h5>
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Service</th>
+                                                <th>Date</th>
+                                                <th>Guests/Quantity</th>
+                                                <th>Price</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var service in Model.BookedServices)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @if (service.Service.Name == "Room Cleaning")
+                                                        {
+                                                            <i class="bi bi-stars text-info me-1"></i>
+                                                        }
+                                                        else if (service.Service.Name == "Swimming Pool")
+                                                        {
+                                                            <i class="bi bi-water text-primary me-1"></i>
+                                                        }
+                                                        else if (service.Service.Name == "Breakfast Buffet")
+                                                        {
+                                                            <i class="bi bi-cup-hot text-warning me-1"></i>
+                                                        }
+                                                        else if (service.Service.Name == "Gym Access")
+                                                        {
+                                                            <i class="bi bi-bicycle text-danger me-1"></i>
+                                                        }
+                                                        @service.Service.Name
+                                                    </td>
+                                                    <td>@service.RequestDate.ToString("MMM d, yyyy")</td>
+                                                    <td>@service.Quantity</td>
+                                                    <td>
+                                                        @if (service.TotalPrice == 0)
+                                                        {
+                                                            <span class="badge bg-success">Complimentary</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>₱@String.Format("{0:N2}", service.TotalPrice)</span>
+                                                        }
+                                                    </td>
+                                                    <td><span class="badge bg-@(service.Status == "Confirmed" ? "success" : "warning")">@service.Status</span></td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     }
@@ -87,5 +177,4 @@
             </div>
         </div>
     </div>
-</div> 
 </div> 

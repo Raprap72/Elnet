@@ -1,0 +1,233 @@
+@model RoyalStayHotel.Models.Payment
+@using RoyalStayHotel.Models
+
+@{
+    ViewData["Title"] = "Payment Details";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Payment #@Model.PaymentId</h1>
+                <div>
+                    <a asp-action="Index" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left fa-sm text-white-50 mr-1"></i> Back to List
+                    </a>
+                    @if (Model.Status == PaymentStatus.Completed)
+                    {
+                        <a asp-action="MarkAsRefunded" asp-route-id="@Model.PaymentId" class="btn btn-warning btn-sm">
+                            <i class="fas fa-undo fa-sm text-white-50 mr-1"></i> Refund Payment
+                        </a>
+                    }
+                    <a href="javascript:window.print();" class="btn btn-info btn-sm">
+                        <i class="fas fa-print fa-sm text-white-50 mr-1"></i> Print
+                    </a>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Payment Information</h6>
+                    <span class="badge @(Model.Status == PaymentStatus.Completed ? "bg-success" : Model.Status == PaymentStatus.Pending ? "bg-warning" : Model.Status == PaymentStatus.Refunded ? "bg-info" : "bg-danger") text-white px-3 py-2">@Model.Status</span>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <h5 class="mb-1">Transaction Details</h5>
+                                <div class="row">
+                                    <div class="col-md-4 font-weight-bold">Payment ID:</div>
+                                    <div class="col-md-8">@Model.PaymentId</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 font-weight-bold">Transaction ID:</div>
+                                    <div class="col-md-8">@(Model.TransactionId ?? "N/A")</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 font-weight-bold">Amount:</div>
+                                    <div class="col-md-8 font-weight-bold text-success">₱@Model.Amount.ToString("N2")</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 font-weight-bold">Payment Method:</div>
+                                    <div class="col-md-8">
+                                        @if (Model.PaymentMethod == PaymentMethod.Cash)
+                                        {
+                                            <span class="badge bg-secondary">Cash</span>
+                                        }
+                                        else if (Model.PaymentMethod == PaymentMethod.CreditCard)
+                                        {
+                                            <span class="badge bg-primary">Credit Card</span>
+                                        }
+                                        else if (Model.PaymentMethod == PaymentMethod.GCash)
+                                        {
+                                            <span class="badge bg-info">GCash</span>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 font-weight-bold">Payment Date:</div>
+                                    <div class="col-md-8">@Model.PaymentDate.ToString("MMM dd, yyyy hh\\:mm tt")</div>
+                                </div>
+                                @if (!string.IsNullOrEmpty(Model.PaymentDetails))
+                                {
+                                    <div class="row">
+                                        <div class="col-md-4 font-weight-bold">Details:</div>
+                                        <div class="col-md-8">@Model.PaymentDetails</div>
+                                    </div>
+                                }
+                                @if (!string.IsNullOrEmpty(Model.Notes))
+                                {
+                                    <div class="row">
+                                        <div class="col-md-4 font-weight-bold">Notes:</div>
+                                        <div class="col-md-8">@Model.Notes</div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <h5 class="mb-1">Booking Information</h5>
+                                @if (Model.Booking != null)
+                                {
+                                    <div class="row">
+                                        <div class="col-md-4 font-weight-bold">Booking ID:</div>
+                                        <div class="col-md-8">
+                                            <a asp-controller="Bookings" asp-action="Details" asp-route-id="@Model.Booking.BookingId">
+                                                @Model.Booking.BookingId
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 font-weight-bold">Status:</div>
+                                        <div class="col-md-8">
+                                            @if (Model.Booking.Status == BookingStatus.Confirmed)
+                                            {
+                                                <span class="badge bg-success">Confirmed</span>
+                                            }
+                                            else if (Model.Booking.Status == BookingStatus.Pending)
+                                            {
+                                                <span class="badge bg-warning">Pending</span>
+                                            }
+                                            else if (Model.Booking.Status == BookingStatus.Cancelled)
+                                            {
+                                                <span class="badge bg-danger">Cancelled</span>
+                                            }
+                                            else if (Model.Booking.Status == BookingStatus.CheckedIn)
+                                            {
+                                                <span class="badge bg-primary">Checked In</span>
+                                            }
+                                            else if (Model.Booking.Status == BookingStatus.CheckedOut)
+                                            {
+                                                <span class="badge bg-secondary">Checked Out</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-info">@Model.Booking.Status</span>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 font-weight-bold">Check-in/out:</div>
+                                        <div class="col-md-8">
+                                            @Model.Booking.CheckInDate.ToString("MMM dd, yyyy") to @Model.Booking.CheckOutDate.ToString("MMM dd, yyyy")
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 font-weight-bold">Total Amount:</div>
+                                        <div class="col-md-8">₱@Model.Booking.TotalPrice.ToString("N2")</div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p class="text-muted">Booking information not available</p>
+                                }
+                            </div>
+
+                            <div class="mb-3 mt-4">
+                                <h5 class="mb-1">Guest Information</h5>
+                                @if (Model.User != null)
+                                {
+                                    <div class="row">
+                                        <div class="col-md-4 font-weight-bold">Name:</div>
+                                        <div class="col-md-8">@Model.User.FullName</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 font-weight-bold">Email:</div>
+                                        <div class="col-md-8">@Model.User.Email</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 font-weight-bold">Phone:</div>
+                                        <div class="col-md-8">@Model.User.PhoneNumber</div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p class="text-muted">Guest information not available</p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.Status == PaymentStatus.Completed)
+            {
+                <div class="text-center mb-4">
+                    <div class="alert alert-success p-3">
+                        <i class="fas fa-check-circle fa-2x mb-3"></i>
+                        <h4>Payment Successful</h4>
+                        <p class="mb-0">This payment has been successfully processed and recorded.</p>
+                    </div>
+                </div>
+            }
+            else if (Model.Status == PaymentStatus.Refunded)
+            {
+                <div class="text-center mb-4">
+                    <div class="alert alert-info p-3">
+                        <i class="fas fa-undo fa-2x mb-3"></i>
+                        <h4>Payment Refunded</h4>
+                        <p class="mb-0">This payment has been refunded to the customer.</p>
+                    </div>
+                </div>
+            }
+            else if (Model.Status == PaymentStatus.Failed)
+            {
+                <div class="text-center mb-4">
+                    <div class="alert alert-danger p-3">
+                        <i class="fas fa-exclamation-circle fa-2x mb-3"></i>
+                        <h4>Payment Failed</h4>
+                        <p class="mb-0">This payment failed to process. Please try again or contact support.</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        @@media print {
+            .btn, .sidebar, .topbar, .card-header, footer {
+                display: none !important;
+            }
+            .container-fluid {
+                width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .card {
+                border: none !important;
+                box-shadow: none !important;
+            }
+            body {
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            h1 {
+                font-size: 1.5rem !important;
+            }
+        }
+    </style>
+} 

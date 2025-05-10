@@ -525,6 +525,7 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
 
         // POST: Admin/Room/UpdateRoomTypeInventory
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateRoomTypeInventory(int id, int totalRooms)
         {
             try

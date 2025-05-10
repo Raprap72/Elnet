@@ -10,22 +10,27 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             base.OnActionExecuting(context);
+
+            // Temporarily disable authentication for demo purposes
+            // All controllers will be accessible without login
             
-            // Skip authentication check for Login and Logout actions
-            if (context.ActionDescriptor.DisplayName != null && 
-                (context.ActionDescriptor.DisplayName.Contains("Login") || 
-                 context.ActionDescriptor.DisplayName.Contains("Logout")))
+            // Original authentication code:
+            /*
+            // Skip authentication for Login and Logout actions
+            if (context.ActionDescriptor.DisplayName?.Contains("Account.Login") == true ||
+                context.ActionDescriptor.DisplayName?.Contains("Account.Logout") == true)
             {
                 return;
             }
-            
+
             // Check if admin is authenticated
             var adminId = context.HttpContext.Session.GetInt32("AdminId");
-            if (adminId == null)
+            if (!adminId.HasValue)
             {
-                // Redirect to login if not authenticated
-                context.Result = new RedirectToActionResult("Login", "Home", new { area = "Admin" });
+                context.Result = new RedirectToActionResult("Login", "Account", new { area = "Admin" });
+                return;
             }
+            */
         }
     }
 } 

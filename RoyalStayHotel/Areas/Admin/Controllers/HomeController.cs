@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace RoyalStayHotel.Areas.Admin.Controllers
 {
-    public class HomeController : AdminBaseController
+    [Area("Admin")]
+    public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
         
@@ -17,31 +18,19 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
             _context = context;
         }
         
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            // Dashboard statistics
-            ViewBag.TotalRooms = await _context.Rooms.CountAsync();
-            ViewBag.AvailableRooms = await _context.Rooms.CountAsync(r => r.AvailabilityStatus == AvailabilityStatus.Available);
-            ViewBag.TotalBookings = await _context.Bookings.CountAsync();
-            ViewBag.PendingBookings = await _context.Bookings.CountAsync(b => b.Status == BookingStatus.Pending);
+            // Simple view that doesn't require authentication
+            var adminId = HttpContext.Session.GetInt32("AdminId");
+            if (adminId.HasValue)
+            {
+                // User is logged in, show welcome message
+                ViewBag.Message = "Welcome to the Admin Dashboard!";
+                return View();
+            }
             
-            // Payment statistics
-            ViewBag.CompletedPayments = await _context.Payments.CountAsync(p => p.PaymentStatus == PaymentStatus.Completed);
-            ViewBag.PendingPayments = await _context.Payments.CountAsync(p => p.PaymentStatus == PaymentStatus.Pending);
-            ViewBag.TotalRevenue = await _context.Payments
-                .Where(p => p.PaymentStatus == PaymentStatus.Completed)
-                .SumAsync(p => p.Amount);
-            
-            // Recent bookings for dashboard
-            var recentBookings = await _context.Bookings
-                .Include(b => b.User)
-                .Include(b => b.Room)
-                .Include(b => b.Payments)
-                .OrderByDescending(b => b.CreatedAt)
-                .Take(5)
-                .ToListAsync();
-                
-            return View(recentBookings);
+            // User is not logged in, redirect to login
+            return RedirectToAction("Login", "Account");
         }
         
         public IActionResult Login()

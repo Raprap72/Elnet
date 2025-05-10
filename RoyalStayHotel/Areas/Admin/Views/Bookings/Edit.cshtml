@@ -8,11 +8,11 @@
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Change Status - Booking #@Model.BookingId</h1>
     <div>
-        <a href="@Url.Action("Details", "Bookings", new { id = Model.BookingId, area = "Admin" })" class="btn btn-info btn-sm mr-2">
-            <i class="fas fa-info-circle fa-sm text-white-50 mr-1"></i> View Details
+        <a href="@Url.Action("Details", "Bookings", new { id = Model.BookingId, area = "Admin" })" class="btn btn-info btn-sm me-2">
+            <i class="fas fa-info-circle fa-sm text-white-50 me-1"></i> View Details
         </a>
         <a href="@Url.Action("Index", "Bookings", new { area = "Admin" })" class="btn btn-secondary btn-sm">
-            <i class="fas fa-arrow-left fa-sm text-white-50 mr-1"></i> Back to List
+            <i class="fas fa-arrow-left fa-sm text-white-50 me-1"></i> Back to List
         </a>
     </div>
 </div>
@@ -20,30 +20,24 @@
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-        <i class="fas fa-check-circle mr-1"></i> @TempData["SuccessMessage"]
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+        <i class="fas fa-check-circle me-1"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
 
 @if (TempData["ErrorMessage"] != null)
 {
     <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
-        <i class="fas fa-exclamation-circle mr-1"></i> @TempData["ErrorMessage"]
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+        <i class="fas fa-exclamation-circle me-1"></i> @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
 
 @if (TempData["InfoMessage"] != null)
 {
     <div class="alert alert-info alert-dismissible fade show mb-4" role="alert">
-        <i class="fas fa-info-circle mr-1"></i> @TempData["InfoMessage"]
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+        <i class="fas fa-info-circle me-1"></i> @TempData["InfoMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
 
@@ -133,59 +127,63 @@
     </div>
     <div class="card-body">
         <div class="alert alert-info mb-4">
-            <i class="fas fa-info-circle mr-2"></i> 
+            <i class="fas fa-info-circle me-2"></i> 
             Changing the booking status will affect room availability. The status will update immediately when you select a new option.
         </div>
         
         <div class="form-group">
-            <label for="statusSelect" class="font-weight-bold">Current Status:</label>
+            <label for="statusSelect" class="form-label fw-bold">Current Status:</label>
             <div class="mb-3">
                 @if (Model.Status == BookingStatus.Confirmed)
                 {
-                    <span class="badge badge-success p-2" style="font-size: 1rem;">Confirmed</span>
+                    <span class="badge bg-success p-2" style="font-size: 1rem;">Confirmed</span>
                 }
                 else if (Model.Status == BookingStatus.Pending)
                 {
-                    <span class="badge badge-warning p-2" style="font-size: 1rem;">Pending</span>
+                    <span class="badge bg-warning p-2" style="font-size: 1rem;">Pending</span>
                 }
                 else if (Model.Status == BookingStatus.Declined)
                 {
-                    <span class="badge badge-danger p-2" style="font-size: 1rem;">Declined</span>
+                    <span class="badge bg-danger p-2" style="font-size: 1rem;">Declined</span>
                 }
                 else if (Model.Status == BookingStatus.CheckedIn)
                 {
-                    <span class="badge badge-info p-2" style="font-size: 1rem;">Checked In</span>
+                    <span class="badge bg-info p-2" style="font-size: 1rem;">Checked In</span>
                 }
                 else if (Model.Status == BookingStatus.CheckedOut)
                 {
-                    <span class="badge badge-secondary p-2" style="font-size: 1rem;">Checked Out</span>
+                    <span class="badge bg-secondary p-2" style="font-size: 1rem;">Checked Out</span>
                 }
                 else if (Model.Status == BookingStatus.Cancelled)
                 {
-                    <span class="badge badge-danger p-2" style="font-size: 1rem;">Cancelled</span>
+                    <span class="badge bg-danger p-2" style="font-size: 1rem;">Cancelled</span>
                 }
                 else if (Model.Status == BookingStatus.NoShow)
                 {
-                    <span class="badge badge-dark p-2" style="font-size: 1rem;">No Show</span>
+                    <span class="badge bg-dark p-2" style="font-size: 1rem;">No Show</span>
                 }
             </div>
             
-            <label for="statusSelect" class="font-weight-bold">Select New Status:</label>
-            <select id="statusSelect" class="form-control form-control-lg">
+            <label for="statusSelect" class="form-label fw-bold">Select New Status:</label>
+            <select id="statusSelect" class="form-select form-select-lg">
                 <option value="">-- Select Status --</option>
-                <option value="@((int)BookingStatus.Pending)" @(Model.Status == BookingStatus.Pending ? "disabled" : "")>Pending</option>
-                <option value="@((int)BookingStatus.Confirmed)" @(Model.Status == BookingStatus.Confirmed ? "disabled" : "")>Approved</option>
-                <option value="@((int)BookingStatus.Declined)" @(Model.Status == BookingStatus.Declined ? "disabled" : "")>Declined</option>
-                <option value="@((int)BookingStatus.CheckedIn)" @(Model.Status == BookingStatus.CheckedIn ? "disabled" : "")>Checked In</option>
-                <option value="@((int)BookingStatus.CheckedOut)" @(Model.Status == BookingStatus.CheckedOut ? "disabled" : "")>Checked Out</option>
-                <option value="@((int)BookingStatus.Cancelled)" @(Model.Status == BookingStatus.Cancelled ? "disabled" : "")>Cancelled</option>
-                <option value="@((int)BookingStatus.NoShow)" @(Model.Status == BookingStatus.NoShow ? "disabled" : "")>No Show</option>
+                @foreach (BookingStatus status in Enum.GetValues(typeof(BookingStatus)))
+                {
+                    if (Model.Status == status)
+                    {
+                        <option value="@((int)status)" disabled>@status</option>
+                    }
+                    else
+                    {
+                        <option value="@((int)status)">@status</option>
+                    }
+                }
             </select>
         </div>
             
         <div class="mt-4 text-center">
             <a href="@Url.Action("Details", "Bookings", new { id = Model.BookingId, area = "Admin" })" class="btn btn-secondary btn-lg">
-                <i class="fas fa-arrow-left mr-1"></i> Back to Details
+                <i class="fas fa-arrow-left me-1"></i> Back to Details
             </a>
         </div>
     </div>

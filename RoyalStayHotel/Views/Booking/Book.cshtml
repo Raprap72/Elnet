@@ -95,11 +95,28 @@
                             <label class="form-check-label" for="termsAgree">I agree to the booking terms and conditions</label>
                         </div>
                         
+                        <!-- Discount Code Section -->
+                        <div class="mb-3">
+                            <label for="discountCode" class="form-label">Discount Code (Optional)</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="discountCode" name="discountCode" placeholder="Enter code if you have one">
+                                <button type="button" id="applyDiscount" class="btn btn-secondary">Apply</button>
+                            </div>
+                            <div id="discountMessage" class="form-text mt-2"></div>
+                        </div>
+                        
                         <div class="alert alert-info">
                             <h5>Booking Summary</h5>
                             <p class="mb-1">Room: @room.RoomType Room #@room.RoomNumber</p>
                             <p class="mb-1">Rate: ₱@room.PricePerNight.ToString("N0") per night</p>
                             <p class="mb-1">Total will be calculated based on your length of stay</p>
+                            <div id="discountSummary" style="display:none;">
+                                <p class="mb-1 text-success" id="discountText"></p>
+                                <p class="mb-1">Discounted Price: <span id="discountedPrice" class="fw-bold"></span></p>
+                            </div>
+                            <input type="hidden" id="appliedDiscountId" name="appliedDiscountId" value="">
+                            <input type="hidden" id="discountAmount" name="discountAmount" value="0">
+                            <input type="hidden" id="originalPrice" name="originalPrice" value="0">
                         </div>
                         
                         <button type="submit" class="btn btn-primary w-100">Confirm Booking</button>
@@ -130,7 +147,143 @@
                 if ($('#checkOut').val() && new Date($('#checkOut').val()) <= checkInDate) {
                     $('#checkOut').val(nextDayStr);
                 }
+                
+                // Recalculate total price
+                calculateTotalPrice();
             });
+            
+            // Calculate total price when dates change
+            function calculateTotalPrice() {
+                var checkIn = new Date($('#checkIn').val());
+                var checkOut = new Date($('#checkOut').val());
+                
+                if (isValidDate(checkIn) && isValidDate(checkOut) && checkOut > checkIn) {
+                    var days = Math.floor((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+                    var pricePerNight = @room.PricePerNight;
+                    var totalPrice = days * pricePerNight;
+                    
+                    // Update UI with calculated price
+                    $('.alert-info p:contains("Total will be calculated")').text('Total for ' + days + ' night(s): ₱' + totalPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+                    $('#originalPrice').val(totalPrice);
+                    
+                    // Clear any existing discount if dates changed
+                    if ($('#appliedDiscountId').val()) {
+                        // If we have a discount code entered, try to reapply it with the new dates
+                        if ($('#discountCode').val().trim()) {
+                            $('#applyDiscount').click();
+                        } else {
+                            resetDiscount();
+                        }
+                    }
+                    
+                    return totalPrice;
+                }
+                return 0;
+            }
+            
+            function isValidDate(d) {
+                return d instanceof Date && !isNaN(d);
+            }
+            
+            // Apply discount code
+            $('#applyDiscount').on('click', function() {
+                var code = $('#discountCode').val().trim();
+                if (!code) {
+                    $('#discountMessage').html('<span class="text-danger">Please enter a discount code</span>');
+                    resetDiscount();
+                    return;
+                }
+                
+                var checkIn = new Date($('#checkIn').val());
+                var checkOut = new Date($('#checkOut').val());
+                
+                if (!isValidDate(checkIn) || !isValidDate(checkOut) || checkOut <= checkIn) {
+                    $('#discountMessage').html('<span class="text-danger">Please select valid check-in and check-out dates first</span>');
+                    resetDiscount();
+                    return;
+                }
+                
+                var days = Math.floor((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+                var roomId = @room.RoomId;
+                var totalPrice = calculateTotalPrice();
+                
+                // Show loading indicator
+                $('#discountMessage').html('<span class="text-info">Validating discount code...</span>');
+                $('#applyDiscount').prop('disabled', true).text('Checking...');
+                
+                // AJAX call to validate and apply discount
+                $.ajax({
+                    url: '@Url.Action("ValidateDiscountCode", "Booking")',
+                    type: 'POST',
+                    data: {
+                        code: code,
+                        roomId: roomId,
+                        checkIn: $('#checkIn').val(),
+                        checkOut: $('#checkOut').val(),
+                        numberOfDays: days,
+                        originalPrice: totalPrice
+                    },
+                    success: function(response) {
+                        $('#applyDiscount').prop('disabled', false).text('Apply');
+                        
+                        if (response.isValid) {
+                            $('#discountMessage').html('<span class="text-success"><i class="bi bi-check-circle"></i> ' + response.message + '</span>');
+                            $('#discountSummary').show();
+                            $('#discountText').text(response.discountDescription);
+                            $('#discountedPrice').text('₱' + response.discountedPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+                            $('#appliedDiscountId').val(response.discountId);
+                            $('#discountAmount').val(response.discountAmount);
+                            
+                            // Update original price hidden field
+                            $('#originalPrice').val(totalPrice);
+                            
+                            // Visual effect for original price
+                            var priceLine = $('.alert-info p:contains("night(s)")');
+                            if (priceLine.length > 0) {
+                                priceLine.html(
+                                    'Original price: <del>₱' + totalPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</del><br>' +
+                                    'Discounted price: <strong class="text-success">₱' + response.discountedPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + '</strong>'
+                                );
+                            }
+                        } else {
+                            $('#discountMessage').html('<span class="text-danger"><i class="bi bi-exclamation-circle"></i> ' + response.message + '</span>');
+                            resetDiscount();
+                            
+                            // Reset price display
+                            var days = Math.floor((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+                            var totalPrice = days * @room.PricePerNight;
+                            $('.alert-info p:contains("night(s)")').text('Total for ' + days + ' night(s): ₱' + totalPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+                        }
+                    },
+                    error: function() {
+                        $('#applyDiscount').prop('disabled', false).text('Apply');
+                        $('#discountMessage').html('<span class="text-danger"><i class="bi bi-exclamation-triangle"></i> Error validating discount code. Please try again.</span>');
+                        resetDiscount();
+                    }
+                });
+            });
+            
+            // Pressing Enter in the discount code field triggers the Apply button
+            $('#discountCode').on('keypress', function(e) {
+                if (e.which === 13) {
+                    e.preventDefault();
+                    $('#applyDiscount').click();
+                }
+            });
+            
+            function resetDiscount() {
+                $('#discountSummary').hide();
+                $('#discountText').text('');
+                $('#discountedPrice').text('');
+                $('#appliedDiscountId').val('');
+                $('#discountAmount').val(0);
+            }
+            
+            // Recalculate when dates change
+            $('#checkIn, #checkOut').on('change', calculateTotalPrice);
+            
+            // Initial calculation
+            calculateTotalPrice();
         });
     </script>
 } 

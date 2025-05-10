@@ -14,6 +14,9 @@ namespace RoyalStayHotel.Models
         [Required]
         public string RoomNumber { get; set; } = string.Empty;
         
+        // Foreign key to RoomTypeInfo
+        public int? RoomTypeInfoId { get; set; }
+        
         [Required]
         public RoomType RoomType { get; set; }
         
@@ -65,6 +68,10 @@ namespace RoyalStayHotel.Models
         // Navigation properties
         public virtual ICollection<Booking>? Bookings { get; set; }
         public virtual ICollection<Review>? Reviews { get; set; }
+        
+        // Navigation property to RoomTypeInfo
+        [ForeignKey("RoomTypeInfoId")]
+        public virtual RoomTypeInfo? RoomTypeInfo { get; set; }
     }
     
     public enum RoomType

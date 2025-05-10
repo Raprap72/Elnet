@@ -1,14 +1,20 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RoyalStayHotel.Models
 {
     public class User
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
         
-        // Add Id property for backward compatibility
-        public int Id { get => UserId; set => UserId = value; }
+        // Make Id nullable to prevent SQL constraint errors
+        // Non-nullable was causing SQL errors when inserting new users
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int? Id { get; set; }
         
         [Required]
         [Display(Name = "Full Name")]
@@ -46,6 +52,10 @@ namespace RoyalStayHotel.Models
     {
         Customer,
         Admin,
-        Staff
+        Staff,
+        Receptionist,
+        Housekeeping,
+        Maintenance,
+        Guest
     }
 } 

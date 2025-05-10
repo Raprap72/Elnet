@@ -1,0 +1,150 @@
+@model IEnumerable<RoyalStayHotel.Models.BookedService>
+@{
+    ViewData["Title"] = "Service Bookings";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Service Bookings</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/Admin/Dashboard">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="/Admin/Services">Services</a></li>
+        <li class="breadcrumb-item active">Bookings</li>
+    </ol>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Service Bookings List
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="bookingsTable">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Room</th>
+                            <th>Request Date</th>
+                            <th>Request Time</th>
+                            <th>Notes</th>
+                            <th>Quantity</th>
+                            <th>Total Price</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var booking in Model)
+                        {
+                            <tr>
+                                <td>@booking.Service?.Name</td>
+                                <td>@booking.Booking?.Room?.RoomNumber</td>
+                                <td>@booking.RequestDate.ToShortDateString()</td>
+                                <td>
+                                    @{
+                                        try
+                                        {
+                                            @booking.RequestTime.ToString("hh\\:mm tt")
+                                        }
+                                        catch
+                                        {
+                                            <text>Not specified</text>
+                                        }
+                                    }
+                                </td>
+                                <td>@booking.Notes</td>
+                                <td>@booking.Quantity</td>
+                                <td>@booking.TotalPrice.ToString("C")</td>
+                                <td>
+                                    <span class="badge @(booking.Status switch {
+                                        "Pending" => "bg-warning",
+                                        "Confirmed" => "bg-primary",
+                                        "Completed" => "bg-success",
+                                        "Cancelled" => "bg-danger",
+                                        _ => "bg-secondary"
+                                    })">@booking.Status</span>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Update Status
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            @if (booking.Status != "Pending")
+                                            {
+                                                <li>
+                                                    <form asp-action="UpdateBookingStatus" method="post" class="d-inline">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="id" value="@booking.Id" />
+                                                        <input type="hidden" name="status" value="Pending" />
+                                                        <button type="submit" class="dropdown-item">Mark as Pending</button>
+                                                    </form>
+                                                </li>
+                                            }
+                                            @if (booking.Status != "Confirmed")
+                                            {
+                                                <li>
+                                                    <form asp-action="UpdateBookingStatus" method="post" class="d-inline">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="id" value="@booking.Id" />
+                                                        <input type="hidden" name="status" value="Confirmed" />
+                                                        <button type="submit" class="dropdown-item">Mark as Confirmed</button>
+                                                    </form>
+                                                </li>
+                                            }
+                                            @if (booking.Status != "Completed")
+                                            {
+                                                <li>
+                                                    <form asp-action="UpdateBookingStatus" method="post" class="d-inline">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="id" value="@booking.Id" />
+                                                        <input type="hidden" name="status" value="Completed" />
+                                                        <button type="submit" class="dropdown-item">Mark as Completed</button>
+                                                    </form>
+                                                </li>
+                                            }
+                                            @if (booking.Status != "Cancelled")
+                                            {
+                                                <li>
+                                                    <form asp-action="UpdateBookingStatus" method="post" class="d-inline">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="id" value="@booking.Id" />
+                                                        <input type="hidden" name="status" value="Cancelled" />
+                                                        <button type="submit" class="dropdown-item">Mark as Cancelled</button>
+                                                    </form>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#bookingsTable').DataTable({
+                order: [[2, 'desc']], // Sort by Request Date by default
+            });
+
+            // Auto-dismiss alerts after 5 seconds
+            setTimeout(function () {
+                $('.alert').alert('close');
+            }, 5000);
+        });
+    </script>
+} 

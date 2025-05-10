@@ -1,40 +1,60 @@
 using Microsoft.AspNetCore.Mvc;
 using RoyalStayHotel.Models;
 using RoyalStayHotel.Models.ViewModels;
+using RoyalStayHotel.Data;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace RoyalStayHotel.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly ApplicationDbContext _context;
+
+        public AccountController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         // In a real application, this would use Identity or a database
         private static List<User> _users = new List<User>();
 
+        [HttpGet]
         public IActionResult Login()
         {
-            return View();
+            return View(new LoginViewModel { Username = string.Empty, Password = string.Empty, RememberMe = false });
         }
 
         [HttpPost]
-        public IActionResult Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var user = _users.FirstOrDefault(u => u.Username == model.Username && u.Password == model.Password);
+            var user = _context.Users.FirstOrDefault(u => u.Username == model.Username && u.Password == model.Password);
             if (user == null)
             {
-                ModelState.AddModelError("", "Invalid login attempt.");
+                ModelState.AddModelError("", "Invalid username or password.");
                 return View(model);
             }
 
-            // In a real application, we would sign in the user
-            // using ASP.NET Core Identity
-
-            return RedirectToAction("Index", "Home");
+            // Redirect based on user type
+            if (user.UserType == UserType.Admin)
+            {
+                return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
+            }
+            else if (user.UserType == UserType.Staff)
+            {
+                return RedirectToAction("Index", "Dashboard", new { area = "Staff" });
+            }
+            else
+            {
+                ModelState.AddModelError("", "Access denied. Only staff and admin can log in here.");
+                return View(model);
+            }
         }
 
         public IActionResult Register()
@@ -81,8 +101,7 @@ namespace RoyalStayHotel.Controllers
         public IActionResult Logout()
         {
             // In a real application, we would sign out the user
-
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login");
         }
     }
 } 

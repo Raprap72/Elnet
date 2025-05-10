@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "s9lMhfGNmMEvBNKDkS9lUG2YZaU5sWsQpj8csUStfYY=",
+  "Hash": "Fdxdc4dtdvCfFESXlmHrKozYlQmAha3M6G/6HN8CqFk=",
   "Source": "RoyalStayHotel",
   "BasePath": "_content/RoyalStayHotel",
   "Mode": "Default",
@@ -206,12 +206,12 @@
       "OriginalItemSpec": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\lib\\bootstrap\\css\\bootstrap-utilities.rtl.css.map"
     },
     {
-      "Identity": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\3ajmy1kiti-g5uqm53td7.gz",
+      "Identity": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\3ajmy1kiti-wq5pjgfbwx.gz",
       "SourceId": "RoyalStayHotel",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "_content/RoyalStayHotel",
-      "RelativePath": "css/admin#[.{fingerprint=g5uqm53td7}]?.css.gz",
+      "RelativePath": "css/admin#[.{fingerprint=wq5pjgfbwx}]?.css.gz",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Alternative",
@@ -220,8 +220,8 @@
       "RelatedAsset": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\css\\admin.css",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "ued876p148",
-      "Integrity": "Gvs7fu/UXYayxArGUji0GvfIMYU4CDIQLDkOB9U5AzY=",
+      "Fingerprint": "0bvpkvp9je",
+      "Integrity": "RFU/mbAXtAHX/idRmFAU/HhXmTuqKeqOm99riDABDiI=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\css\\admin.css"
@@ -1697,6 +1697,27 @@
       "OriginalItemSpec": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\scopedcss\\bundle\\RoyalStayHotel.styles.css"
     },
     {
+      "Identity": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\j448oxg26e-7o8i1o3vwt.gz",
+      "SourceId": "RoyalStayHotel",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\",
+      "BasePath": "_content/RoyalStayHotel",
+      "RelativePath": "js/admin#[.{fingerprint=7o8i1o3vwt}]?.js.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\js\\admin.js",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "allfjpls50",
+      "Integrity": "8p1jJzwJonPpx49ZqrnfqdWu0zRqNdyVS2ydDOLEeZ0=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\js\\admin.js"
+    },
+    {
       "Identity": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\j7kqlkfj6q-slkxxxvi35.gz",
       "SourceId": "RoyalStayHotel",
       "SourceType": "Discovered",
@@ -2915,12 +2936,12 @@
       "OriginalItemSpec": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
     },
     {
-      "Identity": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\xm3n5fi5o6-5fzltc1aso.gz",
+      "Identity": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\xm3n5fi5o6-4iztbxhue2.gz",
       "SourceId": "RoyalStayHotel",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "_content/RoyalStayHotel",
-      "RelativePath": "js/site#[.{fingerprint=5fzltc1aso}]?.js.gz",
+      "RelativePath": "js/site#[.{fingerprint=4iztbxhue2}]?.js.gz",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Alternative",
@@ -2929,8 +2950,8 @@
       "RelatedAsset": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\js\\site.js",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "lzwtwnlf2f",
-      "Integrity": "QTheajiaK7Vz88LI+1SaSwyMZCC4VOcKpAujHqSvCo8=",
+      "Fingerprint": "jjyykk4r48",
+      "Integrity": "obhAccn2PC6qya1LWm/v/sEXBV/X/TSQK8MlHdPAySA=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\js\\site.js"
@@ -3223,8 +3244,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "g5uqm53td7",
-      "Integrity": "3GqQgSK35d6eu2KhIjgbas6gKeGtiwe9ymAKuwJXQl4=",
+      "Fingerprint": "wq5pjgfbwx",
+      "Integrity": "qDOKKaxPjQnZ6EpJl6bla3qsLj01tdwkiGxYvtFdQ68=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\admin.css"
@@ -3349,11 +3370,32 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
+      "Fingerprint": "gahi0tqil4",
+      "Integrity": "CNyOtxobVHMDq1Ejsae/L0cBbyIGgwRa49OwG/scQFU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\deluxe_room.png"
+    },
+    {
+      "Identity": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\images\\deluxe_room1.png",
+      "SourceId": "RoyalStayHotel",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\",
+      "BasePath": "_content/RoyalStayHotel",
+      "RelativePath": "images/deluxe_room1#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
       "Fingerprint": "qewh5kxdcn",
       "Integrity": "rvwrbCgL/1H0J7anYHdPi74vqz+Cb3JcXWC8ylHwnDM=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\deluxe_room.png"
+      "OriginalItemSpec": "wwwroot\\images\\deluxe_room1.png"
     },
     {
       "Identity": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\images\\deluxe-suite_room.png",
@@ -3375,27 +3417,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\deluxe-suite_room.png"
-    },
-    {
-      "Identity": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\images\\delx_suite.png",
-      "SourceId": "RoyalStayHotel",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\",
-      "BasePath": "_content/RoyalStayHotel",
-      "RelativePath": "images/delx_suite#[.{fingerprint}]?.png",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "Fingerprint": "gahi0tqil4",
-      "Integrity": "CNyOtxobVHMDq1Ejsae/L0cBbyIGgwRa49OwG/scQFU=",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\delx_suite.png"
     },
     {
       "Identity": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\images\\delxe.png",
@@ -3713,6 +3734,27 @@
       "OriginalItemSpec": "wwwroot\\images\\Thumbs.db"
     },
     {
+      "Identity": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\js\\admin.js",
+      "SourceId": "RoyalStayHotel",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\",
+      "BasePath": "_content/RoyalStayHotel",
+      "RelativePath": "js/admin#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "7o8i1o3vwt",
+      "Integrity": "mRJ/SGLelOj02HtOa09dmPVIhw1iemFaIrmL2GvjrQg=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\admin.js"
+    },
+    {
       "Identity": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\js\\site.js",
       "SourceId": "RoyalStayHotel",
       "SourceType": "Discovered",
@@ -3727,8 +3769,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "5fzltc1aso",
-      "Integrity": "b9z/JX71lCi8FNYF78zVaBzD1a5kFMM7O3ufwS8qiSY=",
+      "Fingerprint": "4iztbxhue2",
+      "Integrity": "/Pe/jY7JYJpE1VcfeIhoBivpMLPSvw7Bwt1BoKnztgA=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\site.js"
@@ -8798,12 +8840,12 @@
   "Endpoints": [
     {
       "Route": "css/admin.css",
-      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\3ajmy1kiti-g5uqm53td7.gz",
+      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\3ajmy1kiti-wq5pjgfbwx.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.001071811361"
+          "Quality": "0.000478468900"
         }
       ],
       "ResponseHeaders": [
@@ -8813,15 +8855,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "932"
+          "Value": "2089"
         },
         {
           "Name": "ETag",
-          "Value": "\"Gvs7fu/UXYayxArGUji0GvfIMYU4CDIQLDkOB9U5AzY=\""
+          "Value": "\"RFU/mbAXtAHX/idRmFAU/HhXmTuqKeqOm99riDABDiI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 11 Apr 2025 05:31:11 GMT"
+          "Value": "Sun, 27 Apr 2025 14:24:25 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -8841,13 +8883,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"3GqQgSK35d6eu2KhIjgbas6gKeGtiwe9ymAKuwJXQl4=\""
+          "Value": "W/\"qDOKKaxPjQnZ6EpJl6bla3qsLj01tdwkiGxYvtFdQ68=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-3GqQgSK35d6eu2KhIjgbas6gKeGtiwe9ymAKuwJXQl4="
+          "Value": "sha256-qDOKKaxPjQnZ6EpJl6bla3qsLj01tdwkiGxYvtFdQ68="
         }
       ]
     },
@@ -8862,7 +8904,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "2954"
+          "Value": "7286"
         },
         {
           "Name": "Content-Type",
@@ -8870,11 +8912,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"3GqQgSK35d6eu2KhIjgbas6gKeGtiwe9ymAKuwJXQl4=\""
+          "Value": "\"qDOKKaxPjQnZ6EpJl6bla3qsLj01tdwkiGxYvtFdQ68=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 11 Apr 2025 05:31:11 GMT"
+          "Value": "Sun, 27 Apr 2025 14:24:25 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -8884,13 +8926,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-3GqQgSK35d6eu2KhIjgbas6gKeGtiwe9ymAKuwJXQl4="
+          "Value": "sha256-qDOKKaxPjQnZ6EpJl6bla3qsLj01tdwkiGxYvtFdQ68="
         }
       ]
     },
     {
       "Route": "css/admin.css.gz",
-      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\3ajmy1kiti-g5uqm53td7.gz",
+      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\3ajmy1kiti-wq5pjgfbwx.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -8899,7 +8941,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "932"
+          "Value": "2089"
         },
         {
           "Name": "Content-Type",
@@ -8907,11 +8949,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"Gvs7fu/UXYayxArGUji0GvfIMYU4CDIQLDkOB9U5AzY=\""
+          "Value": "\"RFU/mbAXtAHX/idRmFAU/HhXmTuqKeqOm99riDABDiI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 11 Apr 2025 05:31:11 GMT"
+          "Value": "Sun, 27 Apr 2025 14:24:25 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -8929,18 +8971,18 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-Gvs7fu/UXYayxArGUji0GvfIMYU4CDIQLDkOB9U5AzY="
+          "Value": "sha256-RFU/mbAXtAHX/idRmFAU/HhXmTuqKeqOm99riDABDiI="
         }
       ]
     },
     {
-      "Route": "css/admin.g5uqm53td7.css",
-      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\3ajmy1kiti-g5uqm53td7.gz",
+      "Route": "css/admin.wq5pjgfbwx.css",
+      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\3ajmy1kiti-wq5pjgfbwx.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.001071811361"
+          "Quality": "0.000478468900"
         }
       ],
       "ResponseHeaders": [
@@ -8950,15 +8992,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "932"
+          "Value": "2089"
         },
         {
           "Name": "ETag",
-          "Value": "\"Gvs7fu/UXYayxArGUji0GvfIMYU4CDIQLDkOB9U5AzY=\""
+          "Value": "\"RFU/mbAXtAHX/idRmFAU/HhXmTuqKeqOm99riDABDiI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 11 Apr 2025 05:31:11 GMT"
+          "Value": "Sun, 27 Apr 2025 14:24:25 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -8978,13 +9020,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"3GqQgSK35d6eu2KhIjgbas6gKeGtiwe9ymAKuwJXQl4=\""
+          "Value": "W/\"qDOKKaxPjQnZ6EpJl6bla3qsLj01tdwkiGxYvtFdQ68=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "g5uqm53td7"
+          "Value": "wq5pjgfbwx"
         },
         {
           "Name": "label",
@@ -8992,12 +9034,12 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-3GqQgSK35d6eu2KhIjgbas6gKeGtiwe9ymAKuwJXQl4="
+          "Value": "sha256-qDOKKaxPjQnZ6EpJl6bla3qsLj01tdwkiGxYvtFdQ68="
         }
       ]
     },
     {
-      "Route": "css/admin.g5uqm53td7.css",
+      "Route": "css/admin.wq5pjgfbwx.css",
       "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\css\\admin.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -9007,7 +9049,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "2954"
+          "Value": "7286"
         },
         {
           "Name": "Content-Type",
@@ -9015,11 +9057,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"3GqQgSK35d6eu2KhIjgbas6gKeGtiwe9ymAKuwJXQl4=\""
+          "Value": "\"qDOKKaxPjQnZ6EpJl6bla3qsLj01tdwkiGxYvtFdQ68=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 11 Apr 2025 05:31:11 GMT"
+          "Value": "Sun, 27 Apr 2025 14:24:25 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -9029,7 +9071,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "g5uqm53td7"
+          "Value": "wq5pjgfbwx"
         },
         {
           "Name": "label",
@@ -9037,13 +9079,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-3GqQgSK35d6eu2KhIjgbas6gKeGtiwe9ymAKuwJXQl4="
+          "Value": "sha256-qDOKKaxPjQnZ6EpJl6bla3qsLj01tdwkiGxYvtFdQ68="
         }
       ]
     },
     {
-      "Route": "css/admin.g5uqm53td7.css.gz",
-      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\3ajmy1kiti-g5uqm53td7.gz",
+      "Route": "css/admin.wq5pjgfbwx.css.gz",
+      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\3ajmy1kiti-wq5pjgfbwx.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -9052,7 +9094,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "932"
+          "Value": "2089"
         },
         {
           "Name": "Content-Type",
@@ -9060,11 +9102,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"Gvs7fu/UXYayxArGUji0GvfIMYU4CDIQLDkOB9U5AzY=\""
+          "Value": "\"RFU/mbAXtAHX/idRmFAU/HhXmTuqKeqOm99riDABDiI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 11 Apr 2025 05:31:11 GMT"
+          "Value": "Sun, 27 Apr 2025 14:24:25 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -9082,7 +9124,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "g5uqm53td7"
+          "Value": "wq5pjgfbwx"
         },
         {
           "Name": "label",
@@ -9090,7 +9132,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-Gvs7fu/UXYayxArGUji0GvfIMYU4CDIQLDkOB9U5AzY="
+          "Value": "sha256-RFU/mbAXtAHX/idRmFAU/HhXmTuqKeqOm99riDABDiI="
         }
       ]
     },
@@ -9937,8 +9979,90 @@
       ]
     },
     {
+      "Route": "images/deluxe_room.gahi0tqil4.png",
+      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\images\\deluxe_room.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "598988"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"CNyOtxobVHMDq1Ejsae/L0cBbyIGgwRa49OwG/scQFU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 05:31:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "gahi0tqil4"
+        },
+        {
+          "Name": "label",
+          "Value": "images/deluxe_room.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-CNyOtxobVHMDq1Ejsae/L0cBbyIGgwRa49OwG/scQFU="
+        }
+      ]
+    },
+    {
       "Route": "images/deluxe_room.png",
       "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\images\\deluxe_room.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "598988"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"CNyOtxobVHMDq1Ejsae/L0cBbyIGgwRa49OwG/scQFU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 11 Apr 2025 05:31:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-CNyOtxobVHMDq1Ejsae/L0cBbyIGgwRa49OwG/scQFU="
+        }
+      ]
+    },
+    {
+      "Route": "images/deluxe_room1.png",
+      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\images\\deluxe_room1.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -9974,8 +10098,8 @@
       ]
     },
     {
-      "Route": "images/deluxe_room.qewh5kxdcn.png",
-      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\images\\deluxe_room.png",
+      "Route": "images/deluxe_room1.qewh5kxdcn.png",
+      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\images\\deluxe_room1.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -10010,7 +10134,7 @@
         },
         {
           "Name": "label",
-          "Value": "images/deluxe_room.png"
+          "Value": "images/deluxe_room1.png"
         },
         {
           "Name": "integrity",
@@ -10097,88 +10221,6 @@
         {
           "Name": "integrity",
           "Value": "sha256-rvwrbCgL/1H0J7anYHdPi74vqz+Cb3JcXWC8ylHwnDM="
-        }
-      ]
-    },
-    {
-      "Route": "images/delx_suite.gahi0tqil4.png",
-      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\images\\delx_suite.png",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "598988"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "image/png"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"CNyOtxobVHMDq1Ejsae/L0cBbyIGgwRa49OwG/scQFU=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Fri, 11 Apr 2025 05:31:11 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "gahi0tqil4"
-        },
-        {
-          "Name": "label",
-          "Value": "images/delx_suite.png"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-CNyOtxobVHMDq1Ejsae/L0cBbyIGgwRa49OwG/scQFU="
-        }
-      ]
-    },
-    {
-      "Route": "images/delx_suite.png",
-      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\images\\delx_suite.png",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "598988"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "image/png"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"CNyOtxobVHMDq1Ejsae/L0cBbyIGgwRa49OwG/scQFU=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Fri, 11 Apr 2025 05:31:11 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=3600, must-revalidate"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-CNyOtxobVHMDq1Ejsae/L0cBbyIGgwRa49OwG/scQFU="
         }
       ]
     },
@@ -11413,13 +11455,13 @@
       ]
     },
     {
-      "Route": "js/site.5fzltc1aso.js",
-      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\xm3n5fi5o6-5fzltc1aso.gz",
+      "Route": "js/admin.7o8i1o3vwt.js",
+      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\j448oxg26e-7o8i1o3vwt.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.001577287066"
+          "Quality": "0.000630914826"
         }
       ],
       "ResponseHeaders": [
@@ -11429,15 +11471,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "633"
+          "Value": "1584"
         },
         {
           "Name": "ETag",
-          "Value": "\"QTheajiaK7Vz88LI+1SaSwyMZCC4VOcKpAujHqSvCo8=\""
+          "Value": "\"8p1jJzwJonPpx49ZqrnfqdWu0zRqNdyVS2ydDOLEeZ0=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 11 Apr 2025 05:31:11 GMT"
+          "Value": "Sat, 26 Apr 2025 05:27:55 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -11457,13 +11499,311 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"b9z/JX71lCi8FNYF78zVaBzD1a5kFMM7O3ufwS8qiSY=\""
+          "Value": "W/\"mRJ/SGLelOj02HtOa09dmPVIhw1iemFaIrmL2GvjrQg=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "5fzltc1aso"
+          "Value": "7o8i1o3vwt"
+        },
+        {
+          "Name": "label",
+          "Value": "js/admin.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-mRJ/SGLelOj02HtOa09dmPVIhw1iemFaIrmL2GvjrQg="
+        }
+      ]
+    },
+    {
+      "Route": "js/admin.7o8i1o3vwt.js",
+      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\js\\admin.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5088"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"mRJ/SGLelOj02HtOa09dmPVIhw1iemFaIrmL2GvjrQg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 26 Apr 2025 05:27:55 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "7o8i1o3vwt"
+        },
+        {
+          "Name": "label",
+          "Value": "js/admin.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-mRJ/SGLelOj02HtOa09dmPVIhw1iemFaIrmL2GvjrQg="
+        }
+      ]
+    },
+    {
+      "Route": "js/admin.7o8i1o3vwt.js.gz",
+      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\j448oxg26e-7o8i1o3vwt.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1584"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"8p1jJzwJonPpx49ZqrnfqdWu0zRqNdyVS2ydDOLEeZ0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 26 Apr 2025 05:27:55 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "7o8i1o3vwt"
+        },
+        {
+          "Name": "label",
+          "Value": "js/admin.js.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-8p1jJzwJonPpx49ZqrnfqdWu0zRqNdyVS2ydDOLEeZ0="
+        }
+      ]
+    },
+    {
+      "Route": "js/admin.js",
+      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\j448oxg26e-7o8i1o3vwt.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000630914826"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1584"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"8p1jJzwJonPpx49ZqrnfqdWu0zRqNdyVS2ydDOLEeZ0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 26 Apr 2025 05:27:55 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"mRJ/SGLelOj02HtOa09dmPVIhw1iemFaIrmL2GvjrQg=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-mRJ/SGLelOj02HtOa09dmPVIhw1iemFaIrmL2GvjrQg="
+        }
+      ]
+    },
+    {
+      "Route": "js/admin.js",
+      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\js\\admin.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5088"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"mRJ/SGLelOj02HtOa09dmPVIhw1iemFaIrmL2GvjrQg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 26 Apr 2025 05:27:55 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-mRJ/SGLelOj02HtOa09dmPVIhw1iemFaIrmL2GvjrQg="
+        }
+      ]
+    },
+    {
+      "Route": "js/admin.js.gz",
+      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\j448oxg26e-7o8i1o3vwt.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1584"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"8p1jJzwJonPpx49ZqrnfqdWu0zRqNdyVS2ydDOLEeZ0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 26 Apr 2025 05:27:55 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-8p1jJzwJonPpx49ZqrnfqdWu0zRqNdyVS2ydDOLEeZ0="
+        }
+      ]
+    },
+    {
+      "Route": "js/site.4iztbxhue2.js",
+      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\xm3n5fi5o6-4iztbxhue2.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000768049155"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1301"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"obhAccn2PC6qya1LWm/v/sEXBV/X/TSQK8MlHdPAySA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 08 May 2025 17:02:50 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"/Pe/jY7JYJpE1VcfeIhoBivpMLPSvw7Bwt1BoKnztgA=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "4iztbxhue2"
         },
         {
           "Name": "label",
@@ -11471,12 +11811,12 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-b9z/JX71lCi8FNYF78zVaBzD1a5kFMM7O3ufwS8qiSY="
+          "Value": "sha256-/Pe/jY7JYJpE1VcfeIhoBivpMLPSvw7Bwt1BoKnztgA="
         }
       ]
     },
     {
-      "Route": "js/site.5fzltc1aso.js",
+      "Route": "js/site.4iztbxhue2.js",
       "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\wwwroot\\js\\site.js",
       "Selectors": [],
       "ResponseHeaders": [
@@ -11486,7 +11826,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1250"
+          "Value": "3833"
         },
         {
           "Name": "Content-Type",
@@ -11494,11 +11834,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"b9z/JX71lCi8FNYF78zVaBzD1a5kFMM7O3ufwS8qiSY=\""
+          "Value": "\"/Pe/jY7JYJpE1VcfeIhoBivpMLPSvw7Bwt1BoKnztgA=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 11 Apr 2025 05:31:11 GMT"
+          "Value": "Thu, 08 May 2025 17:02:50 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -11508,7 +11848,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "5fzltc1aso"
+          "Value": "4iztbxhue2"
         },
         {
           "Name": "label",
@@ -11516,13 +11856,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-b9z/JX71lCi8FNYF78zVaBzD1a5kFMM7O3ufwS8qiSY="
+          "Value": "sha256-/Pe/jY7JYJpE1VcfeIhoBivpMLPSvw7Bwt1BoKnztgA="
         }
       ]
     },
     {
-      "Route": "js/site.5fzltc1aso.js.gz",
-      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\xm3n5fi5o6-5fzltc1aso.gz",
+      "Route": "js/site.4iztbxhue2.js.gz",
+      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\xm3n5fi5o6-4iztbxhue2.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -11531,7 +11871,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "633"
+          "Value": "1301"
         },
         {
           "Name": "Content-Type",
@@ -11539,11 +11879,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"QTheajiaK7Vz88LI+1SaSwyMZCC4VOcKpAujHqSvCo8=\""
+          "Value": "\"obhAccn2PC6qya1LWm/v/sEXBV/X/TSQK8MlHdPAySA=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 11 Apr 2025 05:31:11 GMT"
+          "Value": "Thu, 08 May 2025 17:02:50 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -11561,7 +11901,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "5fzltc1aso"
+          "Value": "4iztbxhue2"
         },
         {
           "Name": "label",
@@ -11569,18 +11909,18 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-QTheajiaK7Vz88LI+1SaSwyMZCC4VOcKpAujHqSvCo8="
+          "Value": "sha256-obhAccn2PC6qya1LWm/v/sEXBV/X/TSQK8MlHdPAySA="
         }
       ]
     },
     {
       "Route": "js/site.js",
-      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\xm3n5fi5o6-5fzltc1aso.gz",
+      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\xm3n5fi5o6-4iztbxhue2.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.001577287066"
+          "Quality": "0.000768049155"
         }
       ],
       "ResponseHeaders": [
@@ -11590,15 +11930,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "633"
+          "Value": "1301"
         },
         {
           "Name": "ETag",
-          "Value": "\"QTheajiaK7Vz88LI+1SaSwyMZCC4VOcKpAujHqSvCo8=\""
+          "Value": "\"obhAccn2PC6qya1LWm/v/sEXBV/X/TSQK8MlHdPAySA=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 11 Apr 2025 05:31:11 GMT"
+          "Value": "Thu, 08 May 2025 17:02:50 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -11618,13 +11958,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"b9z/JX71lCi8FNYF78zVaBzD1a5kFMM7O3ufwS8qiSY=\""
+          "Value": "W/\"/Pe/jY7JYJpE1VcfeIhoBivpMLPSvw7Bwt1BoKnztgA=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-b9z/JX71lCi8FNYF78zVaBzD1a5kFMM7O3ufwS8qiSY="
+          "Value": "sha256-/Pe/jY7JYJpE1VcfeIhoBivpMLPSvw7Bwt1BoKnztgA="
         }
       ]
     },
@@ -11639,7 +11979,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1250"
+          "Value": "3833"
         },
         {
           "Name": "Content-Type",
@@ -11647,11 +11987,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"b9z/JX71lCi8FNYF78zVaBzD1a5kFMM7O3ufwS8qiSY=\""
+          "Value": "\"/Pe/jY7JYJpE1VcfeIhoBivpMLPSvw7Bwt1BoKnztgA=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 11 Apr 2025 05:31:11 GMT"
+          "Value": "Thu, 08 May 2025 17:02:50 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -11661,13 +12001,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-b9z/JX71lCi8FNYF78zVaBzD1a5kFMM7O3ufwS8qiSY="
+          "Value": "sha256-/Pe/jY7JYJpE1VcfeIhoBivpMLPSvw7Bwt1BoKnztgA="
         }
       ]
     },
     {
       "Route": "js/site.js.gz",
-      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\xm3n5fi5o6-5fzltc1aso.gz",
+      "AssetFile": "C:\\UC\\Elnet2ndChecking\\RoyalStayHotel\\obj\\Debug\\net9.0\\compressed\\xm3n5fi5o6-4iztbxhue2.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -11676,7 +12016,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "633"
+          "Value": "1301"
         },
         {
           "Name": "Content-Type",
@@ -11684,11 +12024,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"QTheajiaK7Vz88LI+1SaSwyMZCC4VOcKpAujHqSvCo8=\""
+          "Value": "\"obhAccn2PC6qya1LWm/v/sEXBV/X/TSQK8MlHdPAySA=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 11 Apr 2025 05:31:11 GMT"
+          "Value": "Thu, 08 May 2025 17:02:50 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -11706,7 +12046,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-QTheajiaK7Vz88LI+1SaSwyMZCC4VOcKpAujHqSvCo8="
+          "Value": "sha256-obhAccn2PC6qya1LWm/v/sEXBV/X/TSQK8MlHdPAySA="
         }
       ]
     },

@@ -1,0 +1,167 @@
+@{
+    ViewData["Title"] = "Notifications";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="bg-light rounded h-100 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="mb-0">Notifications Management</h3>
+                    <a href="@Url.Action("Create", "Notifications", new { area = "Admin" })" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Create Notification
+                    </a>
+                </div>
+
+                <ul class="nav nav-tabs" id="notificationTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">All (25)</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="unread-tab" data-bs-toggle="tab" data-bs-target="#unread" type="button" role="tab" aria-controls="unread" aria-selected="false">Unread (8)</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="sent-tab" data-bs-toggle="tab" data-bs-target="#sent" type="button" role="tab" aria-controls="sent" aria-selected="false">Sent (12)</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content pt-3" id="notificationTabContent">
+                    <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" class="form-check-input"></th>
+                                        <th>Notification</th>
+                                        <th>Type</th>
+                                        <th>Recipient</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="checkbox" class="form-check-input"></td>
+                                        <td>
+                                            <div class="fw-bold">System Maintenance Notice</div>
+                                            <div class="small text-muted">Scheduled downtime for system updates...</div>
+                                        </td>
+                                        <td><span class="badge bg-warning">System</span></td>
+                                        <td>All Users</td>
+                                        <td>Jul 15, 2023</td>
+                                        <td><span class="badge bg-success">Sent</span></td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="#" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                                                <a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" class="form-check-input"></td>
+                                        <td>
+                                            <div class="fw-bold">New Reservation #12453</div>
+                                            <div class="small text-muted">A new reservation has been made by John Smith...</div>
+                                        </td>
+                                        <td><span class="badge bg-primary">Reservation</span></td>
+                                        <td>Admin Staff</td>
+                                        <td>Jul 14, 2023</td>
+                                        <td><span class="badge bg-success">Sent</span></td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="#" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                                                <a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" class="form-check-input"></td>
+                                        <td>
+                                            <div class="fw-bold">Payment Confirmation</div>
+                                            <div class="small text-muted">Payment for reservation #12450 has been received...</div>
+                                        </td>
+                                        <td><span class="badge bg-success">Payment</span></td>
+                                        <td>Finance Dept</td>
+                                        <td>Jul 13, 2023</td>
+                                        <td><span class="badge bg-secondary">Read</span></td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="#" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                                                <a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" class="form-check-input"></td>
+                                        <td>
+                                            <div class="fw-bold">New Support Ticket #458</div>
+                                            <div class="small text-muted">A new support ticket has been opened regarding room service...</div>
+                                        </td>
+                                        <td><span class="badge bg-danger">Support</span></td>
+                                        <td>Support Team</td>
+                                        <td>Jul 12, 2023</td>
+                                        <td><span class="badge bg-secondary">Read</span></td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="#" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                                                <a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" class="form-check-input"></td>
+                                        <td>
+                                            <div class="fw-bold">Inventory Alert: Low Stock</div>
+                                            <div class="small text-muted">Several items in the inventory are running low...</div>
+                                        </td>
+                                        <td><span class="badge bg-info">Inventory</span></td>
+                                        <td>Procurement</td>
+                                        <td>Jul 10, 2023</td>
+                                        <td><span class="badge bg-secondary">Read</span></td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="#" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                                                <a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                <button class="btn btn-outline-danger btn-sm">Delete Selected</button>
+                                <button class="btn btn-outline-secondary btn-sm">Mark as Read</button>
+                            </div>
+                            <nav>
+                                <ul class="pagination pagination-sm mb-0">
+                                    <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="unread" role="tabpanel" aria-labelledby="unread-tab">
+                        <!-- Unread notifications content -->
+                        <div class="p-3 bg-light rounded text-center">
+                            <p>This tab would display only unread notifications</p>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="sent" role="tabpanel" aria-labelledby="sent-tab">
+                        <!-- Sent notifications content -->
+                        <div class="p-3 bg-light rounded text-center">
+                            <p>This tab would display only sent notifications</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

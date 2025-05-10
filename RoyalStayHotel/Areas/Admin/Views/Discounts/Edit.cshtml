@@ -1,0 +1,173 @@
+@model RoyalStayHotel.Models.Discount
+
+@{
+    ViewData["Title"] = "Edit Discount";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Edit Discount</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/Admin/Dashboard">Dashboard</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index">Discounts</a></li>
+        <li class="breadcrumb-item active">Edit</li>
+    </ol>
+
+    <div class="row">
+        <div class="col-xl-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-tag me-1"></i>
+                    Discount Details
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="DiscountId" />
+                        <input type="hidden" asp-for="UsageCount" />
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="Name" class="form-label">Discount Name</label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Type" class="form-label">Discount Type</label>
+                                <select asp-for="Type" class="form-select" asp-items="ViewBag.DiscountTypes">
+                                </select>
+                                <span asp-validation-for="Type" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="DiscountAmount" class="form-label">Discount Value</label>
+                                <div class="input-group">
+                                    <input asp-for="DiscountAmount" class="form-control" type="number" step="0.01" min="0" />
+                                    <span class="input-group-text">
+                                        <select asp-for="IsPercentage" class="form-select border-0">
+                                            <option value="false">₱</option>
+                                            <option value="true">%</option>
+                                        </select>
+                                    </span>
+                                </div>
+                                <span asp-validation-for="DiscountAmount" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Code" class="form-label">Discount Code</label>
+                                <input asp-for="Code" class="form-control" />
+                                <span asp-validation-for="Code" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="StartDate" class="form-label">Valid From</label>
+                                <input asp-for="StartDate" class="form-control" type="date" />
+                                <span asp-validation-for="StartDate" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="EndDate" class="form-label">Valid To</label>
+                                <input asp-for="EndDate" class="form-control" type="date" />
+                                <span asp-validation-for="EndDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label asp-for="MaxUsage" class="form-label">Maximum Uses</label>
+                                <input asp-for="MaxUsage" class="form-control" type="number" min="0" />
+                                <span asp-validation-for="MaxUsage" class="text-danger"></span>
+                                <div class="form-text">Usage so far: @Model.UsageCount</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="MinimumSpend" class="form-label">Minimum Spend</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₱</span>
+                                    <input asp-for="MinimumSpend" class="form-control" type="number" step="0.01" min="0" />
+                                </div>
+                                <span asp-validation-for="MinimumSpend" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="MinimumStay" class="form-label">Minimum Stay (Days)</label>
+                                <input asp-for="MinimumStay" class="form-control" type="number" min="1" />
+                                <span asp-validation-for="MinimumStay" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="RoomTypeId" class="form-label">Applicable Room Type</label>
+                            <select asp-for="RoomTypeId" class="form-select" asp-items="ViewBag.RoomTypes">
+                                <option value="">All Room Types</option>
+                            </select>
+                            <span asp-validation-for="RoomTypeId" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            <input asp-for="IsActive" class="form-check-input" />
+                            <label asp-for="IsActive" class="form-check-label">Active</label>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> Save Changes
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i> Back to List
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Discount Status
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h5>Current Status</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Status
+                                <span class="badge bg-@(Model.IsActive ? "success" : "danger")">
+                                    @(Model.IsActive ? "Active" : "Inactive")
+                                </span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Usage
+                                <span class="badge bg-primary">
+                                    @Model.UsageCount @(Model.MaxUsage.HasValue ? $"/ {Model.MaxUsage.Value}" : "/ ∞")
+                                </span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Valid Period
+                                <span class="badge bg-@(DateTime.Now >= Model.StartDate && DateTime.Now <= Model.EndDate ? "success" : "secondary")">
+                                    @(DateTime.Now < Model.StartDate ? "Upcoming" : (DateTime.Now > Model.EndDate ? "Expired" : "Current"))
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="alert alert-info">
+                        <i class="fas fa-lightbulb me-2"></i>
+                        <small>Changes to date, max usage, or activation status may affect the discount's availability to users.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

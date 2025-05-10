@@ -1,0 +1,128 @@
+@model RoyalStayHotel.Models.MaintenanceRequest
+@using RoyalStayHotel.Models
+
+@{
+    ViewData["Title"] = "Edit Maintenance Task";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Edit Maintenance Task #MT-@Model.Id.ToString("D4")</h6>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="RequestId" />
+                <input type="hidden" asp-for="ReportedAt" />
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="RoomId" class="control-label">Room</label>
+                            <select asp-for="RoomId" class="form-control" asp-items="ViewBag.RoomId" required>
+                                <option value="">-- Select Room --</option>
+                            </select>
+                            <span asp-validation-for="RoomId" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label asp-for="Title" class="control-label">Title</label>
+                            <input asp-for="Title" class="form-control" required />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label asp-for="Description" class="control-label">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="4" required></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label asp-for="Status" class="control-label">Status</label>
+                            <select asp-for="Status" class="form-control" asp-items="ViewBag.Statuses" required>
+                            </select>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="IssueType" class="control-label">Issue Type</label>
+                            <select asp-for="IssueType" class="form-control" asp-items="ViewBag.IssueTypes" required>
+                            </select>
+                            <span asp-validation-for="IssueType" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label asp-for="Priority" class="control-label">Priority</label>
+                            <select asp-for="Priority" class="form-control" asp-items="ViewBag.Priorities" required>
+                            </select>
+                            <span asp-validation-for="Priority" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label asp-for="ReportedById" class="control-label">Reported By</label>
+                            <select asp-for="ReportedById" class="form-control" asp-items="ViewBag.ReportedById">
+                                <option value="">-- Select User --</option>
+                            </select>
+                            <span asp-validation-for="ReportedById" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label asp-for="TechnicianId" class="control-label">Assign Technician</label>
+                            <select asp-for="TechnicianId" class="form-control" asp-items="ViewBag.TechnicianId">
+                                <option value="">-- Not Assigned --</option>
+                            </select>
+                            <span asp-validation-for="TechnicianId" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label asp-for="ScheduledFor" class="control-label">Schedule For</label>
+                            <input asp-for="ScheduledFor" type="datetime-local" class="form-control" />
+                            <span asp-validation-for="ScheduledFor" class="text-danger"></span>
+                        </div>
+                        
+                        @if (Model.Status == MaintenanceRequestStatus.Completed)
+                        {
+                            <div class="form-group mb-3">
+                                <label asp-for="CompletedAt" class="control-label">Completed On</label>
+                                <input asp-for="CompletedAt" type="datetime-local" class="form-control" />
+                                <span asp-validation-for="CompletedAt" class="text-danger"></span>
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label asp-for="Resolution" class="control-label">Resolution</label>
+                                <textarea asp-for="Resolution" class="form-control" rows="3"></textarea>
+                                <span asp-validation-for="Resolution" class="text-danger"></span>
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label asp-for="CostOfRepair" class="control-label">Cost of Repair (₱)</label>
+                                <input asp-for="CostOfRepair" type="number" class="form-control" step="0.01" min="0" />
+                                <span asp-validation-for="CostOfRepair" class="text-danger"></span>
+                            </div>
+                        }
+                    </div>
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label asp-for="Notes" class="control-label">Additional Notes</label>
+                    <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Notes" class="text-danger"></span>
+                </div>
+                
+                <div class="form-group mt-3">
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

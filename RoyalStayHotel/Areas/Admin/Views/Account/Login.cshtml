@@ -1,0 +1,78 @@
+@{
+    ViewData["Title"] = "Admin Login";
+    Layout = "_LoginLayout";
+}
+
+<div class="login-container">
+    <div class="login-box">
+        <div class="text-center mb-4">
+            <h2>Admin Login</h2>
+            <p>Welcome back! Please login to your account.</p>
+        </div>
+
+        @using (Html.BeginForm("Login", "Account", new { area = "Admin" }, FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    @Html.ValidationSummary(false)
+                </div>
+            }
+
+            <div class="form-group mb-3">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required autocomplete="username">
+            </div>
+
+            <div class="form-group mb-4">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+        }
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+        }
+
+        .login-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .form-control:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            padding: 0.6rem;
+        }
+
+        .btn-primary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+
+        .alert {
+            margin-bottom: 1rem;
+        }
+    </style>
+} 

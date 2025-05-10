@@ -6,6 +6,13 @@
 <h1 class="text-danger">Error.</h1>
 <h2 class="text-danger">An error occurred while processing your request.</h2>
 
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert alert-danger my-4">
+        <p>@Model.Message</p>
+    </div>
+}
+
 @if (Model.ShowRequestId)
 {
     <p>

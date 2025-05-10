@@ -1,0 +1,29 @@
+                                        <td>
+                                            @{
+                                                try
+                                                {
+                                                    if (service.RequestTime != null)
+                                                    {
+                                                        var timeType = service.RequestTime.GetType();
+                                                        
+                                                        if (timeType == typeof(TimeSpan))
+                                                        {
+                                                            var ts = (TimeSpan)service.RequestTime;
+                                                            @ts.ToString("hh\\:mm")
+                                                        }
+                                                        else
+                                                        {
+                                                            @service.RequestTime.ToString()
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <text>Not specified</text>
+                                                    }
+                                                }
+                                                catch
+                                                {
+                                                    <text>Not specified</text>
+                                                }
+                                            }
+                                        </td> 

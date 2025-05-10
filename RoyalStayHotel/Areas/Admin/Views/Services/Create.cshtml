@@ -1,0 +1,79 @@
+@model RoyalStayHotel.Models.HotelService
+
+@{
+    ViewData["Title"] = "Add New Service";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Add New Service</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/Admin/Home">Dashboard</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index">Services</a></li>
+        <li class="breadcrumb-item active">Add New</li>
+    </ol>
+
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-plus-circle me-1"></i>
+                    Service Details
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label">Service Name</label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="Price" class="form-label">Price</label>
+                            <div class="input-group">
+                                <span class="input-group-text">₱</span>
+                                <input asp-for="Price" class="form-control" type="number" step="0.01" min="0" />
+                            </div>
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                            <div class="form-text">Enter 0 for free services</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="ServiceType" class="form-label">Service Type</label>
+                            <select asp-for="ServiceType" class="form-select" asp-items="Html.GetEnumSelectList<RoyalStayHotel.Models.ServiceType>()">
+                            </select>
+                            <span asp-validation-for="ServiceType" class="text-danger"></span>
+                            <div class="form-text">Main services appear on the main services section, Additional services can be added when booking a room</div>
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            <input asp-for="IsAvailable" class="form-check-input" />
+                            <label asp-for="IsAvailable" class="form-check-label">Available</label>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> Save
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i> Back to List
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 
