@@ -1,0 +1,5 @@
+C:\UC\Elnet2ndChecking\obj\Debug\net9.0\UpdateDiscount.GeneratedMSBuildEditorConfig.editorconfig
+C:\UC\Elnet2ndChecking\obj\Debug\net9.0\UpdateDiscount.AssemblyInfoInputs.cache
+C:\UC\Elnet2ndChecking\obj\Debug\net9.0\UpdateDiscount.AssemblyInfo.cs
+C:\UC\Elnet2ndChecking\obj\Debug\net9.0\UpdateDiscount.csproj.CoreCompileInputs.cache
+C:\UC\Elnet2ndChecking\obj\Debug\net9.0\UpdateDiscount.sourcelink.json

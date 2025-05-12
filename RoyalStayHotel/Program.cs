@@ -284,6 +284,17 @@ using (var scope = app.Services.CreateScope())
             {
                 logger.LogError(ex, "An error occurred while seeding contact form submissions.");
             }
+            
+            // Seed discount codes
+            try
+            {
+                SeedDiscounts.InitializeDiscounts(services);
+                logger.LogInformation("Discount codes seeded successfully.");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred while seeding discount codes.");
+            }
         }
         else
         {

@@ -200,40 +200,39 @@
 @section Scripts {
     <script>
         $(document).ready(function() {
-            $('#statusSelect').on('change', function() {
-                var newStatus = $(this).val();
-                
-                if (!newStatus) return;
-                
-                // Get the booking ID from the model
-                var bookingId = @Model.BookingId;
-                
-                // Show loading overlay
-                $('#loadingOverlay').show();
-                
-                // Get antiforgery token
-                var token = $('input[name="__RequestVerificationToken"]').val();
-                
-                // Make direct AJAX request to update the status
-                $.ajax({
-                    url: '@Url.Action("DirectUpdateStatus", "Bookings", new { area = "Admin" })',
-                    type: 'POST',
-                    data: {
-                        id: bookingId,
-                        status: newStatus,
-                        __RequestVerificationToken: token
-                    },
-                    success: function(response) {
-                        console.log("Status updated successfully");
-                        // Redirect to details page
-                        window.location.href = '@Url.Action("Details", "Bookings", new { id = Model.BookingId, area = "Admin" })';
-                    },
-                    error: function(xhr, status, error) {
-                        $('#loadingOverlay').hide();
-                        console.error("Error updating status: " + error);
-                        alert("Error updating status: " + (xhr.responseJSON ? xhr.responseJSON.message : error));
-                    }
-                });
+            $('#statusSelect').change(function() {
+                const newStatus = $(this).val();
+                if (newStatus) {
+                    const bookingId = @Model.BookingId;
+                    
+                    // Show loading overlay
+                    $('#loadingOverlay').show();
+                    
+                    // Make AJAX call to update status
+                    $.ajax({
+                        url: '@Url.Action("DirectUpdateStatus", "Bookings", new { area = "Admin" })',
+                        type: 'POST',
+                        data: {
+                            id: bookingId,
+                            status: newStatus
+                        },
+                        success: function(response) {
+                            // Hide loading overlay
+                            $('#loadingOverlay').hide();
+                            
+                            // Redirect to the booking details page
+                            window.location.href = '@Url.Action("Details", "Bookings", new { id = Model.BookingId, area = "Admin" })';
+                        },
+                        error: function(xhr, status, error) {
+                            // Hide loading overlay
+                            $('#loadingOverlay').hide();
+                            
+                            // Show error message
+                            alert('Error updating booking status. Please try again.');
+                            console.error(error);
+                        }
+                    });
+                }
             });
         });
     </script>

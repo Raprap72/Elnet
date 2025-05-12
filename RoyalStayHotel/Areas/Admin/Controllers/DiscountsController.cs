@@ -112,7 +112,7 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
         // POST: Admin/Discounts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Type,DiscountValue,IsPercentage,DiscountCode,StartDate,EndDate,MaxUses,MinimumBookingAmount,RoomTypeId,MinimumStayDays")] Discount discount)
+        public async Task<IActionResult> Create([Bind("Name,Description,Type,DiscountAmount,IsPercentage,Code,StartDate,EndDate,MaxUsage,MinimumSpend,RoomTypeId,MinimumStay")] Discount discount)
         {
             if (ModelState.IsValid)
             {
@@ -126,10 +126,10 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
                 }
                 
                 // Validate discount code uniqueness if provided
-                if (!string.IsNullOrEmpty(discount.DiscountCode) && 
-                    await _context.Discounts.AnyAsync(d => d.DiscountCode == discount.DiscountCode))
+                if (!string.IsNullOrEmpty(discount.Code) && 
+                    await _context.Discounts.AnyAsync(d => d.Code == discount.Code))
                 {
-                    ModelState.AddModelError("DiscountCode", "This discount code is already in use");
+                    ModelState.AddModelError("Code", "This discount code is already in use");
                     ViewBag.DiscountTypes = new SelectList(Enum.GetValues(typeof(DiscountType)), discount.Type);
                     ViewBag.RoomTypes = new SelectList(Enum.GetValues(typeof(RoomType)), discount.RoomTypeId);
                     return View(discount);
@@ -179,7 +179,7 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
         // POST: Admin/Discounts/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DiscountId,Name,Description,Type,DiscountValue,IsPercentage,IsActive,DiscountCode,StartDate,EndDate,MaxUses,UsageCount,MinimumBookingAmount,RoomTypeId,MinimumStayDays")] Discount discount)
+        public async Task<IActionResult> Edit(int id, [Bind("DiscountId,Name,Description,Type,DiscountAmount,IsPercentage,IsActive,Code,StartDate,EndDate,MaxUsage,UsageCount,MinimumSpend,RoomTypeId,MinimumStay")] Discount discount)
         {
             if (id != discount.DiscountId)
             {
@@ -201,18 +201,18 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
                     
                     // Validate discount code uniqueness if changed
                     var originalDiscount = await _context.Discounts.AsNoTracking().FirstOrDefaultAsync(d => d.DiscountId == id);
-                    if (!string.IsNullOrEmpty(discount.DiscountCode) && 
-                        discount.DiscountCode != originalDiscount.DiscountCode &&
-                        await _context.Discounts.AnyAsync(d => d.DiscountCode == discount.DiscountCode))
+                    if (!string.IsNullOrEmpty(discount.Code) && 
+                        discount.Code != originalDiscount.Code &&
+                        await _context.Discounts.AnyAsync(d => d.Code == discount.Code))
                     {
-                        ModelState.AddModelError("DiscountCode", "This discount code is already in use");
+                        ModelState.AddModelError("Code", "This discount code is already in use");
                         ViewBag.DiscountTypes = new SelectList(Enum.GetValues(typeof(DiscountType)), discount.Type);
                         ViewBag.RoomTypes = new SelectList(Enum.GetValues(typeof(RoomType)), discount.RoomTypeId);
                         return View(discount);
                     }
                     
                     // Check if max uses has been reached
-                    if (discount.MaxUses.HasValue && discount.UsageCount >= discount.MaxUses.Value)
+                    if (discount.MaxUsage.HasValue && discount.UsageCount >= discount.MaxUsage.Value)
                     {
                         discount.IsActive = false;
                     }
@@ -258,6 +258,7 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
             }
 
             var discount = await _context.Discounts
+                .Include(d => d.AppliedBookings)
                 .FirstOrDefaultAsync(m => m.DiscountId == id);
                 
             if (discount == null)
@@ -265,9 +266,12 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            // Check if discount has applied bookings
-            bool hasAppliedBookings = await _context.Bookings.AnyAsync(b => b.AppliedDiscountId == id);
-            ViewBag.HasAppliedBookings = hasAppliedBookings;
+            // Check if discount has been used
+            if (discount.AppliedBookings != null && discount.AppliedBookings.Any())
+            {
+                TempData["ErrorMessage"] = "Cannot delete a discount that has been used in bookings.";
+                return RedirectToAction(nameof(Index));
+            }
 
             return View(discount);
         }
@@ -277,27 +281,26 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var discount = await _context.Discounts.FindAsync(id);
-            
-            // Check if discount has applied bookings before deleting
-            bool hasAppliedBookings = await _context.Bookings.AnyAsync(b => b.AppliedDiscountId == id);
-            
-            if (hasAppliedBookings)
-            {
-                // Instead of deleting, mark as inactive
-                discount.IsActive = false;
-                await _context.SaveChangesAsync();
+            var discount = await _context.Discounts
+                .Include(d => d.AppliedBookings)
+                .FirstOrDefaultAsync(m => m.DiscountId == id);
                 
-                TempData["WarningMessage"] = "Discount could not be deleted because it's used in bookings. It has been deactivated instead.";
-            }
-            else
+            if (discount == null)
             {
-                _context.Discounts.Remove(discount);
-                await _context.SaveChangesAsync();
-                
-                TempData["SuccessMessage"] = "Discount deleted successfully!";
+                return NotFound();
             }
             
+            // Final check to prevent deletion of used discounts
+            if (discount.AppliedBookings != null && discount.AppliedBookings.Any())
+            {
+                TempData["ErrorMessage"] = "Cannot delete a discount that has been used in bookings.";
+                return RedirectToAction(nameof(Index));
+            }
+            
+            _context.Discounts.Remove(discount);
+            await _context.SaveChangesAsync();
+            
+            TempData["SuccessMessage"] = "Discount deleted successfully!";
             return RedirectToAction(nameof(Index));
         }
 
@@ -312,30 +315,33 @@ namespace RoyalStayHotel.Areas.Admin.Controllers
                 return NotFound();
             }
             
-            // Check if discount can be activated
-            if (!discount.IsActive)
+            // Don't allow activation if discount period has expired
+            if (!discount.IsActive && discount.EndDate < DateTime.Now)
             {
-                // Check if it's expired
-                if (discount.EndDate < DateTime.Now)
-                {
-                    TempData["ErrorMessage"] = "Cannot activate a discount that has already expired.";
-                    return RedirectToAction(nameof(Index));
-                }
-                
-                // Check if it's reached max uses
-                if (discount.MaxUses.HasValue && discount.UsageCount >= discount.MaxUses.Value)
-                {
-                    TempData["ErrorMessage"] = "Cannot activate a discount that has reached its maximum usage.";
-                    return RedirectToAction(nameof(Index));
-                }
+                TempData["ErrorMessage"] = "Cannot activate an expired discount.";
+                return RedirectToAction(nameof(Index));
             }
             
+            // Don't allow activation if discount hasn't started yet
+            if (!discount.IsActive && discount.StartDate > DateTime.Now)
+            {
+                TempData["ErrorMessage"] = "Cannot activate a discount before its start date.";
+                return RedirectToAction(nameof(Index));
+            }
+            
+            // Check if it's reached max uses
+            if (discount.MaxUsage.HasValue && discount.UsageCount >= discount.MaxUsage.Value)
+            {
+                TempData["ErrorMessage"] = "Cannot activate a discount that has reached its maximum usage.";
+                return RedirectToAction(nameof(Index));
+            }
+            
+            // Toggle the status
             discount.IsActive = !discount.IsActive;
+            _context.Update(discount);
             await _context.SaveChangesAsync();
             
-            string status = discount.IsActive ? "activated" : "deactivated";
-            TempData["SuccessMessage"] = $"Discount {status} successfully!";
-            
+            TempData["SuccessMessage"] = $"Discount {(discount.IsActive ? "activated" : "deactivated")} successfully.";
             return RedirectToAction(nameof(Index));
         }
 

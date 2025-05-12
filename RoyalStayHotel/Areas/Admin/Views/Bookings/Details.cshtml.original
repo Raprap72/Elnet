@@ -204,14 +204,17 @@
                                             @{
                                                 try
                                                 {
-                                                    if (service.RequestTime != null)
+                                                    if (service.RequestTime is TimeSpan timeSpan)
                                                     {
-                                                        // Simple string representation that works for both TimeSpan and string
-                                                        @service.RequestTime.ToString()
+                                                        @timeSpan.ToString("hh\\:mm")
+                                                    }
+                                                    else if (service.RequestTime is string timeString)
+                                                    {
+                                                        @timeString
                                                     }
                                                     else
                                                     {
-                                                        <text>Not specified</text>
+                                                        @service.RequestTime.ToString()
                                                     }
                                                 }
                                                 catch
